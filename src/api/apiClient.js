@@ -11,6 +11,7 @@ const apiClient = axios.create({
 export const getSongs = () => apiClient.get('/songs/');
 export const getArtists = () => apiClient.get('/artists/');
 export const getAlbums = () => apiClient.get('/albums/');
-// ...
+export const getPlaylists = () => apiClient.get('/playlists/');
+export const getMusicGenres = () => apiClient.get('/musicgenres/');
 
 export default apiClient;

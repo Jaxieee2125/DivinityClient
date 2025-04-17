@@ -1,0 +1,137 @@
+/* src/components/SearchModal.module.css */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Nền mờ */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Căn modal lên trên một chút */
+    padding-top: 15vh; /* Khoảng cách từ đỉnh */
+    z-index: 1000; /* Đảm bảo nằm trên cùng */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+  
+  .overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .modal {
+    background-color: #282828; /* Nền modal tối */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 600px; /* Giới hạn chiều rộng */
+    max-height: 70vh; /* Giới hạn chiều cao */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Quan trọng để border-radius hoạt động */
+  }
+  
+  .searchInputContainer {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #404040; /* Đường kẻ dưới input */
+    background-color: #282828; /* Giữ nền giống modal */
+  }
+  
+  .searchIcon {
+    color: #b3b3b3;
+    margin-right: 12px;
+  }
+  
+  .searchInput {
+    flex-grow: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    /* font-size: 1.1rem; */ /* Có thể giữ lại hoặc đổi thành inherit */
+    font-size: inherit;   /* <<< Thêm hoặc thay đổi thành inherit */
+    padding: 4px 0;
+    /* --- THÊM DÒNG NÀY --- */
+    font-family: inherit; /* <<< Quan trọng: Kế thừa font từ cha */
+    /* font-weight: inherit; */ /* <<< Tùy chọn: Kế thừa độ đậm */
+  }
+  .searchInput::placeholder {
+      color: #757575;
+      /* Đảm bảo placeholder cũng kế thừa font nếu cần */
+      font-family: inherit;
+  }
+  
+  .clearButton {
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 12px;
+  }
+  .clearButton:hover {
+    color: #ffffff;
+  }
+  
+  .resultsContainer {
+    padding: 8px 8px 16px 8px; /* Padding cho kết quả */
+    overflow-y: auto; /* Cho phép cuộn kết quả */
+    flex-grow: 1; /* Chiếm không gian còn lại */
+  
+    /* Tùy chỉnh thanh cuộn */
+    scrollbar-width: thin;
+    scrollbar-color: #535353 #282828;
+  }
+  .resultsContainer::-webkit-scrollbar { width: 8px; }
+  .resultsContainer::-webkit-scrollbar-track { background: #282828; border-radius: 8px; }
+  .resultsContainer::-webkit-scrollbar-thumb { background-color: #535353; border-radius: 10px; }
+  .resultsContainer::-webkit-scrollbar-thumb:hover { background-color: #6b6b6b; }
+  
+  
+  .categoryTitle {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #b3b3b3;
+    text-transform: uppercase;
+    padding: 12px 16px 4px 16px;
+  }
+  
+  .resultItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .resultItem:hover {
+    background-color: #3a3a3a;
+  }
+  
+  .itemCover {
+    width: 40px; height: 40px; border-radius: 4px; flex-shrink: 0;
+    background-color: #535353; object-fit: cover;
+  }
+  .itemCover.artist { border-radius: 50%; } /* Bo tròn cho nghệ sĩ */
+  
+  .itemDetails { overflow: hidden; }
+  .itemName { color: #fff; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.9rem;}
+  .itemMeta { color: #b3b3b3; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+  
+  .itemActions { margin-left: auto; display: flex; gap: 8px; }
+  .actionButton { background: none; border: none; color: #b3b3b3; padding: 4px; cursor: pointer; transition: color 0.15s ease; }
+  .actionButton:hover { color: #fff; }
+  
+  .loading, .error, .noResults {
+      text-align: center;
+      padding: 20px;
+      color: #a0a0a0;
+      font-size: 0.9rem;
+  }
+  .error { color: #f87171; }

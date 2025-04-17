@@ -1,0 +1,237 @@
+/* src/pages/SearchResultsPage.module.css */
+
+.pageContainer {
+    padding: 24px 32px;
+  }
+  
+  .title {
+    font-size: 1.8rem; /* Cỡ chữ lớn hơn */
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px; /* Thêm margin dưới title */
+  }
+  
+  /* --- Search Input ở Header (Nếu bạn muốn giữ lại) --- */
+  .searchInputContainer {
+    display: flex;
+    align-items: center;
+    background-color: #282828;
+    border-radius: 20px;
+    padding: 6px 12px;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease;
+    margin-bottom: 24px; /* Thêm nếu input ở đây */
+  }
+  .searchInputContainer:focus-within { border-color: #535353; }
+  .searchIcon { color: #b3b3b3; margin-right: 8px; }
+  .searchInput {
+    flex-grow: 1; background: none; border: none; outline: none;
+    color: #ffffff; font-size: 0.9rem; padding: 2px 0;
+    font-family: inherit;
+  }
+  .searchInput::placeholder { color: #757575; font-family: inherit; }
+  .clearButton { background: none; border: none; color: #b3b3b3; cursor: pointer; padding: 2px; margin-left: 8px; }
+  .clearButton:hover { color: #ffffff; }
+  
+  /* --- Tabs --- */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  
+  .tabButton {
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+  }
+  .tabButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .tabButton.active {
+    background-color: #fff;
+    color: #000;
+  }
+  
+  /* --- Phần Kết quả --- */
+  .resultsSection {
+    margin-top: 16px;
+  }
+  
+  /* --- Styling chung cho các bảng --- */
+  .resultsTable {
+    width: 100%;
+    border-collapse: collapse; /* Quan trọng */
+  }
+  
+  .tableHeader {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #b3b3b3;
+    font-size: 0.75rem; /* text-xs */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* --- Padding và Alignment NHẤT QUÁN cho TH và TD --- */
+  .resultsTable th,
+  .resultsTable td {
+      padding: 12px 8px; /* Padding chung: 12px trên dưới, 8px trái phải */
+      text-align: left;
+      vertical-align: middle;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Border dưới cho data cells */
+  }
+  /* Chỉ áp dụng border dưới cho Header */
+  .tableHeader th {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 400;
+  }
+  /* Bỏ border dưới cho hàng cuối cùng trong tbody */
+  .resultsTable tbody tr:last-child td {
+      border-bottom: none;
+  }
+  
+  /* --- Styling cho hàng khi hover --- */
+  .trackRow, .albumRow, .artistRow {
+      border-radius: 4px; /* Ít ảnh hưởng trong bảng, nhưng giữ lại */
+      transition: background-color 0.15s ease;
+  }
+  .trackRow:hover, .albumRow:hover, .artistRow:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+  }
+  /* Hiện nút play khi hover hàng track */
+  .trackRow:hover .playButtonContainer { opacity: 1; }
+  .trackRow:hover .indexNumber { opacity: 0; }
+  
+  
+  /* --- Ghi đè Padding/Alignment/Width cho các cột ĐẶC BIỆT --- */
+  
+  /* Cột Index (#) */
+  .tableHeader .indexCol,
+  .trackIndex,
+  .albumRow td:first-child, /* Giả định cột đầu là index */
+  .artistRow td:first-child /* Giả định cột đầu là index */
+  {
+      width: 5%;
+      min-width: 40px; /* Đảm bảo không quá hẹp */
+      text-align: left;
+      padding-left: 8px !important; /* Giữ padding trái */
+      padding-right: 16px !important; /* Ghi đè padding phải */
+      position: relative; /* Cho phép định vị nút play */
+  }
+  
+  /* Cột Duration/Year (Căn phải) */
+  .tableHeader .durationCol,
+  .trackDurationCell,
+  .tableHeader .headerYear,
+  .albumYearCell
+  {
+      width: 10%;
+      min-width: 60px;
+      text-align: left;
+      padding-left: 8px !important; /* Giữ padding trái */
+      padding-right: 12px !important; /* Ghi đè padding phải */
+      white-space: nowrap;
+      color: #b3b3b3;
+      font-size: 0.85rem;
+  }
+  
+  /* --- Chiều rộng cột còn lại (Tổng ~100% trừ Index và Duration/Year) --- */
+  
+  /* Tracks */
+  .tableHeader .titleCol { width: 40%; }
+  .tableHeader .albumCol { width: 45%; }
+  
+  /* Albums */
+  /* Title dùng chung .titleCol */
+  .tableHeader .headerAlbumArtist { width: 45%; }
+  /* Year dùng chung .headerYear */
+  
+  /* Artists */
+  .headerArtistName { width: 95%; }
+  
+  /* --- Styling chi tiết cho các loại Cell --- */
+  
+  /* Cell chứa Title (Ảnh + Text) */
+  .trackTitleCell, .albumTitleCell, .artistTitleCell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      /* Không thêm padding ngang ở đây */
+  }
+  
+  /* Ảnh bìa/Avatar */
+  .trackCover, .albumCover {
+      width: 40px; height: 40px; border-radius: 3px; flex-shrink: 0;
+      background-color: #333; object-fit: cover;
+  }
+  .artistAvatarContainer {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background-color: #333; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .artistAvatar { width: 100%; height: 100%; object-fit: cover; }
+  .artistAvatarPlaceholder { color: #757575; }
+  
+  
+  /* Khối text bên cạnh ảnh */
+  .trackInfo, .albumInfo, .artistInfo {
+      overflow: hidden; /* Ngăn text tràn */
+  }
+  
+  /* Tên chính (Bài hát, Album, Nghệ sĩ) */
+  .trackName, .albumName, .artistName {
+      color: #fff; font-weight: 500; font-size: 0.95rem; margin-bottom: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  
+  /* Text phụ (Nghệ sĩ của bài hát/album, chữ "Artist") */
+  .trackArtists, .albumMetaArtist, .artistMeta {
+      font-size: 0.8rem; color: #b3b3b3;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  
+  /* Cell chỉ chứa text (Album trong bảng Track, Artist trong bảng Album) */
+  .trackAlbumCell, .albumArtistCell {
+      font-size: 0.85rem; color: #b3b3b3;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  
+  /* Link trong cell */
+  .trackAlbumLink, .albumArtistLink {
+      color: inherit; text-decoration: none;
+  }
+  .trackAlbumLink:hover, .albumArtistLink:hover {
+      text-decoration: underline; color: #fff;
+  }
+  
+  /* --- Play Button trong bảng Track --- */
+  .playButtonContainer {
+      opacity: 0;
+      transition: opacity 0.1s ease;
+      position: absolute;
+      left: 8px; /* Điều chỉnh vị trí nếu cần */
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  .playButton {
+      background: none; border: none; color: #fff; padding: 0;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .playButton svg { width: 20px; height: 20px; }
+  .indexNumber { transition: opacity 0.1s ease; display: inline-block; }
+  
+  
+  /* Loading/Error/Empty states */
+  .message { text-align: center; padding: 40px; color: #a0a0a0; }
+  .error { color: #f87171; }
