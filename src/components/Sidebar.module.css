@@ -1,0 +1,57 @@
+/* src/components/Sidebar.module.css */
+.sidebar {
+    width: 224px;
+    background-color: #040404;
+    flex-shrink: 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #282828;
+  }
+  
+  .logo {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 24px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  
+  .nav {
+    flex-grow: 1;
+  }
+  
+  .link {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #b3b3b3;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  }
+  
+  .link:hover {
+    background-color: #282828;
+    color: #ffffff;
+  }
+  
+  .link.active { /* Class 'active' được NavLink tự động thêm */
+    background-color: #282828;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  
+  .link svg {
+     margin-right: 12px;
+     width: 18px;
+     height: 18px;
+     flex-shrink: 0; /* Đảm bảo icon không bị co lại */
+  }
+  
+  .settingsContainer {
+    margin-top: auto; /* Đẩy xuống dưới cùng */
+  }

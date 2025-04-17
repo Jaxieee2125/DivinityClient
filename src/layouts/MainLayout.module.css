@@ -1,0 +1,22 @@
+/* src/layouts/MainLayout.module.css */
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #121212;
+    color: #e0e0e0;
+    overflow: hidden;
+  }
+  
+  .contentWrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .mainContent {
+    flex-grow: 1;
+    padding: 24px;
+    overflow-y: auto; /* Cho phép cuộn */
+    background-color: #181818;
+  }
