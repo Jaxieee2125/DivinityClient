@@ -2,7 +2,9 @@
 import React, {useState} from 'react'; // Không cần import useState nếu chỉ dùng placeholder
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout'; // Sẽ tạo
+import AdminLayout from './layouts/AdminLayout.jsx';
 import SearchModal from './components/SearchModal';
+import AdminLoginPage from './pages/admin/AdminLoginPage.jsx';
 
 
 // --- Import pages ---
@@ -20,6 +22,13 @@ const PlaylistDetailPage = () => <div className="p-4">Playlist Detail Page</div>
 const AlbumDetailPage = () => <div className="p-4">Album Detail Page</div>;
 const ArtistDetailPage = () => <div className="p-4">Artist Detail Page</div>;
 // --- End Placeholders ---
+// Admin Pages (Import các trang admin bạn vừa tạo)
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import ManageSongs from './pages/admin/ManageSongs.jsx'; // Ví dụ
+// import ManageArtists from './pages/admin/ManageArtists.jsx'; // Ví dụ
+// import ManageAlbums from './pages/admin/ManageAlbums.jsx'; // Ví dụ
+// import ManageUsers from './pages/admin/ManageUsers.jsx'; // Ví dụ
+// import ManageGenres from './pages/admin/ManageGenres.jsx'; // Ví dụ
 
 function App() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -44,6 +53,17 @@ function App() {
           <Route path="playlist/:playlistId" element={<PlaylistDetailPage />} />
           <Route path="album/:albumId" element={<AlbumDetailPage />} />
           <Route path="artist/:artistId" element={<ArtistDetailPage />} />
+        </Route>
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        {/* Admin Routes - Đã có kiểm tra đăng nhập trong AdminLayout */}
+        <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="songs" element={<ManageSongs />} />
+            {/* <Route path="artists" element={<ManageArtists />} />
+            <Route path="albums" element={<ManageAlbums />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="genres" element={<ManageGenres />} /> */}
+            {/* ... các route admin khác ... */}
         </Route>
       </Routes>
       <SearchModal isOpen={isSearchModalOpen} onClose={closeSearchModal} />

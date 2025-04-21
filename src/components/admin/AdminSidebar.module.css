@@ -1,0 +1,84 @@
+/* src/components/admin/AdminSidebar.module.css */
+.sidebar {
+    width: 250px;
+    background-color: #ffffff; /* Nền trắng */
+    border-right: 1px solid #e8e8e8; /* Border nhạt */
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0; /* Padding trên dưới, không trái phải */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+  }
+  
+  .logo {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    padding: 0 20px 20px 20px; /* Padding cho logo */
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 16px;
+  }
+  
+  .nav {
+    flex-grow: 1; /* Đẩy logout xuống */
+    padding: 0 12px; /* Padding cho các link */
+  }
+  
+  .navLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    color: #555;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .navLink:hover {
+    background-color: #f0f2f5; /* Nền hover nhạt */
+    color: #1890ff; /* Màu xanh dương */
+  }
+  .navLink.active {
+    background-color: #e6f7ff; /* Nền xanh dương nhạt khi active */
+    color: #1890ff;
+    font-weight: 600;
+  }
+  .navLink svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    /* color: inherit; */ /* Giữ màu của text */
+  }
+  
+  .logoutSection {
+      padding: 16px 12px 0 12px; /* Padding trên */
+      margin-top: auto; /* Đẩy xuống dưới cùng */
+      border-top: 1px solid #e8e8e8;
+  }
+  
+  .logoutButton {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: #555;
+      font-weight: 500;
+      font-size: 0.9rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+       transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .logoutButton:hover {
+      background-color: #f0f2f5;
+      color: #ff4d4f; /* Màu đỏ khi hover logout */
+  }
+   .logoutButton svg {
+       width: 18px; height: 18px;
+   }

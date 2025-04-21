@@ -1,0 +1,48 @@
+/* src/pages/admin/AdminPages.module.css */
+.pageContainer {
+    padding: 20px;
+  }
+  
+  .pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  
+  .pageHeader h1 {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 600;
+    color: #333;
+    margin: 0; /* Bỏ margin mặc định của h1 */
+  }
+  
+  .addButton {
+    background-color: #1890ff; /* Màu xanh dương chính */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  .addButton:hover {
+    background-color: #40a9ff; /* Sáng hơn khi hover */
+  }
+  
+  /* Loading/Error messages */
+  .message {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+  }
+  .error {
+    color: #ff4d4f; /* Màu đỏ lỗi */
+    background-color: #fff1f0;
+    border: 1px solid #ffccc7;
+    border-radius: 4px;
+    padding: 10px 15px;
+  }

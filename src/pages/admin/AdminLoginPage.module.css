@@ -1,0 +1,88 @@
+/* src/pages/admin/AdminLoginPage.module.css */
+
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
+    background-color: #f0f2f5; /* Màu nền xám nhạt giống admin layout */
+  }
+  
+  .loginBox {
+    background-color: #ffffff; /* Nền trắng */
+    padding: 32px 40px; /* Padding lớn hơn */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    width: 100%;
+    max-width: 400px; /* Giới hạn chiều rộng */
+    text-align: center; /* Căn giữa tiêu đề */
+  }
+  
+  .loginBox h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #333;
+    font-size: 1.6rem; /* Cỡ chữ tiêu đề */
+    font-weight: 600;
+  }
+  
+  .inputGroup {
+    margin-bottom: 20px; /* Khoảng cách giữa các input group */
+    text-align: left; /* Căn trái label */
+  }
+  
+  .inputGroup label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  .inputGroup input[type="text"],
+  .inputGroup input[type="password"] {
+    width: 100%;
+    padding: 10px 12px; /* Padding cho input */
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .inputGroup input:focus {
+    border-color: #40a9ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    outline: none;
+  }
+  
+  .errorMessage {
+    color: #ff4d4f; /* Màu đỏ lỗi */
+    font-size: 0.85rem;
+    margin-top: 16px; /* Khoảng cách với nút login */
+    text-align: center;
+    min-height: 1.2em; /* Giữ khoảng trống ngay cả khi không có lỗi */
+  }
+  
+  .loginButton {
+    width: 100%;
+    padding: 10px 16px;
+    background-color: #1890ff; /* Màu nút xanh dương */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem; /* Cỡ chữ nút */
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    margin-top: 8px; /* Khoảng cách nhỏ trên nút */
+  }
+  
+  .loginButton:hover:not(:disabled) {
+    background-color: #40a9ff; /* Sáng hơn khi hover */
+  }
+  
+  .loginButton:disabled {
+    background-color: #d9d9d9; /* Màu xám khi disable */
+    cursor: not-allowed;
+    opacity: 0.7;
+  }

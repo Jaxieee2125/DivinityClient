@@ -1,0 +1,74 @@
+/* src/components/admin/DataTable.module.css */
+.tableContainer {
+    overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá rộng */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 16px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem; /* text-sm */
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px 16px; /* Padding lớn hơn một chút */
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0; /* Đường kẻ nhạt hơn */
+    vertical-align: middle;
+  }
+  
+  .table th {
+    background-color: #fafafa; /* Nền header nhạt */
+    color: #555;
+    font-weight: 500;
+    white-space: nowrap; /* Không xuống dòng header */
+  }
+  
+  .table tbody tr {
+    transition: background-color 0.15s ease;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f5f5f5; /* Nền hover nhẹ */
+  }
+  
+  .actionsCell {
+    white-space: nowrap; /* Ngăn các nút xuống dòng */
+    text-align: right; /* Căn phải các nút actions */
+    width: 1%; /* Cho cột actions co lại vừa đủ */
+  }
+  
+  .actionButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    margin-left: 8px; /* Khoảng cách giữa các nút */
+    border-radius: 4px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    font-size: 0.8rem;
+    color: #555;
+  }
+  .editButton:hover {
+    background-color: #e6f7ff;
+    color: #1890ff;
+  }
+  .deleteButton:hover {
+    background-color: #fff1f0;
+    color: #ff4d4f;
+  }
+  .actionButton svg { /* Nếu dùng icon */
+      width: 16px; height: 16px;
+  }
+  
+  /* Responsive (Ví dụ) */
+  @media (max-width: 768px) {
+    .table th, .table td {
+      padding: 8px 10px;
+    }
+    /* Có thể ẩn một số cột ít quan trọng hơn */
+  }

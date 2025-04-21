@@ -1,0 +1,13 @@
+/* src/layouts/AdminLayout.module.css */
+.adminContainer {
+    display: flex;
+    height: 100vh;
+    background-color: #f0f2f5; /* Màu nền sáng hơn cho admin */
+    color: #333; /* Màu chữ tối */
+  }
+  
+  .adminContent {
+    flex-grow: 1;
+    padding: 24px;
+    overflow-y: auto; /* Cho phép cuộn nội dung chính */
+  }
