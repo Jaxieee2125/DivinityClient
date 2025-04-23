@@ -133,6 +133,8 @@
 .formGroup input[type="number"],
 .formGroup input[type="date"],
 .formGroup input[type="file"],
+.formGroup input[type="email"],
+.formGroup input[type="password"],
 .formGroup select,
 .formGroup textarea {
   width: 100%;
@@ -324,4 +326,23 @@
      border-color: #d9d9d9 !important;
      cursor: not-allowed;
      opacity: 0.7;
+}
+
+/* Thêm style cho checkbox nếu cần */
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px; /* Thêm khoảng cách trên */
+}
+.checkboxGroup input[type="checkbox"] {
+  width: auto; /* Reset width */
+  margin-right: 4px;
+  cursor: pointer;
+}
+.checkboxGroup label {
+  margin-bottom: 0; /* Bỏ margin dưới của label checkbox */
+  font-weight: normal; /* Font bình thường */
+  color: #333;
+  cursor: pointer;
 }

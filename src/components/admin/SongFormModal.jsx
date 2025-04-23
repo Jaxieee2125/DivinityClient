@@ -209,8 +209,8 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
                     {initialData ? 'Edit Song' : 'Add New Song'}
                 </div>
 
-                {apiError && <div className={styles.apiErrorBanner}>Error: {apiError}</div>}
-                {optionsError && <div className={styles.apiErrorBanner}>{optionsError}</div>}
+                {/* {apiError && <div className={styles.apiErrorBanner}>Error: {apiError}</div>}
+                {optionsError && <div className={styles.apiErrorBanner}>{optionsError}</div>} */}
 
                 {/* Đặt thẻ form bao ngoài modalBody */}
                 <form onSubmit={handleSubmit}>

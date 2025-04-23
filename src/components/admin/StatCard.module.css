@@ -1,0 +1,52 @@
+/* src/components/admin/StatCard.module.css */
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center; /* Căn giữa icon và text */
+    gap: 16px; /* Khoảng cách giữa icon và nội dung */
+    transition: box-shadow 0.2s ease-in-out;
+  }
+  .card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .iconWrapper {
+    padding: 12px;
+    border-radius: 50%; /* Bo tròn nền icon */
+    display: flex; /* Căn giữa icon */
+    align-items: center;
+    justify-content: center;
+  }
+  /* Thêm màu nền khác nhau cho từng loại thẻ nếu muốn */
+  .iconWrapper.songs { background-color: #e6f7ff; color: #1890ff; } /* Xanh dương */
+  .iconWrapper.artists { background-color: #fffbe6; color: #faad14; } /* Vàng */
+  .iconWrapper.albums { background-color: #f6ffed; color: #52c41a; } /* Xanh lá */
+  .iconWrapper.users { background-color: #fff1f0; color: #ff4d4f; } /* Đỏ */
+  .iconWrapper.genres { background-color: #f9f0ff; color: #722ed1; } /* Tím */
+  .iconWrapper.playlists { background-color: #fff0f6; color: #eb2f96; } /* Hồng */
+  
+  .iconWrapper svg {
+      width: 24px;
+      height: 24px;
+  }
+  
+  .content {
+      flex-grow: 1;
+  }
+  
+  .value {
+      font-size: 1.75rem; /* Cỡ chữ lớn cho con số */
+      font-weight: 600;
+      color: #333;
+      line-height: 1.2;
+      margin: 0 0 4px 0;
+  }
+  
+  .label {
+      font-size: 0.9rem;
+      color: #888;
+      margin: 0;
+  }
