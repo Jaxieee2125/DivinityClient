@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@redux-devtools/extension": "^3.3.0",
     "axios": "^1.8.4",
     "musicclient": "file:",
     "musicweb": "file:",

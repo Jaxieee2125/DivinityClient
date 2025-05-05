@@ -18,13 +18,14 @@ const PlayerBar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showRateSlider, setShowRateSlider] = useState(false);
+  const isSeeking = useRef(false); // <-- Thêm state này
 
   // --- State & Actions từ Zustand ---
   const currentSong = usePlayerStore(state => state.currentSong);
   const isPlaying = usePlayerStore(state => state.isPlaying);
   const volume = usePlayerStore(state => state.volume);
   const isMuted = usePlayerStore(state => state.isMuted);
-  const currentTime = usePlayerStore(state => state.currentTime);
+  let currentTime = usePlayerStore(state => state.currentTime);
   const duration = usePlayerStore(state => state.duration);
   const togglePlayPause = usePlayerStore(state => state.togglePlayPause);
   const playNext = usePlayerStore(state => state.playNext);
@@ -33,30 +34,26 @@ const PlayerBar = () => {
   const toggleMute = usePlayerStore(state => state.toggleMute);
   const setCurrentTime = usePlayerStore(state => state.setCurrentTime);
   const setDuration = usePlayerStore(state => state.setDuration);
-  const queue = usePlayerStore(state => state.queue);
-  const currentIndex = usePlayerStore(state => state.currentIndex);
-  const setCurrentIndex = usePlayerStore(state => state.setCurrentIndex);
-  const setCurrentSong = usePlayerStore(state => state.setCurrentSong);
 
   // --- CALLBACKS CHO USER INTERACTIONS ---
-  const handleLikeToggle = () => {
+  const handleLikeToggle = useCallback(() => {
     if (!currentSong) return;
     console.log("Toggle Like for song:", currentSong._id);
     setIsLiked(!isLiked);
-  };
+  }, [currentSong, isLiked]);
 
-  const handleShuffleToggle = () => {
+  const handleShuffleToggle = useCallback(() => {
     setIsShuffle(!isShuffle);
     console.log("Toggle Shuffle:", !isShuffle);
-  };
+  }, [isShuffle]);
 
-  const handleRepeatToggle = () => {
+  const handleRepeatToggle = useCallback(() => {
     setRepeatMode(prevMode => {
       if (prevMode === 'none') return 'all';
       if (prevMode === 'all') return 'one';
       return 'none';
     });
-  };
+  }, []);
 
   const toggleMiniPlayer = () => {
     setIsMiniPlayer(!isMiniPlayer);
@@ -177,15 +174,23 @@ const PlayerBar = () => {
        }
    }, [currentSong, setCurrentTime, setDuration]);
 
-  useEffect(() => {
+   useEffect(() => {
     if (audioRef.current) {
-      if (isPlaying && currentSong) {
-        audioRef.current.play().catch(error => console.error("Play error:", error));
+      // Chỉ gọi play/pause nếu người dùng KHÔNG đang kéo seekbar
+      if (!isSeeking.current) {
+          if (isPlaying && currentSong) {
+              console.log("[Effect] Playing audio (not seeking)");
+              audioRef.current.play().catch(error => console.error("Play error:", error));
+          } else {
+              console.log("[Effect] Pausing audio (not seeking)");
+              audioRef.current.pause();
+          }
       } else {
-        audioRef.current.pause();
+          console.log("[Effect] Play/Pause deferred (isSeeking=true)");
       }
     }
-  }, [isPlaying, currentSong]);
+    // Phụ thuộc isPlaying, currentSong và isSeeking.current (ref không cần trong deps)
+  }, [isPlaying, currentSong]); // Bỏ isSeeking khỏi dependencies
 
   useEffect(() => {
     if (audioRef.current) {
@@ -208,11 +213,7 @@ const PlayerBar = () => {
       }
    }, [setDuration]);
 
-  const handleTimeUpdate = useCallback(() => {
-      if (audioRef.current) {
-          setCurrentTime(audioRef.current.currentTime || 0);
-      }
-  }, [setCurrentTime]);
+  
 
   // Xử lý khi bài hát kết thúc dựa trên repeatMode
   const handleSongEnd = useCallback(() => {
@@ -227,13 +228,40 @@ const PlayerBar = () => {
   }, [repeatMode, playNext]);
 
   // --- CALLBACKS CHO USER INTERACTIONS ---
+
+  const handleSeekMouseDown = useCallback(() => {
+    console.log("Seek Mouse Down");
+    isSeeking.current = true; // Bắt đầu trạng thái kéo
+    // Không cần làm gì thêm ở đây
+  }, []);
+
+  
+
+  // Khi thả chuột (quan trọng nhất)
+  const handleSeekMouseUp = useCallback((event) => {
+    // Chỉ thực hiện nếu đang trong trạng thái kéo
+    if (isSeeking.current && audioRef.current) {
+        const newTime = parseFloat(event.target.value);
+        console.log("Seek Mouse Up - Setting audio currentTime:", newTime);
+        audioRef.current.currentTime = newTime;
+        console.log(audioRef.current.currentTime);
+    }
+     console.log("Seek Mouse Up - Setting isSeeking=false");
+    isSeeking.current = false;
+  }, []); 
+
   const handleSeekChange = (event) => {
-      const newTime = parseFloat(event.target.value);
-      if (audioRef.current) {
-          audioRef.current.currentTime = newTime;
-      }
-      setCurrentTime(newTime);
-  };
+     if (isSeeking.current) {
+        const newTime = parseFloat(event.target.value);
+        setCurrentTime(newTime);
+     }
+  }; // Phụ thuộc action
+
+  const handleTimeUpdate = useCallback(() => {
+    if (audioRef.current && !isSeeking.current) {
+      setCurrentTime(audioRef.current.currentTime || 0);
+    }
+  }, [setCurrentTime]);
 
   const handleVolumeChange = (event) => {
       const newVolume = parseFloat(event.target.value);
@@ -373,15 +401,20 @@ const PlayerBar = () => {
         <div className={styles.seekBarContainer}>
            <span className={styles.time}>{formatTime(currentTime)}</span>
            <input
-              type="range"
-              min="0"
-              max={duration || 1}
-              value={currentTime}
-              onChange={handleSeekChange}
-              className={styles.seekBar}
-              disabled={!currentSong || duration === 0}
+                type="range"
+                min="0"
+                max={duration || 1}
+                value={currentTime} // Lấy value từ state
+                onMouseDown={handleSeekMouseDown}
+                onMouseUp={handleSeekMouseUp}
+                onTouchStart={handleSeekMouseDown} 
+                onTouchEnd={handleSeekMouseUp}   
+                onChange={handleSeekChange}      
+                // --------------------------
+                className={styles.seekBar}
+                disabled={!currentSong || duration === 0}
                 style={{ '--progress-percent': `${progressPercent}%` }}
-            />
+              />
            <span className={styles.time}>{formatTime(duration)}</span>
         </div>
       </div>

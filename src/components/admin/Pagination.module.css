@@ -1,0 +1,51 @@
+/* src/components/admin/Pagination.module.css */
+.paginationContainer {
+    display: flex;
+    justify-content: center; /* Căn giữa các nút */
+    align-items: center;
+    margin-top: 24px; /* Khoảng cách với bảng */
+    padding: 10px 0;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+    gap: 6px; /* Khoảng cách giữa các nút */
+  }
+  
+  .pageButton, .pageNumber {
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    color: #555;
+    padding: 6px 12px;
+    margin: 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    min-width: 32px; /* Đảm bảo nút số có chiều rộng tối thiểu */
+    text-align: center;
+  }
+  
+  .pageButton:hover:not(:disabled),
+  .pageNumber:hover:not(:disabled) {
+    border-color: #1890ff;
+    color: #1890ff;
+  }
+  
+  .pageNumber.active {
+    background-color: #1890ff;
+    color: #fff;
+    border-color: #1890ff;
+    font-weight: 600;
+  }
+  
+  .pageButton:disabled,
+  .pageNumber:disabled {
+    color: #bfbfbf;
+    border-color: #d9d9d9;
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+  
+  .ellipsis {
+      color: #aaa;
+      padding: 6px 4px;
+      cursor: default;
+  }

@@ -33,11 +33,7 @@ export const loginAdmin = (username, password) => {
    return apiClient.post('/token/', { username, password });
 };
 
-export const getSongs = () => apiClient.get('/songs/');
-export const getArtists = () => apiClient.get('/artists/');
-export const getAlbums = () => apiClient.get('/albums/');
-export const getPlaylists = () => apiClient.get('/playlists/');
-export const getMusicGenres = () => apiClient.get('/musicgenres/');
+
 
 export const getArtistOptions = () => apiClient.get('/artists/options/'); // <<< HÀM MỚI
 export const getAlbumOptions = () => apiClient.get('/albums/options/'); // <<< HÀM MỚI
@@ -47,6 +43,28 @@ export const getSongDetail = (id) => apiClient.get(`/songs/${id}/`);
 export const addSong = (songData) => apiClient.post('/songs/', songData);
 export const updateSong = (id, songData) => apiClient.put(`/songs/${id}/`, songData);
 export const deleteSong = (id) => apiClient.delete(`/songs/${id}/`);
+
+// Ví dụ cập nhật getSongs
+/**
+ * Lấy danh sách bài hát.
+ * @param {object} params - Optional query parameters (e.g., { page: 1, limit: 10, search: 'query' })
+ */
+export const getSongs = (params) => apiClient.get('/songs/', { params });
+
+/** Lấy danh sách nghệ sĩ */
+export const getArtists = (params) => apiClient.get('/artists/', { params }); // <<< Thêm params
+
+/** Lấy danh sách album */
+export const getAlbums = (params) => apiClient.get('/albums/', { params }); // <<< Thêm params
+
+/** Lấy danh sách người dùng */
+export const getUsers = (params) => apiClient.get('/users/', { params }); // <<< Thêm params
+
+/** Lấy danh sách playlist */
+export const getPlaylists = (params) => apiClient.get('/playlists/', { params }); // <<< Thêm params
+
+/** Lấy danh sách thể loại */
+export const getMusicGenres = (params) => apiClient.get('/musicgenres/', { params }); // <<< Thêm params
 
 /**
  * Thêm một nghệ sĩ mới.
@@ -88,8 +106,7 @@ export const deleteMusicGenre = (id) => apiClient.delete(`/musicgenres/${id}/`);
 // --------------------
 
 // --- Users ---
-/** Lấy danh sách người dùng (cần quyền admin) */
-export const getUsers = (params) => apiClient.get('/users/', { params }); // <<< Endpoint này cần được bảo vệ ở backend
+
 /** Lấy chi tiết một người dùng */
 export const getUserDetail = (id) => apiClient.get(`/users/${id}/`); // <<< Endpoint này cần được bảo vệ
 /** Thêm người dùng mới (admin tạo) */
