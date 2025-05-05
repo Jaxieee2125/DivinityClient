@@ -8,15 +8,21 @@ const apiClient = axios.create({
 // --- Interceptor để thêm Token (Ví dụ - Cần điều chỉnh theo cách lưu token của bạn) ---
 apiClient.interceptors.request.use(
   (config) => {
-    // Chỉ thêm token cho các request API cần bảo vệ (ví dụ: không phải /token/)
-    const token = localStorage.getItem('adminAuthToken'); // <<< Key đúng
-    if (token && config.url !== '/token/' && config.url !== '/token/refresh/') {
-      config.headers['Authorization'] = `Bearer ${token}`; // <<< Header đúng
+    // Nên lấy token chung (vd: 'accessToken') thay vì chỉ 'adminAuthToken'
+    // Hoặc có logic để biết khi nào dùng token nào nếu admin/user dùng key khác nhau
+    const token = localStorage.getItem('accessToken') || localStorage.getItem('adminAuthToken'); // Thử lấy token user hoặc admin
+
+    // Không thêm token vào các request public như login, register
+    const publicUrls = ['/token/', '/users/login/', '/users/register/'];
+
+    if (token && !publicUrls.includes(config.url)) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
-    console.log("API Request:", config.method.toUpperCase(), config.url, "Headers:", config.headers); // Log để debug
+    // console.log("API Request:", config.method.toUpperCase(), config.url, "Headers:", config.headers); // Bỏ comment nếu cần debug
     return config;
   },
   (error) => {
+    // Có thể thêm xử lý lỗi ở đây (ví dụ: redirect về login nếu lỗi 401)
     return Promise.reject(error);
   }
 );
@@ -101,5 +107,33 @@ export const deleteUser = (id) => apiClient.delete(`/users/${id}/`); // <<< Cầ
 // -----------
 
 export const getAdminStats = () => apiClient.get('/admin/stats/');
+
+/**
+ * Gửi yêu cầu đăng ký user mới đến backend.
+ * @param {string} username
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<object>} Promise chứa response từ API (thường là message thành công).
+ */
+export const registerUser = (username, email, password) => {
+  console.log("Attempting user registration for:", username, email);
+  // Gọi đến endpoint /api/users/register/
+  // Không cần header Authorization
+  return apiClient.post('/users/register/', { username, email, password });
+};
+
+/**
+* Gửi yêu cầu đăng nhập user thường đến backend.
+* @param {string} identifier - Username hoặc Email
+* @param {string} password
+* @returns {Promise<object>} Promise chứa response từ API (bao gồm access, refresh tokens và user info).
+*/
+export const loginUser = (identifier, password) => {
+  console.log("Attempting user login for identifier:", identifier);
+  // Gọi đến endpoint /api/users/login/
+  // Không cần header Authorization
+  return apiClient.post('/users/login/', { identifier, password });
+};
+
 
 export default apiClient;
