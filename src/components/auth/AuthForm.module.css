@@ -1,0 +1,119 @@
+/* src/components/auth/AuthForm.module.css */
+.formContainer {
+    width: 100%;
+    max-width: 400px; /* Giới hạn chiều rộng form */
+    margin: 50px auto; /* Căn giữa và tạo khoảng cách trên dưới */
+    padding: 30px;
+    background-color: #121212; /* Màu nền tối */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: #ffffff; /* Màu chữ trắng */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa các thành phần con */
+}
+
+.formContainer h2 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputGroup {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    color: #b3b3b3; /* Màu label hơi xám */
+}
+
+.input {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #282828; /* Màu nền input tối hơn */
+    border: 1px solid #404040; /* Viền nhẹ */
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1em;
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+}
+
+.input:focus {
+    outline: none;
+    border-color: #1db954; /* Màu viền khi focus (có thể đổi thành màu xanh dương) */
+    /* Hoặc màu xanh dương: border-color: #2979ff; */
+    box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.3); /* Hiệu ứng shadow nhẹ khi focus */
+     /* Hoặc màu xanh dương: box-shadow: 0 0 0 2px rgba(41, 121, 255, 0.3); */
+}
+
+.submitButton {
+    width: 100%;
+    padding: 12px 15px;
+    /* background-color: #1db954; */ /* Màu gốc Spotify */
+    background-color: #2979ff; /* Màu xanh dương */
+    color: #ffffff;
+    border: none;
+    border-radius: 500px; /* Bo tròn mạnh */
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+    /* background-color: #1ed760; */
+     background-color: #1c64f2; /* Màu xanh dương đậm hơn khi hover */
+}
+
+.submitButton:disabled {
+    background-color: #535353; /* Màu xám khi bị disable */
+    cursor: not-allowed;
+}
+
+.links {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between; /* Đặt 2 link ở 2 bên */
+    font-size: 0.9em;
+    width: 100%;
+}
+
+.link {
+    color: #b3b3b3;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.error,
+.fieldError {
+    color: #f44336; /* Màu đỏ cho lỗi */
+    font-size: 0.85em;
+    margin-top: 5px;
+    text-align: left; /* Căn trái lỗi field */
+}
+.error{
+    text-align: center; /* Căn giữa lỗi chung */
+     margin-bottom: 15px;
+}
+
+.success {
+    color: #4caf50; /* Màu xanh lá cho thành công */
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
