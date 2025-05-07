@@ -1,0 +1,198 @@
+/* src/components/modals/CreatePlaylistModal.module.css */
+
+/* Lớp phủ mờ - giữ nguyên hoặc điều chỉnh độ mờ */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75); /* Có thể tăng độ mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0s linear 0.2s;
+  }
+  .overlay.open { opacity: 1; visibility: visible; transition: opacity 0.2s ease-in-out; }
+  
+  /* Container modal */
+  .modal {
+    background-color: #282828; /* Nền tối như client */
+    color: #ffffff; /* Chữ trắng */
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); /* Bóng đổ rõ hơn */
+    width: 90%;
+    max-width: 450px; /* Giảm max-width cho gọn hơn */
+    /* Không cần max-height vì form ngắn */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* Hiệu ứng vào */
+    transform: scale(0.95) translateY(-10px);
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    opacity: 0;
+  }
+  .overlay.open .modal { transform: scale(1) translateY(0); opacity: 1; }
+  
+  /* Header modal */
+  .modalHeader {
+    padding: 20px 24px; /* Padding đều hơn */
+    /* Bỏ border dưới */
+    font-size: 1.3rem; /* Tăng cỡ chữ header */
+    font-weight: 700; /* Đậm hơn */
+    color: #fff;
+    flex-shrink: 0;
+    position: relative;
+    text-align: center; /* Căn giữa */
+  }
+  
+  /* Nút đóng (X) */
+  .closeButton {
+    position: absolute;
+    top: 10px; /* Dịch lên trên */
+    right: 10px; /* Dịch vào trong */
+    background: none; border: none; font-size: 1.5rem; color: #a0a0a0; /* Màu xám nhạt */
+    cursor: pointer; padding: 8px; line-height: 1; border-radius: 50%;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  .closeButton:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.1); }
+  .closeButton:disabled { opacity: 0.5; cursor: not-allowed; }
+  
+  
+  /* Body modal */
+  .modalBody {
+    padding: 0px 24px 24px 24px; /* Giảm padding top */
+  }
+  
+  .modalBody form { display: flex; flex-direction: column; gap: 16px; } /* Giảm gap */
+  
+  /* Form group */
+  .formGroup { display: flex; flex-direction: column; gap: 8px; } /* Tăng gap label-input */
+  
+  .formGroup label {
+    font-weight: 600; /* Label đậm hơn */
+    font-size: 0.875rem;
+    color: #b3b3b3; /* Màu label xám nhạt */
+  }
+  .formGroup label.required::after { content: " *"; color: #e53e3e; } /* Màu đỏ lỗi */
+  
+  /* Input và Textarea */
+  .formGroup input[type="text"],
+  .formGroup textarea {
+    width: 100%;
+    padding: 12px 16px; /* Padding lớn hơn */
+    border: none; /* Bỏ border */
+    border-radius: 4px; /* Bo góc nhẹ */
+    font-size: 0.9rem;
+    color: #fff; /* Chữ trắng */
+    background-color: #3e3e3e; /* Nền input tối hơn */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+  }
+  .formGroup input:focus,
+  .formGroup textarea:focus {
+    background-color: #4a4a4a; /* Nền sáng hơn khi focus */
+    box-shadow: 0 0 0 2px rgba(91, 192, 222, 0.3); /* Shadow xanh nhạt (info) */
+    outline: none;
+  }
+  .formGroup input::placeholder,
+  .formGroup textarea::placeholder { color: #888; }
+  .formGroup input:disabled,
+  .formGroup textarea:disabled { background-color: #282828; color: #777; cursor: not-allowed; }
+  
+  .formGroup textarea { resize: vertical; min-height: 100px; }
+  
+  /* Checkbox */
+  .checkboxGroup {
+      display: flex; align-items: center; gap: 10px; /* Tăng gap */
+      margin-top: 8px; padding: 6px 0;
+  }
+  .checkboxGroup input[type="checkbox"] {
+      width: 18px; height: 18px; margin: 0; cursor: pointer;
+      accent-color: #2e77d0; /* <<< Màu xanh dương khi check */
+      background-color: #535353; /* Nền checkbox khi chưa check */
+      border: 1px solid #777;
+      border-radius: 3px;
+      appearance: none; /* Tắt giao diện mặc định để style tốt hơn */
+      position: relative; /* Để vẽ dấu check */
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .checkboxGroup input[type="checkbox"]:checked {
+      background-color: #2e77d0;
+      border-color: #2e77d0;
+  }
+  /* Vẽ dấu check bằng pseudo-element */
+  .checkboxGroup input[type="checkbox"]:checked::after {
+      content: '✔';
+      color: white;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      font-size: 14px;
+      line-height: 1;
+  }
+  
+  
+  .checkboxGroup label {
+      margin-bottom: 0; font-weight: normal; color: #b3b3b3; cursor: pointer;
+      font-size: 0.9rem; user-select: none; /* Ngăn chọn chữ */
+  }
+  
+  /* Lỗi validation */
+  .errorMessage { font-size: 0.8rem; color: #f87171; margin-top: 4px; }
+  
+  /* Lỗi API */
+  .apiErrorBanner {
+      background-color: rgba(248, 113, 113, 0.1); /* Nền đỏ trong suốt */
+      border-left: 4px solid #f87171; /* Border đỏ bên trái */
+      color: #fecaca; /* Màu chữ đỏ nhạt */
+      padding: 12px 16px;
+      margin: -24px -24px 24px -24px; /* Tràn ra */
+      border-radius: 0; /* Không bo góc banner lỗi */
+      font-size: 0.875rem;
+      text-align: center;
+  }
+  
+  
+  /* Footer modal */
+  .modalFooter {
+    padding: 16px 24px;
+    /* Bỏ border-top */
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background-color: #282828; /* Nền footer giống modal */
+    border-radius: 0 0 8px 8px;
+    flex-shrink: 0;
+  }
+  
+  /* Nút bấm footer */
+  .submitButton, .cancelButton {
+    padding: 10px 24px; /* Padding lớn hơn cho nút chính */
+    border-radius: 20px; /* Bo tròn nhiều hơn */
+    font-weight: 600; /* Đậm hơn */
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    border: none; /* Bỏ border mặc định */
+    min-width: 100px;
+    text-align: center;
+    line-height: 1.5;
+  }
+  
+  /* Nút Create Playlist */
+  .submitButton {
+    background-color: #2e77d0; /* Xanh dương */
+    color: white;
+  }
+  .submitButton:hover:not(:disabled) { background-color: #5fa8ff; }
+  .submitButton:disabled { background-color: #535353 !important; color: #888 !important; cursor: not-allowed; opacity: 0.7; }
+  
+  /* Nút Cancel */
+  .cancelButton {
+    background-color: #535353; /* Nền xám */
+    color: #fff;
+  }
+  .cancelButton:hover:not(:disabled) { background-color: #6b6b6b; }
+  .cancelButton:disabled { background-color: #404040 !important; color: #777 !important; cursor: not-allowed; opacity: 0.7; }

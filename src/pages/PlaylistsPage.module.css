@@ -1,0 +1,108 @@
+/* src/pages/PlaylistsPage.module.css */
+/* Kế thừa hoặc định nghĩa lại các styles chung nếu cần */
+/* @import url('./AdminPages.module.css'); */
+
+.pageContainer {
+    padding: 24px 32px;
+  }
+  
+  /* --- Header Trang --- */
+  .pageHeader {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .headerIcon { /* Dùng icon FiList */
+    background-color: #333;
+    color: #fff;
+    border-radius: 50%; /* Giữ tròn hoặc vuông tùy ý */
+    padding: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .headerIcon svg { width: 24px; height: 24px; }
+  .pageTitle { font-size: 1.8rem; font-weight: 700; color: #fff; margin: 0; }
+  .itemCount { background-color: #282828; color: #b3b3b3; font-size: 0.8rem; font-weight: 500; padding: 4px 8px; border-radius: 4px; margin-left: 8px; }
+  
+  /* --- Toolbar (Tương tự AlbumsPage/SongsPage) --- */
+  .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #282828;
+  }
+  .sortFilterGroup { display: flex; align-items: center; gap: 12px; }
+  .sortSelect { /* Giữ nguyên style */ }
+  .filterButton { /* Giữ nguyên style */ }
+  .sortSelect { background-color: #282828; color: #fff; border: 1px solid #404040; border-radius: 4px; padding: 7px 12px; font-size: 0.875rem; font-weight: 500; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; min-width: 150px; background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); background-repeat: no-repeat; background-position: right 10px center; background-size: 18px 18px; transition: border-color 0.2s ease, background-color 0.2s ease; }
+  .sortSelect:hover { border-color: #606060; }
+  .sortSelect:focus { outline: none; border-color: #777; }
+  .sortSelect option { background-color: #282828; color: #fff; }
+  .filterButton { background-color: rgba(255, 255, 255, 0.1); color: #b3b3b3; border: none; border-radius: 4px; padding: 6px 10px; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background-color 0.2s ease, color 0.2s ease; }
+  .filterButton:hover:not(:disabled) { background-color: rgba(255, 255, 255, 0.2); color: #fff; }
+  .filterButton:disabled { opacity: 0.5; cursor: not-allowed; }
+  .filterButton svg { width: 16px; height: 16px; }
+  
+  /* --- Lưới Hiển thị Playlists (Tương tự Album Grid) --- */
+  .playlistGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Điều chỉnh minmax nếu cần */
+    gap: 24px;
+  }
+  
+  .playlistCard {
+    background-color: #181818;
+    border-radius: 8px;
+    padding: 16px;
+    transition: background-color 0.2s ease-in-out;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+  .playlistCard:hover { background-color: #282828; }
+  .playlistCard:hover .playButtonOverlay { opacity: 1; transform: translateY(0); }
+  
+  .playlistCoverLink { display: block; margin-bottom: 16px; position: relative; }
+  
+  .playlistCover {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px; /* Hoặc 0px nếu muốn ảnh vuông hoàn toàn */
+    object-fit: cover;
+    background-color: #333; /* Placeholder */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    display: block;
+  }
+  /* Nếu playlist không có ảnh bìa riêng, có thể hiển thị lưới 4 ảnh nhỏ */
+  .playlistCoverGrid { /* Dùng cho playlist không có ảnh bìa */
+      width: 100%; aspect-ratio: 1 / 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+      background-color: #282828; border-radius: 6px; overflow: hidden;
+  }
+  .playlistCoverGrid img { width: 100%; height: 100%; object-fit: cover; }
+  .playlistCoverGrid .placeholderIcon { /* Icon nếu không có ảnh nào trong 4 ảnh nhỏ */
+      grid-column: 1 / -1; grid-row: 1 / -1; /* Chiếm hết lưới */
+      display: flex; align-items: center; justify-content: center;
+      color: #777; background-color: #333;
+  }
+  .playlistCoverGrid .placeholderIcon svg { width: 40%; height: 40%; }
+  
+  
+  .playButtonOverlay { /* Style từ AlbumsPage */ }
+   .playButtonOverlay { position: absolute; bottom: 8px; right: 8px; background-color: #2e77d0; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); opacity: 0; transform: translateY(8px); transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; border: none; cursor: pointer; }
+   .playButtonOverlay svg { width: 24px; height: 24px; fill: #fff; position: relative; left: 1px; }
+   .playButtonOverlay:hover { transform: scale(1.05); background-color: #5fa8ff; }
+  
+  
+  .playlistInfo { overflow: hidden; }
+  .playlistName { color: #fff; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; text-decoration: none; }
+  .playlistName:hover { text-decoration: underline; }
+  .playlistMeta { font-size: 0.8rem; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  
+  /* Loading/Error/Empty states */
+  .message { text-align: center; padding: 40px; color: #a0a0a0; }
+  .error { color: #f87171; }
+  /* Animation cho spinner */
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .animate-spin svg { animation: spin 1s linear infinite; }

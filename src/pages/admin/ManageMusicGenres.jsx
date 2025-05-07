@@ -27,6 +27,7 @@ const ManageMusicGenres = () => {
         if (musicGenres.length === 0) setLoading(true); setError(null);
         try {
             const response = await getMusicGenres(); // <<< Gọi hàm API đã đổi tên
+            console.log("Fetched music genres:", response.data); // Debug log
             setMusicGenres(response.data || []); // <<< Cập nhật state đã đổi tên
         } catch (err) {
             const apiError = err.response?.data?.detail || err.message || "Failed to load music genres.";

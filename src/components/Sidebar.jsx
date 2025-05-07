@@ -15,6 +15,7 @@ import {
 } from 'react-icons/fi';
 import usePlaylistStore from '../store/playlistStore'; // Import playlist store
 import styles from './Sidebar.module.css'; // Import CSS Module
+import CreatePlaylistModal from './CreatePlaylistModal.jsx'; // <<< IMPORT MODAL
 
 // <<< THÊM PROPS isLoggedIn và handleLogout >>>
 const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
@@ -30,6 +31,8 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null); // Ref cho dropdown menu
   const menuButtonRef = useRef(null); // Ref cho nút mở menu
+
+  const [isCreatePlaylistModalOpen, setIsCreatePlaylistModalOpen] = useState(false);
 
   // Fetch playlists khi component mount
   useEffect(() => {
@@ -51,12 +54,29 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
   // --- Handlers ---
   const handleSearchClick = () => { openSearchModal(); };
   const handleMenuToggle = () => setIsMenuOpen(prev => !prev); // Đảo trạng thái
-  const handleCreatePlaylist = () => { console.log("Create Playlist clicked"); };
-  const handleViewListToggle = () => { console.log("Toggle Playlist View clicked"); };
   const handleCollapseSidebar = () => { console.log("TODO: Implement Collapse Sidebar"); setIsMenuOpen(false); };
   const handleSettingsClick = () => { navigate('/settings'); setIsMenuOpen(false); }; // Đóng menu
   const handleGoBack = () => { navigate(-1); setIsMenuOpen(false); }; // Đóng menu
   const handleGoForward = () => { navigate(1); setIsMenuOpen(false); }; // Đóng menu
+
+  // --- HANDLER CHO NÚT TẠO PLAYLIST ---
+  const handleOpenCreatePlaylistModal = () => {
+    setIsCreatePlaylistModalOpen(true);
+  };
+
+  const handleCloseCreatePlaylistModal = () => {
+    setIsCreatePlaylistModalOpen(false);
+  };
+
+  const handlePlaylistCreated = (newPlaylist) => {
+    // Sau khi tạo thành công trên API (thông qua modal)
+    // Cập nhật UI bằng cách fetch lại danh sách
+    fetchPlaylists(true); // true để buộc refresh
+    // Hoặc nếu API trả về playlist mới, có thể thêm vào state cục bộ của store
+    // addPlaylistLocal(newPlaylist);
+    // toast.success(`Playlist "${newPlaylist.playlist_name}" created!`); // Cần import toast
+  };
+ 
 
   // Hàm đóng menu (dùng cho các link/button trong menu)
   const closeMenu = () => setIsMenuOpen(false);
@@ -152,8 +172,8 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
       <div className={styles.playlistHeader}>
          <span className={styles.playlistTitle}>Playlists</span>
          <div className={styles.playlistActions}>
-           <button onClick={handleCreatePlaylist} title="Create Playlist"> <FiPlus /> </button>
-           <button onClick={handleViewListToggle} title="View Options"> <FiList /> </button>
+           <button onClick={handleOpenCreatePlaylistModal} title="Create Playlist"> <FiPlus /> </button>
+           <NavLink to="/playlists" title="View All Playlist"> <FiList /> </NavLink>
          </div>
       </div>
 
@@ -165,6 +185,12 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
         {!isLoading && !error && playlists.length === 0 && ( <div className={`${styles.playlistLink} ${styles.empty}`}>No playlists found.</div> )}
         {!isLoading && !error && playlists.map((playlist) => ( <NavLink key={playlist._id} to={`/playlist/${playlist._id}`} className={({ isActive }) => `${styles.playlistLink} ${isActive ? styles.active : ''}`} title={playlist.playlist_name} > {playlist.playlist_name || 'Untitled Playlist'} </NavLink> ))}
       </div>
+
+      <CreatePlaylistModal
+        isOpen={isCreatePlaylistModalOpen}
+        onClose={handleCloseCreatePlaylistModal}
+        onCreateSuccess={handlePlaylistCreated} // Truyền callback
+      />
     </aside>
   );
 };

@@ -172,6 +172,8 @@ export const getLibraryHighlights = (params) => apiClient.get('/home/library-hig
  * @param {object} params - Ví dụ: { limit: 10 }
  */
 export const getRecentlyAddedAlbums = (params) => apiClient.get('/home/new-releases/', { params });
+export const getPlaylistDetail = (playlistId) => apiClient.get(`/playlists/${playlistId}/`);
 
+export const createPlaylistApi = (playlistData) => apiClient.post('/playlists/', playlistData);
 
 export default apiClient;
