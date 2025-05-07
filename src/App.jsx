@@ -5,24 +5,27 @@ import MainLayout from './layouts/MainLayout'; // Sẽ tạo
 import AdminLayout from './layouts/AdminLayout.jsx';
 import SearchModal from './components/SearchModal';
 import AdminLoginPage from './pages/admin/AdminLoginPage.jsx';
+import AlbumDetailPage from './pages/AlbumDetailPage.jsx'; // Import từ pages
+import SongsPage from './pages/SongsPage.jsx'; // Import từ pages
+import ArtistDetailPage from './pages/ArtistDetailPage.jsx'; // Import từ pages
+import MusicGenresPage from './pages/MusicGenresPage.jsx'; // Import từ pages
+import MusicGenreDetailPage from './pages/MusicGenreDetailPage.jsx';
 
 // --- Import pages ---
 import HomePage from './pages/HomePage.jsx'; // Import từ pages
+import AlbumsPage from './pages/AlbumsPage.jsx'; // Import từ pages
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
 // --- Import các trang Đăng nhập/Đăng ký User --- // <<< THÊM IMPORT
 import LoginPage from './pages/LoginPage.jsx';       // <<< THÊM IMPORT
 import RegisterPage from './pages/RegisterPage.jsx'; // <<< THÊM IMPORT
 // --- Tạm thời giữ các placeholder khác ---
-const ArtistsPage = () => <div className="p-4">Artists Page Content</div>;
-const AlbumsPage = () => <div className="p-4">Albums Page Content</div>;
+import ArtistsPage from './pages/ArtistsPage.jsx'; // Import từ pages
 const PlaylistsPage = () => <div className="p-4">Playlists Page Content</div>;
 const SearchPage = () => <div className="p-4">Search Page Content</div>;
 const SettingsPage = () => <div className="p-4">Settings Page Content</div>;
-const SongsPage = () => <div className="p-4">Songs Page Content</div>;
-const MusicGenresPage = () => <div className="p-4">Music Genres Page Content</div>;
+
+
 const PlaylistDetailPage = () => <div className="p-4">Playlist Detail Page</div>;
-const AlbumDetailPage = () => <div className="p-4">Album Detail Page</div>;
-const ArtistDetailPage = () => <div className="p-4">Artist Detail Page</div>;
 // --- End Placeholders ---
 // Admin Pages (Import các trang admin bạn vừa tạo)
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
@@ -51,11 +54,13 @@ function App() {
           <Route path="search" element={<SearchPage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="songs" element={<SongsPage />} />
+          <Route path="musicgenre/:genreId" element={<MusicGenreDetailPage />} />
           <Route path="musicgenres" element={<MusicGenresPage />} />
           <Route path="search/:query" element={<SearchResultsPage />} /> {/* Route cho trang kết quả chi tiết */}
           <Route path="playlist/:playlistId" element={<PlaylistDetailPage />} />
           <Route path="album/:albumId" element={<AlbumDetailPage />} />
           <Route path="artist/:artistId" element={<ArtistDetailPage />} />
+          
         </Route>
 
         {/* Route Đăng nhập Admin */}

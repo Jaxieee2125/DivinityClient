@@ -43,7 +43,8 @@ export const getSongs = () => apiClient.get('/songs/');
 export const getArtists = () => apiClient.get('/artists/');
 export const getAlbums = () => apiClient.get('/albums/');
 export const getPlaylists = () => apiClient.get('/playlists/');
-export const getMusicGenres = () => apiClient.get('/musicgenres/');
+export const getMusicGenres = () => apiClient.get('/musicgenres/'); // 
+export const getMusicGenreName = (id) => apiClient.get(`/musicgenres/${id}/`); // <<< HÀM MỚI
 
 export const getArtistOptions = () => apiClient.get('/artists/options/'); // <<< HÀM MỚI
 export const getAlbumOptions = () => apiClient.get('/albums/options/'); // <<< HÀM MỚI
@@ -73,6 +74,8 @@ export const updateArtist = (id, artistData) => apiClient.put(`/artists/${id}/`,
 export const deleteArtist = (id) => apiClient.delete(`/artists/${id}/`);
 export const getGenreOptions = () => apiClient.get('/musicgenres/options/');
 
+export const getGenreTracks = (genreId, params) => apiClient.get(`/musicgenres/${genreId}/tracks/`, { params });
+
 // --- Albums (Thêm CRUD) ---
 /** Thêm album mới (FormData nếu có ảnh) */
 export const addAlbum = (albumData) => apiClient.post('/albums/', albumData);
@@ -80,6 +83,10 @@ export const addAlbum = (albumData) => apiClient.post('/albums/', albumData);
 export const updateAlbum = (id, albumData) => apiClient.put(`/albums/${id}/`, albumData);
 /** Xóa album */
 export const deleteAlbum = (id) => apiClient.delete(`/albums/${id}/`);
+
+export const getAlbumSongs = (albumId) => apiClient.get(`/albums/${albumId}/songs/`);
+
+export const getAlbumDetail = (albumId) => apiClient.get(`/albums/${albumId}/`);
 // --------------------------
 
 // --- Music Genres ---
@@ -134,6 +141,37 @@ export const loginUser = (identifier, password) => {
   // Không cần header Authorization
   return apiClient.post('/users/login/', { identifier, password });
 };
+
+/** Lấy danh sách album của một nghệ sĩ */
+export const getArtistAlbums = (artistId, params) => apiClient.get(`/artists/${artistId}/albums/`, { params }); // Thêm params nếu cần pagination/sort
+
+/** Lấy danh sách bài hát phổ biến của một nghệ sĩ */
+export const getArtistTopTracks = (artistId, params) => apiClient.get(`/artists/${artistId}/top-tracks/`, { params });
+
+export const getArtistDetail = (artistId) => apiClient.get(`/artists/${artistId}/`);
+
+/**
+ * Lấy nội dung nổi bật cho trang chủ (ví dụ: 1 album hoặc playlist).
+ */
+export const getFeaturedContent = () => apiClient.get('/home/featured/');
+
+/**
+ * Lấy danh sách được nghe nhiều nhất.
+ * @param {object} params - Ví dụ: { type: 'songs' | 'albums', limit: 10 }
+ */
+export const getMostPlayed = (params) => apiClient.get('/home/most-played/', { params });
+
+/**
+ * Lấy các mục nổi bật từ thư viện (ví dụ: mix albums, playlists).
+ * @param {object} params - Ví dụ: { limit: 10 }
+ */
+export const getLibraryHighlights = (params) => apiClient.get('/home/library-highlights/', { params });
+
+/**
+ * Lấy các album mới được thêm/phát hành gần đây.
+ * @param {object} params - Ví dụ: { limit: 10 }
+ */
+export const getRecentlyAddedAlbums = (params) => apiClient.get('/home/new-releases/', { params });
 
 
 export default apiClient;

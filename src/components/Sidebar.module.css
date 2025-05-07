@@ -5,6 +5,7 @@
   background-color: #000000;
   padding: 8px;
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   height: 100%; /* Quan trọng để flex-grow hoạt động đúng */
   color: #b3b3b3;

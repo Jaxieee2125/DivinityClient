@@ -1,0 +1,246 @@
+/* src/pages/AlbumsPage.module.css */
+
+/* Kế thừa hoặc định nghĩa lại các styles chung nếu cần */
+
+
+.pageContainer {
+  padding: 24px 32px;
+}
+
+/* --- Header Trang Albums --- */
+.pageHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Khoảng cách giữa icon, title, count */
+  margin-bottom: 24px;
+}
+
+.headerIcon {
+  background-color: #333; /* Nền tối cho icon */
+  color: #fff;
+  border-radius: 50%;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.headerIcon svg {
+    width: 24px; height: 24px;
+}
+
+.pageTitle {
+  font-size: 1.8rem; /* ~text-3xl */
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.itemCount {
+  background-color: #282828; /* Nền xám đậm */
+  color: #b3b3b3; /* Chữ xám */
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* --- Thanh Công cụ/Bộ lọc --- */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #282828;
+}
+
+.sortFilterGroup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* --- Select Sắp xếp (Dropdown) --- */
+.sortSelect {
+    background-color: #282828; /* Nền xám đậm hơn */
+    color: #fff; /* Chữ trắng */
+    border: 1px solid #404040; /* Viền tối nhẹ */
+    border-radius: 4px;
+    padding: 7px 12px; /* Padding bên trong */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none; /* Tắt giao diện mặc định của trình duyệt */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    min-width: 150px; /* Chiều rộng tối thiểu */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Icon mũi tên xuống màu trắng */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Vị trí mũi tên */
+    background-size: 18px 18px; /* Kích thước mũi tên */
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.sortSelect:hover {
+    border-color: #606060; /* Viền sáng hơn khi hover */
+}
+
+.sortSelect:focus { /* Style khi focus (tùy chọn) */
+    outline: none;
+    border-color: #777;
+    /* box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.3); */
+}
+
+.sortSelect:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Style cho các option bên trong (hạn chế style được) */
+.sortSelect option {
+    background-color: #282828; /* Nền option giống select */
+    color: #fff; /* Chữ trắng */
+    padding: 8px 12px; /* Padding cho option (có thể không hoạt động trên mọi trình duyệt) */
+}
+/* Không thể style trực tiếp dropdown list mở ra bằng CSS chuẩn */
+
+
+/* --- Các nút Filter/Action khác --- */
+.filterButton { /* Style chung cho các nút khác trong toolbar */
+    background-color: rgba(255, 255, 255, 0.1); /* Nền bán trong suốt nhẹ */
+    color: #b3b3b3; /* Chữ xám */
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px; /* Padding nhỏ hơn select */
+    font-size: 0.875rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.filterButton:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+.filterButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.filterButton svg {
+    width: 16px; height: 16px;
+}
+
+
+/* --- Lưới Hiển thị Albums --- */
+.albumGrid {
+  display: grid;
+  /* Số cột tự động điều chỉnh, chiều rộng tối thiểu 180px */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px; /* Khoảng cách giữa các card */
+}
+
+.albumCard {
+  background-color: #181818; /* Nền card tối */
+  border-radius: 8px;
+  padding: 16px;
+  transition: background-color 0.2s ease-in-out;
+  overflow: hidden; /* Giữ bo góc cho ảnh */
+  position: relative; /* Cho nút play tuyệt đối */
+  cursor: pointer;
+}
+.albumCard:hover {
+  background-color: #282828; /* Nền sáng hơn khi hover */
+}
+.albumCard:hover .playButtonOverlay { /* Hiện nút play khi hover card */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.albumCoverLink { /* Link bao quanh ảnh */
+    display: block; /* Để chiếm không gian */
+    margin-bottom: 16px;
+    position: relative; /* Để chứa nút play */
+}
+
+.albumCover {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Đảm bảo ảnh vuông */
+  border-radius: 6px; /* Bo góc ảnh */
+  object-fit: cover;
+  background-color: #333; /* Màu nền placeholder */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); /* Đổ bóng mạnh hơn */
+  display: block; /* Tránh khoảng trắng thừa dưới ảnh */
+}
+
+.playButtonOverlay {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: #1e88e5; /* Màu xanh Spotify */
+    border-radius: 50%;
+    width: 44px; /* Kích thước nút play */
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    opacity: 0; /* Ẩn ban đầu */
+    transform: translateY(8px); /* Hiệu ứng trượt lên */
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+.playButtonOverlay svg {
+    width: 24px; height: 24px; fill: #000; /* Màu đen cho icon play */
+    position: relative; left: 1px; /* Căn chỉnh icon play */
+}
+.playButtonOverlay:hover {
+    transform: scale(1.05); /* Phóng to nhẹ khi hover nút */
+    background-color: #1e88e5; /* Sáng hơn */
+}
+
+.albumInfo { /* Phần text dưới ảnh */
+    overflow: hidden;
+}
+
+.albumName {
+  color: #fff;
+  font-weight: 600; /* Đậm hơn */
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block; /* Để link hoạt động đúng */
+  text-decoration: none;
+}
+.albumName:hover {
+    text-decoration: underline;
+}
+
+
+.albumMeta { /* Chứa nghệ sĩ và năm */
+  font-size: 0.85rem;
+  color: #b3b3b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.albumMeta span:not(:last-child)::after { /* Thêm dấu chấm giữa năm và nghệ sĩ */
+    content: " • ";
+    margin: 0 4px;
+}
+
+.artistLink {
+    color: inherit;
+    text-decoration: none;
+}
+.artistLink:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+
+/* Loading/Error/Empty states */
+.message { text-align: center; padding: 40px; color: #a0a0a0; }
+.error { color: #f87171; }

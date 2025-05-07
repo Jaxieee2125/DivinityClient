@@ -1,0 +1,137 @@
+/* src/pages/ArtistsPage.module.css */
+/* Kế thừa hoặc định nghĩa lại các styles chung nếu cần */
+/* @import url('./AdminPages.module.css'); */
+
+.pageContainer {
+    padding: 24px 32px;
+  }
+  
+  /* --- Header Trang --- */
+  .pageHeader { /* Tương tự AlbumsPage */
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .headerIcon { /* Dùng icon FiUsers */
+    background-color: #333;
+    color: #fff;
+    border-radius: 50%;
+    padding: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .headerIcon svg { width: 24px; height: 24px; }
+  .pageTitle { font-size: 1.8rem; font-weight: 700; color: #fff; margin: 0; }
+  .itemCount { background-color: #282828; color: #b3b3b3; font-size: 0.8rem; font-weight: 500; padding: 4px 8px; border-radius: 4px; margin-left: 8px; }
+  
+  /* --- Toolbar (Tương tự AlbumsPage) --- */
+  .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #282828;
+  }
+  .sortFilterGroup { display: flex; align-items: center; gap: 12px; }
+  /* Chỉ cần sort theo Name (A-Z) và Recently Added cho Artist */
+  .sortSelect { /* Giữ nguyên style từ AlbumsPage */ }
+  .filterButton { /* Giữ nguyên style từ AlbumsPage */ }
+  .sortSelect { background-color: #282828; color: #fff; border: 1px solid #404040; border-radius: 4px; padding: 7px 12px; font-size: 0.875rem; font-weight: 500; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; min-width: 150px; background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); background-repeat: no-repeat; background-position: right 10px center; background-size: 18px 18px; transition: border-color 0.2s ease, background-color 0.2s ease; }
+  .sortSelect:hover { border-color: #606060; }
+  .sortSelect:focus { outline: none; border-color: #777; }
+  .sortSelect option { background-color: #282828; color: #fff; }
+  .filterButton { background-color: rgba(255, 255, 255, 0.1); color: #b3b3b3; border: none; border-radius: 4px; padding: 6px 10px; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background-color 0.2s ease, color 0.2s ease; }
+  .filterButton:hover:not(:disabled) { background-color: rgba(255, 255, 255, 0.2); color: #fff; }
+  .filterButton:disabled { opacity: 0.5; cursor: not-allowed; }
+  .filterButton svg { width: 16px; height: 16px; }
+  
+  
+  /* --- Lưới Hiển thị Artists --- */
+  .artistGrid {
+    display: grid;
+    /* Số cột tự động điều chỉnh, chiều rộng tối thiểu ~160px */
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px; /* Khoảng cách giữa các card */
+  }
+  
+  .artistCard {
+    background-color: #181818;
+    border-radius: 8px;
+    padding: 16px;
+    transition: background-color 0.2s ease-in-out;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    text-align: center; /* Căn giữa nội dung card */
+  }
+  .artistCard:hover {
+    background-color: #282828;
+  }
+  .artistCard:hover .playButtonOverlay {
+      opacity: 1;
+      transform: translateY(0);
+  }
+  
+  .artistAvatarLink { /* Link bao quanh ảnh */
+      display: block;
+      width: 85%; /* Chiều rộng avatar so với card */
+      margin: 0 auto 16px auto; /* Căn giữa avatar và tạo khoảng cách dưới */
+      position: relative; /* Để chứa nút play */
+  }
+  
+  .artistAvatarWrapper { /* Container để giữ hình tròn */
+      width: 100%;
+      aspect-ratio: 1 / 1; /* Đảm bảo hình tròn */
+      border-radius: 50%; /* <<< BO TRÒN AVATAR */
+      overflow: hidden; /* Giữ bo tròn cho ảnh */
+      background-color: #333; /* Nền placeholder */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px; /* Khoảng cách với tên */
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+  .artistAvatar {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .avatarPlaceholder svg {
+      width: 50%; /* Kích thước icon placeholder */
+      height: 50%;
+      color: #757575;
+  }
+  
+  
+  .playButtonOverlay { /* Giữ nguyên style nút play từ AlbumsPage */ }
+   .playButtonOverlay { position: absolute; bottom: 8px; right: 8px; background-color: #1e88e5; /* Xanh lá */ border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); opacity: 0; transform: translateY(8px); transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; border: none; cursor: pointer; }
+   .playButtonOverlay svg { width: 24px; height: 24px; fill: #000; position: relative; left: 1px; }
+   .playButtonOverlay:hover { transform: scale(1.05); background-color: #2196fc; }
+  
+  
+  .artistInfo { overflow: hidden; }
+  
+  .artistName {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block; /* Cho Link */
+    text-decoration: none;
+  }
+  .artistName:hover { text-decoration: underline; }
+  
+  .artistMeta { /* Text "Artist" */
+    font-size: 0.8rem;
+    color: #b3b3b3;
+  }
+  
+  /* Loading/Error/Empty states */
+  .message { text-align: center; padding: 40px; color: #a0a0a0; }
+  .error { color: #f87171; }
+  
+  /* Animation cho spinner */
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .animate-spin svg { animation: spin 1s linear infinite; }
