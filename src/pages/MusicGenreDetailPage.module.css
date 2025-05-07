@@ -63,7 +63,7 @@
 .playButton svg { width: 20px; height: 20px; }
 .indexNumber { transition: opacity 0.1s ease; display: inline-block; }
 
-.trackTitleCell { display: flex; align-items: center; gap: 12px; }
+.trackTitleCell { display: flex; align-items: center; gap: 12px; height: inherit; }
 .trackCoverContainer { width: 40px; height: 40px; flex-shrink: 0; background-color: #333; border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .trackCover { width: 100%; height: 100%; object-fit: cover; display: block; }
 .trackCoverPlaceholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color: #aaa; font-size: 0.8rem; }

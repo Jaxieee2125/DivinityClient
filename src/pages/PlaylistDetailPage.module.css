@@ -1,0 +1,127 @@
+/* src/pages/PlaylistDetailPage.module.css */
+/* Kế thừa hoặc định nghĩa lại các styles chung */
+/* @import url('./AdminPages.module.css'); */
+
+.pageContainer { padding: 0; background-color: #121212; color: #e0e0e0; min-height: calc(100vh - 90px); }
+
+/* --- Playlist Header --- */
+.playlistHeader {
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+  gap: 24px;
+  padding: 32px 32px 24px 32px; /* Giảm padding top một chút */
+  min-height: 200px; /* Giảm chiều cao header */
+  /* background: linear-gradient(...); */
+}
+
+.headerCover {
+  width: 190px; /* Giảm kích thước ảnh bìa */
+  height: 190px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 6px; /* Hoặc 0px */
+}
+.coverWrapper { width: 100%; height: 100%; background-color: #282828; border-radius: inherit; overflow: hidden; display: flex; align-items: center; justify-content: center;}
+.coverImage { width: 100%; height: 100%; object-fit: cover; }
+.coverPlaceholder svg { width: 50px; height: 50px; color: #555; }
+/* Style cho lưới 4 ảnh bìa track */
+.headerCoverGrid { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background-color: #181818; border-radius: inherit; overflow:hidden; }
+.headerCoverGrid img { width: 100%; height: 100%; object-fit: cover; }
+.headerCoverGrid .gridCellPlaceholder { background-color: #282828; } /* Ô trống nếu không đủ 4 ảnh */
+.headerCoverGrid .gridPlaceholderIcon { grid-column: 1 / -1; grid-row: 1 / -1; display: flex; align-items: center; justify-content: center; color: #777; background-color: #333; }
+.headerCoverGrid .gridPlaceholderIcon svg { width: 40%; height: 40%; }
+
+
+.headerInfo { display: flex; flex-direction: column; justify-content: center; /* Căn giữa dọc */ flex-grow: 1; gap: 6px; }
+.itemType { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #fff; margin-bottom: 2px; }
+.playlistTitle {
+  font-size: clamp(1.8rem, 5vw, 3rem); /* Giảm size title một chút */
+  font-weight: 900; color: #fff; line-height: 1.1; margin: 0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.playlistDescription { font-size: 0.875rem; color: #b3b3b3; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.metaInfo { font-size: 0.875rem; color: #fff; font-weight: 400; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.metaInfo span, .metaInfo a { opacity: 0.9; }
+.metaInfo span:not(:first-child)::before,
+.metaInfo a:not(:first-child)::before { content: "•"; margin: 0 6px; opacity: 0.7; }
+.metaInfo span:first-child::before { content: none; margin: 0; }
+.userLink { color: #fff; font-weight: 600; text-decoration: none; }
+.userLink:hover { text-decoration: underline; }
+
+
+/* --- Action Bar --- */
+.actionBar {
+  padding: 16px 32px 24px 32px; /* Giảm padding top */
+  display: flex; align-items: center; gap: 16px; /* Giảm gap */
+}
+.playButtonLarge { /* Giữ nguyên */ }
+.iconButton { /* Giữ nguyên */ }
+.iconButton.liked { /* Giữ nguyên */ }
+/* Thanh actions bên phải theo hình ảnh */
+.toolbarActions {
+    margin-left: auto; /* Đẩy sang phải */
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.actionText { font-size: 0.8rem; color: #b3b3b3; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;}
+
+
+/* --- Track List Container và Bảng --- */
+.trackListContainer { padding: 0 32px 32px 32px; }
+.trackTable { width: 100%; border-collapse: collapse; }
+.tableHeader { border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #b3b3b3; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.tableHeader th { padding: 10px 8px; text-align: left; font-weight: 400; }
+/* Điều chỉnh chiều rộng cột cho Playlist Detail */
+.indexCol { width: 4%; }
+.titleCol { width: 35%; }
+.albumCol { width: 25%; }
+.artistCol { width: 20%; } /* <<< Thêm lại cột Artist */
+.dateAddedCol { width: 10%; } /* <<< CỘT MỚI */
+.durationCol { width: 6%; }
+
+/* Các class cho hàng và ô (trackRow, trackIndex, ...) giữ nguyên hoặc copy */
+.trackRow { transition: background-color 0.15s ease; border-radius: 4px; height: 56px; }
+.trackRow td { padding: 0 8px; vertical-align: middle; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #b3b3b3; font-size: 0.875rem; }
+.trackRow:hover { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+.trackRow:hover td { color: #fff; }
+.trackRow:hover .tableLink { color: #fff; }
+.trackRow:hover .playButtonContainer { opacity: 1; }
+.trackRow:hover .indexNumber { display: none; }
+.trackRow:hover .trackActions { opacity: 1; color: #fff; }
+.trackIndex { text-align: right; padding-right: 16px !important; position: relative; min-width: 40px; width: 4%; color: #b3b3b3; }
+.playButtonContainer { opacity: 0; transition: opacity 0.1s ease; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); display: flex; justify-content: flex-end; padding-right: 16px; cursor: pointer; }
+.playButton { background: none; border: none; color: #fff; padding: 0; cursor: pointer; display: flex; }
+.playButton svg { width: 20px; height: 20px; }
+.indexNumber { transition: opacity 0.1s ease; display: inline-block; }
+.trackTitleCell { display: flex; align-items: center; gap: 12px; height: inherit; }
+.trackCoverContainer { width: 40px; height: 40px; flex-shrink: 0; background-color: #333; border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.trackCover { width: 100%; height: 100%; object-fit: cover; display: block; }
+.trackCoverPlaceholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color: #aaa; font-size: 0.8rem; }
+.trackInfo { overflow: hidden; }
+.trackName { color: #fff; font-weight: 500; font-size: 0.95rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.trackRow:hover .trackName { color: #fff; }
+.trackSubArtists { font-size: 0.8rem; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+.trackRow:hover .trackSubArtists { color: #b3b3b3; }
+.trackAlbumCell {}
+.tableLink { color: inherit; text-decoration: none; transition: color 0.1s ease; }
+.tableLink:hover { text-decoration: underline; color: #fff; }
+.trackArtistCell {} /* Giữ lại nếu cần hiển thị artist của track */
+.trackDateAddedCell { font-size: 0.85rem; color: #b3b3b3; }
+.trackDurationCell { text-align: right; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
+.durationText {}
+.trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3; }
+.trackRow:hover .trackActions { opacity: 1; color: #fff; }
+.actionButton { background: none; border: none; color: inherit; cursor: pointer; padding: 4px; border-radius: 50%; transition: color 0.15s ease, background-color 0.15s ease; }
+.actionButton:hover { color: #fff; background-color: rgba(255, 255, 255, 0.1); }
+.actionButton svg { width: 16px; height: 16px; display: block; }
+.actionButton.liked { color: #2e77d0; }
+.actionButton.liked:hover { color: #5fa8ff; }
+
+/* Loading/Error */
+.message { text-align: center; padding: 40px; color: #a0a0a0; }
+.error { color: #f87171; }
+
+/* Animation spinner */
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.animate-spin svg { animation: spin 1s linear infinite; }

@@ -20,12 +20,9 @@ import LoginPage from './pages/LoginPage.jsx';       // <<< THÊM IMPORT
 import RegisterPage from './pages/RegisterPage.jsx'; // <<< THÊM IMPORT
 // --- Tạm thời giữ các placeholder khác ---
 import ArtistsPage from './pages/ArtistsPage.jsx'; // Import từ pages
-const PlaylistsPage = () => <div className="p-4">Playlists Page Content</div>;
-const SearchPage = () => <div className="p-4">Search Page Content</div>;
+import PlaylistsPage from './pages/PlaylistsPage.jsx'; // Import từ pages
 const SettingsPage = () => <div className="p-4">Settings Page Content</div>;
-
-
-const PlaylistDetailPage = () => <div className="p-4">Playlist Detail Page</div>;
+import PlaylistDetailPage from './pages/PlaylistDetailPage.jsx'; // Import từ pages
 // --- End Placeholders ---
 // Admin Pages (Import các trang admin bạn vừa tạo)
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
@@ -51,7 +48,7 @@ function App() {
           <Route path="artists" element={<ArtistsPage />} />
           <Route path="albums" element={<AlbumsPage />} />
           <Route path="playlists" element={<PlaylistsPage />} />
-          <Route path="search" element={<SearchPage />} />
+          
           <Route path="settings" element={<SettingsPage />} />
           <Route path="songs" element={<SongsPage />} />
           <Route path="musicgenre/:genreId" element={<MusicGenreDetailPage />} />

@@ -152,7 +152,7 @@
   .indexNumber { transition: opacity 0.1s ease; display: inline-block; }
   
   /* Title Cell (có ảnh bìa) */
-  .trackTitleCell { display: flex; align-items: center; gap: 12px; }
+  .trackTitleCell { display: flex; align-items: center; gap: 12px; height: 60px; }
   /* --- Định nghĩa lại trackCover cho bảng --- */
   .trackCoverContainer { width: 40px; height: 40px; flex-shrink: 0; background-color: #333; border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
   .trackCover { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -168,10 +168,10 @@
   .trackAlbumCell, .trackArtistCell { display: none; }
   
   /* Plays */
-  .trackPlaysCell { text-align: right; font-size: 0.85rem; }
+  .trackPlaysCell { text-align: left; font-size: 0.85rem; }
   
   /* Duration & Actions */
-  .trackDurationCell { text-align: right; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
+  .trackDurationCell { text-align: left; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
   .durationText { /* Span chứa số thời gian */ }
   .trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3; }
   .trackRow:hover .trackActions { opacity: 1; color: #fff; }
