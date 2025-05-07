@@ -1,0 +1,173 @@
+/* src/pages/AlbumDetailPage.module.css */
+/* Kế thừa hoặc định nghĩa lại các styles chung nếu cần */
+/* @import url('./AdminPages.module.css'); */
+
+.pageContainer {
+  padding: 0;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* --- Album Header --- */
+.albumHeader {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 48px 32px 24px 32px;
+  /* Thêm gradient nền dựa trên màu album (cần JS để lấy màu) */
+  /* background: linear-gradient(to bottom, rgba(var(--album-color, 60, 60, 60), 0.5), #121212 300px); */
+  min-height: 300px;
+  position: relative; /* Cho phép định vị tuyệt đối con nếu cần */
+}
+
+.headerCover {
+  width: 230px;
+  height: 230px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+}
+.coverWrapper { width: 100%; height: 100%; background-color: #333; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center;}
+.coverImage { width: 100%; height: 100%; object-fit: cover; }
+.coverPlaceholder svg { width: 60px; height: 60px; color: #555; }
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex-grow: 1;
+  gap: 8px;
+  padding-bottom: 4px; /* Nâng text lên một chút */
+}
+
+.itemType {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.albumTitle {
+  font-size: clamp(2rem, 6vw, 4rem); /* Responsive font size */
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.metaInfo {
+  font-size: 0.875rem;
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px; /* Khoảng cách với title */
+}
+.metaInfo span, .metaInfo a { opacity: 0.9; }
+.metaInfo span:not(:first-child)::before,
+.metaInfo a:not(:first-child)::before { content: "•"; margin: 0 6px; opacity: 0.7; }
+.artistLink { color: #fff; font-weight: 600; text-decoration: none; }
+.artistLink:hover { text-decoration: underline; }
+
+/* --- Action Bar --- */
+.actionBar {
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  /* Gradient nền nhẹ để tách biệt với header */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0) 80px);
+}
+
+.playButtonLarge {
+  background-color: #2e77d0; /* Xanh dương */
+  color: #fff; border: none; border-radius: 50%;
+  width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform 0.1s ease, background-color 0.1s ease; padding: 0;
+}
+.playButtonLarge:hover { transform: scale(1.05); background-color: #5fa8ff; }
+.playButtonLarge svg { width: 28px; height: 28px; fill: #fff; position: relative; left: 2px; }
+
+.iconButton {
+    background: none; border: none; color: #b3b3b3; cursor: pointer;
+    padding: 8px; transition: color 0.15s ease, transform 0.1s ease; border-radius: 50%;
+}
+.iconButton:hover { color: #fff; transform: scale(1.1); }
+.iconButton.liked { color: #2e77d0; }
+.iconButton.liked:hover { color: #5fa8ff; }
+.iconButton svg { display: block; }
+.settingsButton { margin-left: auto; }
+
+
+/* --- Track List --- */
+.trackListContainer {
+    padding: 0 32px 32px 32px;
+}
+
+.trackTable { width: 100%; border-collapse: collapse; }
+.tableHeader { border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #b3b3b3; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.tableHeader th { padding: 12px 8px; text-align: left; font-weight: 400; }
+.indexCol { width: 4%; text-align: right; padding-right: 16px !important; }
+.titleCol { width: 40%; }
+.artistCol { width: 30%;}
+.playsCol { width: 10%; text-align: right; }
+.durationCol { width: 10%; text-align: right; padding-right: 12px !important; }
+
+
+.trackRow { transition: background-color 0.15s ease; border-radius: 4px; }
+.trackRow td { padding: 10px 8px; vertical-align: middle; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #b3b3b3; font-size: 0.875rem; }
+.trackRow:hover { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+.trackRow:hover td { color: #fff; }
+.trackRow:hover .playButtonContainer { opacity: 1; }
+.trackRow:hover .indexNumber { display: none; }
+.trackRow:hover .trackActions { opacity: 1; }
+
+
+/* Index/Play */
+.trackIndex { text-align: right; padding-right: 16px !important; position: relative; min-width: 40px; width: 4%; color: #b3b3b3; }
+.playButtonContainer { opacity: 0; transition: opacity 0.1s ease; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); display: flex; justify-content: flex-end; padding-right: 16px; cursor: pointer; }
+.playButton { background: none; border: none; color: #fff; padding: 0; cursor: pointer; display: flex; }
+.playButton svg { width: 20px; height: 20px; }
+.indexNumber { transition: opacity 0.1s ease; display: inline-block; }
+
+/* Title */
+.trackTitleCell { display: flex; align-items: center; gap: 12px; }
+.trackInfo { overflow: hidden; }
+.trackName { color: #fff; font-weight: 500; font-size: 0.95rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.trackRow:hover .trackName { color: #fff; }
+
+/* Artist */
+.trackArtistCell {}
+.tableLink { color: inherit; text-decoration: none; transition: color 0.1s ease; }
+.tableLink:hover { text-decoration: underline; color: #fff; }
+.trackRow:hover .tableLink { color: #fff; }
+
+/* Plays */
+.trackPlaysCell { text-align: right; font-size: 0.85rem; }
+
+/* Duration & Actions */
+.trackDurationCell { text-align: right; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
+.durationText { /* Span chứa số thời gian */ }
+.trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3; /* Màu icon mặc định */ }
+.trackRow:hover .trackActions { opacity: 1; color: #fff; } /* Hiện và đổi màu icon khi hover hàng */
+
+.actionButton { background: none; border: none; color: inherit; /* Kế thừa màu từ .trackActions */ cursor: pointer; padding: 4px; border-radius: 50%; transition: color 0.15s ease, background-color 0.15s ease; }
+.actionButton:hover { color: #fff; background-color: rgba(255, 255, 255, 0.1); }
+.actionButton svg { width: 16px; height: 16px; display: block; }
+.actionButton.liked { color: #2e77d0; }
+.actionButton.liked:hover { color: #5fa8ff; }
+
+/* Loading/Error */
+.message { text-align: center; padding: 40px; color: #a0a0a0; }
+.error { color: #f87171; }
+
+/* Animation cho spinner */
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.animate-spin svg { animation: spin 1s linear infinite; }

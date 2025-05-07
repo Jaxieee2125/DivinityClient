@@ -1,7 +1,8 @@
 // src/store/playerStore.js
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware'; // Import devtools
 
-const usePlayerStore = create((set, get) => ({
+const usePlayerStore = create(devtools((set, get) => ({
   // --- State Variables ---
   currentSong: null,   // Thông tin bài hát đang phát (object)
   queue: [],           // Hàng đợi các bài hát (array of song objects)
@@ -15,6 +16,16 @@ const usePlayerStore = create((set, get) => ({
 
   // --- Actions (Hàm để cập nhật state) ---
 
+  /**
+   * Cập nhật thời gian hiện tại của bài hát đang phát.
+   * (Thường được gọi từ sự kiện onTimeUpdate của thẻ audio).
+   * @param {number} time
+   */
+  setCurrentTime: (time) => {
+    
+    set({ currentTime: time });
+  },
+  
   /**
    * Bắt đầu phát một bài hát.
    * @param {object} song - Object bài hát để phát.
@@ -141,13 +152,6 @@ const usePlayerStore = create((set, get) => ({
   },
 
   /**
-   * Cập nhật thời gian hiện tại của bài hát đang phát.
-   * (Thường được gọi từ sự kiện onTimeUpdate của thẻ audio).
-   * @param {number} time - Thời gian hiện tại (tính bằng giây).
-   */
-  setCurrentTime: (time) => set({ currentTime: time }),
-
-  /**
    * Cập nhật tổng thời lượng của bài hát đang phát.
    * (Thường được gọi từ sự kiện onLoadedMetadata của thẻ audio).
    * @param {number} duration - Tổng thời lượng (tính bằng giây).
@@ -247,6 +251,6 @@ const usePlayerStore = create((set, get) => ({
    */
   setQueue: (newQueue, newIndex = -1) => set({ queue: newQueue, currentQueueIndex: newIndex }),
 
-}));
+}), {name:"PlayerStore"})); // Tên cho devtools));
 
 export default usePlayerStore;

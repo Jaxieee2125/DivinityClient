@@ -1,0 +1,128 @@
+/* src/pages/MusicGenresPage.module.css */
+/* Kế thừa hoặc định nghĩa lại các styles chung nếu cần */
+/* @import url('./AdminPages.module.css'); */ /* Bỏ nếu không dùng chung */
+
+.pageContainer {
+    padding: 24px 32px;
+    /* background-color: #121212; */ /* Kế thừa từ body hoặc layout */
+    /* color: #e0e0e0; */
+  }
+  
+  /* --- Header Trang --- */
+  .pageHeader {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .headerIcon {
+    background-color: #333; /* Màu nền tối cho icon */
+    color: #fff;
+    border-radius: 50%;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .headerIcon svg {
+      width: 24px; height: 24px;
+  }
+  
+  .pageTitle {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+  }
+  
+  .itemCount {
+    background-color: #282828;
+    color: #b3b3b3;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+  }
+  
+  /* --- Toolbar (Đơn giản hơn) --- */
+  .toolbar {
+      display: flex;
+      justify-content: space-between; /* Chỉ cần nếu có nhiều nhóm */
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #282828;
+  }
+  
+  .sortFilterGroup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+  }
+  
+  /* Nút Sắp xếp (nếu chỉ có 1 kiểu sort) */
+  .sortButton {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #b3b3b3;
+      border: none;
+      border-radius: 4px;
+      padding: 7px 12px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .sortButton:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+  }
+  .sortButton:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+  }
+  .sortButton svg {
+      width: 16px; height: 16px;
+  }
+  
+  
+  /* --- Danh sách Genres --- */
+  .genreList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* Có thể dùng display: flex; flex-direction: column; nếu muốn mỗi genre chiếm 1 dòng */
+  }
+  
+  .genreLink { /* Thẻ NavLink */
+      display: block;
+      padding: 12px 16px; /* Padding lớn hơn cho dễ click */
+      color: #b3b3b3; /* Màu chữ xám nhạt */
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Border dưới rất mờ */
+      transition: background-color 0.15s ease, color 0.15s ease;
+      font-weight: 500;
+      font-size: 0.95rem; /* Cỡ chữ vừa phải */
+  }
+  .genreLink:hover {
+      background-color: rgba(255, 255, 255, 0.1); /* Nền hover */
+      color: #fff; /* Chữ trắng khi hover */
+  }
+  .genreLink:last-child {
+      border-bottom: none; /* Bỏ border cho mục cuối */
+  }
+  
+  .genreLink.active { /* Style khi trang chi tiết genre tương ứng đang active */
+      /* background-color: #282828; */ /* Có thể không cần nền active rõ ràng */
+      color: #2e77d0; /* <<< ĐỔI MÀU XANH DƯƠNG KHI ACTIVE */
+      font-weight: 600; /* Đậm hơn */
+  }
+  
+  /* Loading/Error/Empty states */
+  .message { text-align: center; padding: 40px; color: #a0a0a0; }
+  .error { color: #f87171; }
