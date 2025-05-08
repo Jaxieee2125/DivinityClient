@@ -1,135 +1,171 @@
 /* src/pages/ProfilePage.module.css */
-.container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #181818; /* Nền tối hơn một chút */
-    border-radius: 8px;
-    color: #ffffff;
-}
 
-.title {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2em;
-    color: #2979ff; /* Màu xanh lá Spotify */
-}
-
-.profileCard {
-    background-color: #282828; /* Nền card */
-    border-radius: 8px;
-    padding: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+.pageWrapper {
+    padding: 40px 24px; /* Tăng padding */
+    /* background-color: #121212; */ /* Nền tối nếu chưa có từ layout */
+    min-height: calc(100vh - 90px); /* Chiều cao trừ player bar */
     display: flex;
-    flex-direction: column; /* Mặc định, sẽ thay đổi cho màn hình lớn hơn */
-    gap: 30px; /* Khoảng cách giữa các section */
-}
-
-.avatarSection {
+    justify-content: center; /* Căn giữa card */
+    align-items: flex-start; /* Căn lên trên */
+  }
+  
+  .profileCard {
+    background-color: #1c1c1c; /* Nền card tối hơn một chút */
+    border-radius: 12px; /* Bo góc nhiều hơn */
+    padding: 32px 40px; /* Padding lớn hơn */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); /* Bóng đổ rõ hơn */
+    width: 100%;
+    max-width: 800px;
+    color: #e0e0e0; /* Màu chữ sáng */
+    display: flex;
+    flex-direction: column; /* Bố cục dọc ban đầu */
+    gap: 40px; /* Khoảng cách lớn giữa các phần */
+  }
+  
+  /* Header của Card */
+  .cardHeader {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px; /* Khoảng cách với info nếu ở trên mobile */
-}
-
-.avatar {
-    width: 150px;
-    height: 150px;
+    align-items: center; /* Căn giữa avatar và nút */
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #3a3a3a; /* Đường kẻ mờ */
+  }
+  
+  .avatarContainer {
+    position: relative; /* Để định vị nút edit */
+    width: 160px; /* Kích thước avatar lớn hơn */
+    height: 160px;
+  }
+  
+  .avatar {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #404040;
-    margin-bottom: 15px;
-}
-
-.changeAvatarButton {
-    background-color: #535353;
+    border: 4px solid #404040; /* Viền dày hơn */
+  }
+  
+  .editAvatarButton {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: rgba(40, 40, 40, 0.8); /* Nền bán trong suốt */
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9em;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: background-color 0.2s;
-}
-.changeAvatarButton:hover {
-    background-color: #6a6a6a;
-}
-
-.infoSection {
-    flex-grow: 1;
-}
-
-.infoItem {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #3a3a3a;
-    font-size: 1em;
-}
-.infoItem:last-child {
-    border-bottom: none;
-}
-
-.infoLabel {
-    color: #b3b3b3; /* Màu label xám nhạt */
+    padding: 0;
+  }
+  .editAvatarButton:hover {
+    background-color: rgba(60, 60, 60, 0.9);
+  }
+  .editAvatarButton svg {
+      width: 18px; height: 18px;
+  }
+  
+  .usernameTitle {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-top: 10px;
+      color: #ffffff;
+  }
+  
+  /* Phần thông tin chi tiết */
+  .infoSection {
+    /* Không cần flex-grow ở đây nữa */
+  }
+  
+  .infoGrid { /* Sử dụng Grid cho thông tin */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Lưới tự động */
+      gap: 16px 32px; /* Khoảng cách giữa các mục */
+  }
+  
+  .infoItem {
+    /* Bỏ border bottom, dùng grid gap */
+    /* border-bottom: 1px solid #3a3a3a; */
+    padding: 8px 0; /* Giảm padding dọc */
+  }
+  
+  .infoLabel {
+    display: block; /* Label một dòng riêng */
+    color: #a0a0a0; /* Màu label nhạt hơn */
+    font-size: 0.8rem; /* Nhỏ hơn */
     font-weight: 500;
-    margin-right: 10px;
-}
-
-.infoValue {
-    color: #ffffff;
-    text-align: right;
-}
-
-.actions {
-    margin-top: 20px;
+    margin-bottom: 4px; /* Khoảng cách với value */
+    text-transform: uppercase; /* Viết hoa */
+    letter-spacing: 0.5px;
+  }
+  
+  .infoValue {
+    color: #ffffff; /* Màu trắng */
+    font-size: 1rem; /* Cỡ chữ value */
+    font-weight: 500;
+  }
+  
+  /* Phần Actions */
+  .actions {
+    margin-top: 10px; /* Giảm margin top */
+    padding-top: 24px;
+    border-top: 1px solid #3a3a3a; /* Thêm đường kẻ trên */
     display: flex;
-    flex-direction: column; /* Nút chồng lên nhau trên mobile */
-    gap: 15px;
-}
-
-.actionButton {
-    padding: 10px 20px;
-    background-color: #2979ff; /* Màu xanh lá */
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-size: 1em;
-    font-weight: bold;
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu cần */
+    gap: 16px; /* Khoảng cách giữa các nút */
+  }
+  
+  .actionButton {
+    padding: 10px 24px; /* Padding nút */
+    background-color: #3e3e3e; /* Nền nút tối */
+    color: #ffffff;
+    border: 1px solid #535353; /* Viền nhẹ */
+    border-radius: 6px; /* Bo góc ít hơn */
+    font-size: 0.9rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s;
     text-align: center;
-}
-
-.actionButton:hover {
-    background-color: #2979ff;
-}
-
-.loading,
-.errorContainer {
-    text-align: center;
-    padding: 50px;
-    font-size: 1.2em;
-}
-.errorContainer {
-    color: #f44336; /* Màu đỏ cho lỗi */
-}
-
-
-/* Responsive cho màn hình lớn hơn */
-@media (min-width: 768px) {
-    .profileCard {
-        flex-direction: row; /* Avatar bên trái, info bên phải */
-        align-items: flex-start;
-    }
-    .avatarSection {
-        margin-bottom: 0;
-        margin-right: 30px; /* Khoảng cách giữa avatar và info */
-        flex-shrink: 0; /* Ngăn avatar co lại */
-    }
-    .actions {
-        flex-direction: row; /* Nút nằm cạnh nhau */
-        justify-content: flex-start; /* Căn trái các nút */
-         margin-top: 30px;
-    }
-}
+  }
+  .actionButton:hover {
+    background-color: #535353; /* Sáng hơn khi hover */
+    border-color: #777;
+  }
+  
+  /* Loading / Error */
+  .loading,
+  .errorContainer {
+      text-align: center;
+      padding: 60px 20px; /* Padding lớn hơn */
+      font-size: 1.1rem;
+      color: #a0a0a0;
+  }
+  .errorContainer {
+      color: #ff7b7b; /* Màu đỏ lỗi nhạt hơn */
+  }
+  
+  /* Responsive */
+  @media (min-width: 640px) { /* Điểm breakpoint nhỏ hơn */
+      .cardHeader {
+          flex-direction: row;
+          text-align: left; /* Căn trái text khi avatar bên trái */
+          align-items: center;
+          padding-bottom: 32px;
+      }
+      .avatarContainer {
+          margin-bottom: 0;
+          margin-right: 30px;
+      }
+      .usernameTitle {
+          margin-top: 0;
+          margin-bottom: 8px; /* Thêm khoảng cách dưới username */
+      }
+      .actions {
+          justify-content: flex-start;
+      }
+  }

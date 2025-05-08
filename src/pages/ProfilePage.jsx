@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserProfile } from '../api/apiClient'; // Đổi tên nếu cần
 import styles from './ProfilePage.module.css'; // Tạo file CSS riêng
+import { FiEdit2, FiLock } from 'react-icons/fi'; // Thêm icon nếu cần
 
 function ProfilePage() {
     const [userData, setUserData] = useState(null);
@@ -85,58 +86,71 @@ function ProfilePage() {
 
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>Thông Tin Cá Nhân</h1>
+        // Thêm pageWrapper để căn giữa
+        <div className={styles.pageWrapper}>
             <div className={styles.profileCard}>
-                <div className={styles.avatarSection}>
-                    {/* Giả sử bạn có profile_picture_url từ API */}
-                    <img
-                        src={userData.profile_picture_url || 'https://via.placeholder.com/150?text=Avatar'}
-                        alt={`${userData.username}'s avatar`}
-                        className={styles.avatar}
-                    />
-                    {/* Nút thay đổi ảnh đại diện (chức năng nâng cao) */}
-                    {/* <button className={styles.changeAvatarButton}>Đổi ảnh</button> */}
+                {/* Phần Header của Card */}
+                <div className={styles.cardHeader}>
+                    <div className={styles.avatarContainer}>
+                        <img
+                            src={userData.profile_picture_url || '/default-avatar.png'} // <<< Dùng ảnh mặc định từ public
+                            alt={`${userData.username}'s avatar`}
+                            className={styles.avatar}
+                            onError={(e) => { e.target.src = '/default-avatar.png'; }} // Fallback nếu ảnh lỗi
+                        />
+                        {/* Nút sửa ảnh nhỏ đè lên avatar */}
+                        
+                    </div>
+                    {/* Tên user lớn */}
+                    <div>
+                        <h1 className={styles.usernameTitle}>{userData.username}</h1>
+                         {/* Có thể thêm email hoặc thông tin khác ở đây */}
+                         <p style={{color: '#a0a0a0', fontSize: '0.9rem', margin: 0}}>{userData.email}</p>
+                    </div>
                 </div>
 
+                {/* Phần Thông tin chi tiết */}
                 <div className={styles.infoSection}>
-                    <div className={styles.infoItem}>
-                        <span className={styles.infoLabel}>Tên đăng nhập:</span>
-                        <span className={styles.infoValue}>{userData.username}</span>
+                    <h2 style={{fontSize: '1.2rem', fontWeight: 600, marginBottom: '20px', borderBottom: '1px solid #3a3a3a', paddingBottom: '10px'}}>Details</h2>
+                    <div className={styles.infoGrid}>
+                        <div className={styles.infoItem}>
+                            <span className={styles.infoLabel}>Username</span>
+                            <span className={styles.infoValue}>{userData.username}</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <span className={styles.infoLabel}>Email</span>
+                            <span className={styles.infoValue}>{userData.email}</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <span className={styles.infoLabel}>Date of Birth</span>
+                            <span className={styles.infoValue}>{formatDate(userData.date_of_birth)}</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <span className={styles.infoLabel}>Joined Date</span>
+                            {/* Giả sử backend trả về date_joined */}
+                            <span className={styles.infoValue}>{formatDate(userData.date_joined)}</span>
+                        </div>
+                         {/* Thêm các trường khác nếu có */}
+                         {/* <div className={styles.infoItem}>
+                            <span className={styles.infoLabel}>Status</span>
+                            <span className={styles.infoValue}>{userData.is_active ? 'Active' : 'Inactive'}</span>
+                         </div> */}
                     </div>
-                    <div className={styles.infoItem}>
-                        <span className={styles.infoLabel}>Email:</span>
-                        <span className={styles.infoValue}>{userData.email}</span>
-                    </div>
-                    <div className={styles.infoItem}>
-                        <span className={styles.infoLabel}>Ngày sinh:</span>
-                        <span className={styles.infoValue}>{formatDate(userData.date_of_birth)}</span>
-                    </div>
-                    <div className={styles.infoItem}>
-                        <span className={styles.infoLabel}>Ngày tham gia:</span>
-                        <span className={styles.infoValue}>{formatDate(userData.date_joined)}</span>
-                    </div>
-                    {/* Thêm các thông tin khác nếu có từ API */}
-                    {/* Ví dụ:
-                    <div className={styles.infoItem}>
-                        <span className={styles.infoLabel}>Số bài hát yêu thích:</span>
-                        <span className={styles.infoValue}>{userData.favourite_songs_count || 0}</span>
-                    </div>
-                    */}
                 </div>
 
+                {/* Phần Actions */}
                 <div className={styles.actions}>
                     <button
                         className={styles.actionButton}
-                        onClick={() => navigate('/profile/edit')} // Cần tạo trang EditProfile
+                        onClick={() => navigate('/profile/edit')} // <<< Cần tạo route và trang này
                     >
-                        Chỉnh sửa thông tin
+                        <FiEdit2 style={{marginRight: '8px'}}/> Edit Profile
                     </button>
                     <button
                         className={styles.actionButton}
-                        onClick={() => navigate('/profile/change-password')} // Cần tạo trang ChangePassword
+                        onClick={() => navigate('/profile/change-password')} // <<< Cần tạo route và trang này
                     >
-                        Đổi mật khẩu
+                         <FiLock style={{marginRight: '8px'}}/> Change Password
                     </button>
                 </div>
             </div>
