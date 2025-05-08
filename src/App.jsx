@@ -36,6 +36,7 @@ import ManageArtists from './pages/admin/ManageArtists.jsx'; // Ví dụ
 import ManageAlbums from './pages/admin/ManageAlbums.jsx'; // Ví dụ
 import ManageUsers from './pages/admin/ManageUsers.jsx'; // Ví dụ
 import ManageGenres from './pages/admin/ManageMusicGenres.jsx'; // Ví dụ
+import ManageSongRequests from './pages/admin/ManageSongRequests.jsx'; // Ví dụ
 
 function App() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -75,10 +76,10 @@ function App() {
           <Route path="artist/:artistId" element={<ArtistDetailPage />} />
           {/* Route cho trang cá nhân (Profile) */}
           <Route path="profile" element={<ProfilePage />} />
-          
+          <Route path="profile/edit" element={<EditProfilePage />} />
         </Route>
         {/* Route cho trang cá nhân (Profile) */}
-        <Route path="profile/edit" element={<EditProfilePage />} />
+        
         <Route path="profile/change-password" element={<ChangePasswordPage />} />
 
         {/* Route Đăng nhập Admin */}
@@ -92,6 +93,7 @@ function App() {
             <Route path="albums" element={<ManageAlbums />} />
             <Route path="genres" element={<ManageGenres />} />
             <Route path="users" element={<ManageUsers />} />
+            <Route path="song-requests" element={<ManageSongRequests />} />
         </Route>
 
         {/* --- THÊM CÁC ROUTE ĐĂNG NHẬP/ĐĂNG KÝ USER --- */}

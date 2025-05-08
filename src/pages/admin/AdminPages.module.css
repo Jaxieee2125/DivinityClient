@@ -1,48 +1,183 @@
 /* src/pages/admin/AdminPages.module.css */
+
 .pageContainer {
-    padding: 20px;
-  }
-  
-  .pageHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #e8e8e8;
-  }
-  
-  .pageHeader h1 {
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 600;
-    color: #333;
-    margin: 0; /* Bỏ margin mặc định của h1 */
-  }
-  
-  .addButton {
-    background-color: #1890ff; /* Màu xanh dương chính */
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-  }
-  .addButton:hover {
-    background-color: #40a9ff; /* Sáng hơn khi hover */
-  }
-  
-  /* Loading/Error messages */
-  .message {
-    text-align: center;
-    padding: 40px;
-    color: #888;
-  }
-  .error {
-    color: #ff4d4f; /* Màu đỏ lỗi */
-    background-color: #fff1f0;
-    border: 1px solid #ffccc7;
-    border-radius: 4px;
-    padding: 10px 15px;
-  }
+  padding: 20px;
+  background-color: #fff; /* Nền trắng như ảnh */
+  min-height: calc(100vh - 60px); /* Chiều cao tối thiểu */
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8e8e8; /* Đường kẻ dưới header */
+}
+
+.pageHeader h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.addButton { /* Style cho nút Add (nếu có) */
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+.addButton:hover {
+  background-color: #40a9ff;
+}
+
+/* Filters Section (Style tương tự Toolbar nếu có) */
+.filters {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filters label {
+  font-weight: 500;
+  color: #555;
+  margin-right: 5px; /* Khoảng cách với select */
+}
+
+.selectInput {
+  padding: 6px 10px; /* Giảm padding chút */
+  border: 1px solid #d9d9d9; /* Màu border giống bảng */
+  border-radius: 4px;
+  min-width: 150px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem; /* Kích thước chữ nhỏ hơn */
+}
+.selectInput:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+
+/* Table Styles - Điều chỉnh để giống ảnh nhất */
+.tableResponsive {
+  overflow-x: auto;
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid #e8e8e8; /* Thêm border bao ngoài */
+  border-radius: 8px; /* Bo góc nhẹ */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Thêm shadow nhẹ */
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse; /* Quan trọng */
+  font-size: 0.875rem; /* text-sm */
+  color: #555; /* Màu chữ chính */
+}
+
+/* Bỏ border riêng của cell/table, dùng border của tbody/thead */
+.dataTable th,
+.dataTable td {
+  padding: 12px 15px; /* Padding đồng nhất */
+  text-align: left;
+  vertical-align: middle;
+  border: none; /* Bỏ border riêng của cell */
+}
+
+.dataTable th {
+  background-color: #fafafa; /* Nền header rất nhạt */
+  font-weight: 500; /* Giảm độ đậm */
+  color: #333;
+  white-space: nowrap;
+  border-bottom: 1px solid #e8e8e8; /* Chỉ border dưới cho header */
+}
+
+.dataTable tbody tr {
+  border-bottom: 1px solid #e8e8e8; /* Border giữa các hàng */
+  transition: background-color 0.1s ease;
+}
+.dataTable tbody tr:last-child {
+  border-bottom: none; /* Bỏ border cho hàng cuối */
+}
+
+.dataTable tbody tr:hover {
+  background-color: #f5f5f5; /* Màu hover rất nhạt */
+}
+
+.updatingRow {
+  opacity: 0.6;
+  pointer-events: none;
+  background-color: #f0f0f0 !important;
+}
+
+/* Status Badges - Làm giống style tag của Ant Design */
+.statusBadge {
+  padding: 2px 8px; /* Padding nhỏ hơn */
+  border-radius: 4px; /* Ít bo hơn */
+  font-size: 0.75rem; /* Chữ nhỏ */
+  font-weight: 400; /* Bớt đậm */
+  display: inline-block;
+  line-height: 1.5; /* Căn chữ tốt hơn */
+  border: 1px solid; /* Dùng border thay vì background đậm */
+}
+
+.status-pending { background-color: #fffbe6; color: #d48806; border-color: #ffe58f; }
+.status-approved { background-color: #f6ffed; color: #389e0d; border-color: #b7eb8f; }
+.status-rejected { background-color: #fff1f0; color: #cf1322; border-color: #ffccc7; }
+.status-added { background-color: #e6f7ff; color: #096dd9; border-color: #91d5ff; }
+
+/* Action Buttons - Làm giống icon button trong ảnh */
+.actionButtons {
+  display: flex;
+  gap: 12px; /* Tăng khoảng cách */
+  align-items: center;
+  justify-content: flex-start; /* Hoặc center */
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  padding: 0; /* Bỏ padding */
+  margin: 0 2px; /* Thêm margin nhỏ */
+  cursor: pointer;
+  color: #888; /* Màu icon mặc định */
+  display: inline-flex;
+  transition: color 0.2s ease;
+}
+.actionButton:hover:not(:disabled) {
+  color: #1890ff; /* Màu xanh khi hover */
+}
+.actionButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* Không cần các class approve/reject/add riêng nếu chỉ dùng màu hover */
+
+/* Loading/Error/Info Messages */
+.message {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+.error {
+  color: #ff4d4f;
+  background-color: #fff1f0;
+  border: 1px solid #ffccc7;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 15px; /* Thêm khoảng cách dưới */
+}
+.loadingMessage{ /* Có thể thêm style riêng cho loading */
+ font-style: italic;
+}
+.infoMessage { /* Style cho "No requests found..." */
+  font-style: italic;
+}

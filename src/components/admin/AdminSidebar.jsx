@@ -40,6 +40,9 @@ const AdminSidebar = () => {
                  <NavLink to="/admin/genres" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
                     <FiTag /> Manage Genres
                 </NavLink>
+                <NavLink to="/admin/song-requests" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+                    <FiMusic /> Manage Song Requests
+                </NavLink>
                 {/* Thêm các link quản lý khác */}
             </nav>
             <div className={styles.logoutSection}>

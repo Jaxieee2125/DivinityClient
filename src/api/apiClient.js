@@ -224,6 +224,21 @@ export const updateCurrentUserProfile = (userData) => {
   return apiClient.put('/profile/', userData); // Dùng PUT hoặc PATCH tùy backend
 };
 
+/**
+ * Gửi yêu cầu bài hát mới từ user.
+ * @param {object} requestData - { song_title, artist_name?, album_name?, notes? }
+ * @returns {Promise<object>}
+ */
+export const requestSong = (requestData) => {
+  console.log("[apiClient] Sending song request:", requestData);
+  // Interceptor sẽ gửi token
+  return apiClient.post('/song-requests/', requestData);
+};
+
+// --- API cho Admin quản lý request ---
+export const getAdminSongRequests = (params) => apiClient.get('/admin/song-requests/', { params });
+export const updateAdminSongRequest = (requestId, updateData) => apiClient.put(`/admin/song-requests/${requestId}/`, updateData);
+
 export const getRecentlyAddedAlbums = (params) => apiClient.get('/home/new-releases/', { params });
 export const getPlaylistDetail = (playlistId) => apiClient.get(`/playlists/${playlistId}/`);
 
