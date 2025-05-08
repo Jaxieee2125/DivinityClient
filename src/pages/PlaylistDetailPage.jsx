@@ -70,17 +70,7 @@ const PlaylistDetailPage = () => {
     const playSong = usePlayerStore(state => state.playSong);
     const addToQueue = usePlayerStore(state => state.addToQueue);
 
-    const fetchData = useCallback(async () => {
-        setLoading(true); setError(null);
-        try {
-            // API getPlaylistDetail giờ nên trả về playlist và mảng songs chi tiết
-            const response = await getPlaylistDetail(playlistId);
-            if (!response.data) throw new Error("Playlist not found.");
-            setPlaylistDetails(response.data);
-            // TODO: Cập nhật isPlaylistLiked
-        } catch (err) { /* ... xử lý lỗi ... */ }
-        finally { setLoading(false); }
-         fetchData = useCallback(async () => { // Re-define
+    const fetchData = useCallback(async () => { // Re-define
             setLoading(true); setError(null);
             try {
                 const response = await getPlaylistDetail(playlistId);
@@ -93,7 +83,6 @@ const PlaylistDetailPage = () => {
             } finally { setLoading(false); }
         }, [playlistId]);
 
-    }, [playlistId]);
 
     useEffect(() => { fetchData(); }, [fetchData]);
 
