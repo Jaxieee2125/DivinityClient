@@ -10,6 +10,7 @@ import SongsPage from './pages/SongsPage.jsx'; // Import từ pages
 import ArtistDetailPage from './pages/ArtistDetailPage.jsx'; // Import từ pages
 import MusicGenresPage from './pages/MusicGenresPage.jsx'; // Import từ pages
 import MusicGenreDetailPage from './pages/MusicGenreDetailPage.jsx';
+import QueueSidebar from './components/QueueSidebar.jsx';
 
 // --- Import pages ---
 import HomePage from './pages/HomePage.jsx'; // Import từ pages
@@ -38,15 +39,26 @@ import ManageGenres from './pages/admin/ManageMusicGenres.jsx'; // Ví dụ
 
 function App() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isQueueSidebarOpen, setIsQueueSidebarOpen] = useState(false);
 
   const openSearchModal = () => setIsSearchModalOpen(true);
   const closeSearchModal = () => setIsSearchModalOpen(false);
+
+  // --- HÀM MỚI ĐỂ TOGGLE QUEUE ---
+  const toggleQueueSidebar = () => {
+    setIsQueueSidebarOpen(prev => !prev);
+  };
+  const closeQueueSidebar = () => {
+      setIsQueueSidebarOpen(false);
+  }
+
   return (
     <>
     <Router>
       <Routes>
         {/* Các Route chính của User (có thể cần bảo vệ sau này) */}
-        <Route path="/" element={<MainLayout openSearchModal={openSearchModal} />}>
+        <Route path="/" element={<MainLayout openSearchModal={openSearchModal} />}></Route>
+        <Route path="/" element={<MainLayout openSearchModal={openSearchModal} toggleQueueSidebar={toggleQueueSidebar} />}>
           {/* Sử dụng HomePage đã import */}
           <Route index element={<HomePage />} />
           <Route path="artists" element={<ArtistsPage />} />
@@ -92,6 +104,7 @@ function App() {
 
       </Routes>
       <SearchModal isOpen={isSearchModalOpen} onClose={closeSearchModal} />
+      <QueueSidebar isOpen={isQueueSidebarOpen} onClose={closeQueueSidebar} />
     </Router>
 
     </>
