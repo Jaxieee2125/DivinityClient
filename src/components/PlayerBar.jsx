@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fi';
 import usePlayerStore from '../store/playerStore'; // Đảm bảo đường dẫn đúng
 import styles from './PlayerBar.module.css'; // Đảm bảo import CSS Module
+import { toast } from 'react-toastify'; // Thêm import cho toast
 
 const PlayerBar = ({ toggleQueueSidebar }) => {
   const audioRef = useRef(null);
@@ -33,30 +34,27 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
   const toggleMute = usePlayerStore(state => state.toggleMute);
   const setCurrentTime = usePlayerStore(state => state.setCurrentTime);
   const setDuration = usePlayerStore(state => state.setDuration);
-  const queue = usePlayerStore(state => state.queue);
-  const currentIndex = usePlayerStore(state => state.currentIndex);
-  const setCurrentIndex = usePlayerStore(state => state.setCurrentIndex);
-  const setCurrentSong = usePlayerStore(state => state.setCurrentSong);
 
-  // --- CALLBACKS CHO USER INTERACTIONS ---
-  const handleLikeToggle = () => {
+
+  const handleLikeToggle = useCallback(() => {
     if (!currentSong) return;
     console.log("Toggle Like for song:", currentSong._id);
     setIsLiked(!isLiked);
-  };
+  } , [currentSong, isLiked]);
 
-  const handleShuffleToggle = () => {
+
+  const handleShuffleToggle = useCallback(() => {
     setIsShuffle(!isShuffle);
     console.log("Toggle Shuffle:", !isShuffle);
-  };
+  }, [isShuffle]);
 
-  const handleRepeatToggle = () => {
+  const handleRepeatToggle = useCallback(() => {
     setRepeatMode(prevMode => {
       if (prevMode === 'none') return 'all';
       if (prevMode === 'all') return 'one';
       return 'none';
     });
-  };
+  }, [setRepeatMode]);
 
   const toggleMiniPlayer = () => {
     setIsMiniPlayer(!isMiniPlayer);

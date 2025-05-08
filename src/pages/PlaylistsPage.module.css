@@ -34,8 +34,6 @@
       border-bottom: 1px solid #282828;
   }
   .sortFilterGroup { display: flex; align-items: center; gap: 12px; }
-  .sortSelect { /* Giữ nguyên style */ }
-  .filterButton { /* Giữ nguyên style */ }
   .sortSelect { background-color: #282828; color: #fff; border: 1px solid #404040; border-radius: 4px; padding: 7px 12px; font-size: 0.875rem; font-weight: 500; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; min-width: 150px; background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); background-repeat: no-repeat; background-position: right 10px center; background-size: 18px 18px; transition: border-color 0.2s ease, background-color 0.2s ease; }
   .sortSelect:hover { border-color: #606060; }
   .sortSelect:focus { outline: none; border-color: #777; }

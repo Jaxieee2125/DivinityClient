@@ -40,7 +40,7 @@
   .artistTitle {
     font-size: clamp(2rem, 6vw, 4.5rem); /* Điều chỉnh lại cỡ chữ */
     font-weight: 900; color: #fff; line-height: 1.1; margin: 0;
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 3;
   }
   
   .metaInfo {
@@ -172,7 +172,6 @@
   
   /* Duration & Actions */
   .trackDurationCell { text-align: left; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
-  .durationText { /* Span chứa số thời gian */ }
   .trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3; }
   .trackRow:hover .trackActions { opacity: 1; color: #fff; }
   .actionButton { background: none; border: none; color: inherit; cursor: pointer; padding: 4px; border-radius: 50%; transition: color 0.15s ease, background-color 0.15s ease; }
