@@ -12,7 +12,7 @@
     text-align: center;
     margin-bottom: 30px;
     font-size: 2em;
-    color: #1db954; /* Màu xanh lá Spotify */
+    color: #2979ff; /* Màu xanh lá Spotify */
 }
 
 .profileCard {
@@ -90,7 +90,7 @@
 
 .actionButton {
     padding: 10px 20px;
-    background-color: #1db954; /* Màu xanh lá */
+    background-color: #2979ff; /* Màu xanh lá */
     color: white;
     border: none;
     border-radius: 25px;
@@ -102,7 +102,7 @@
 }
 
 .actionButton:hover {
-    background-color: #1ed760;
+    background-color: #2979ff;
 }
 
 .loading,

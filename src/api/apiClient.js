@@ -183,6 +183,23 @@ export const getLibraryHighlights = (params) => apiClient.get('/home/library-hig
  * Lấy các album mới được thêm/phát hành gần đây.
  * @param {object} params - Ví dụ: { limit: 10 }
  */
+
+/**
+ * Gửi yêu cầu đổi mật khẩu cho người dùng đang đăng nhập.
+ * Gọi đến endpoint POST /users/change-password/ (do ChangePasswordView xử lý).
+ * @param {string} oldPassword Mật khẩu cũ
+ * @param {string} newPassword Mật khẩu mới
+ * @returns {Promise<object>} Promise chứa response từ API (thường là message thành công).
+ */
+export const changePassword = (oldPassword, newPassword) => {
+  console.log("[apiClient] Attempting password change.");
+  // Interceptor sẽ tự động đính kèm access token của user
+  return apiClient.post('/users/change-password/', {
+      old_password: oldPassword, // Đảm bảo key khớp với ChangePasswordSerializer backend
+      new_password: newPassword,
+  });
+};
+
 export const getRecentlyAddedAlbums = (params) => apiClient.get('/home/new-releases/', { params });
 export const getPlaylistDetail = (playlistId) => apiClient.get(`/playlists/${playlistId}/`);
 
