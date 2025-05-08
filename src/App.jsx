@@ -17,6 +17,7 @@ import AlbumsPage from './pages/AlbumsPage.jsx'; // Import từ pages
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx'; // Import từ pages
 import ChangePasswordPage from './pages/ChangePasswordPage.jsx'; // Import từ pages
+import EditProfilePage from './pages/EditProfilePage.jsx'; // Import từ pages
 
 // --- Import các trang Đăng nhập/Đăng ký User --- // <<< THÊM IMPORT
 import LoginPage from './pages/LoginPage.jsx';       // <<< THÊM IMPORT
@@ -62,9 +63,10 @@ function App() {
           <Route path="artist/:artistId" element={<ArtistDetailPage />} />
           {/* Route cho trang cá nhân (Profile) */}
           <Route path="profile" element={<ProfilePage />} />
+          
         </Route>
         {/* Route cho trang cá nhân (Profile) */}
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path="profile/edit" element={<EditProfilePage />} />
         <Route path="profile/change-password" element={<ChangePasswordPage />} />
 
         {/* Route Đăng nhập Admin */}
