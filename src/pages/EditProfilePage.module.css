@@ -1,0 +1,156 @@
+/* src/pages/EditProfilePage.module.css */
+/* Sử dụng lại nhiều style từ ProfilePage và AuthForm nếu muốn */
+.container {
+    padding: 20px;
+    max-width: 600px; /* Có thể nhỏ hơn ProfilePage */
+    margin: 20px auto;
+    background-color: #181818;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    color: #2979ff;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Khoảng cách giữa các input group */
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    color: #b3b3b3;
+}
+
+.input {
+    padding: 10px 12px;
+    background-color: #282828;
+    border: 1px solid #404040;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1em;
+}
+.input:focus {
+    outline: none;
+    border-color: #2979ff;
+    box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.3);
+}
+.input:disabled {
+     background-color: #3a3a3a;
+     cursor: not-allowed;
+}
+
+
+.avatarPreviewContainer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.avatarPreview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #404040;
+}
+
+/* Ẩn input file gốc */
+.fileInput {
+    display: none;
+}
+
+/* Style cho label của input file trông như nút */
+.fileInputLabel {
+    background-color: #535353;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: inline-block; /* Để padding có tác dụng */
+}
+.fileInputLabel:hover {
+    background-color: #6a6a6a;
+}
+
+.buttonGroup {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+}
+
+.saveButton,
+.cancelButton {
+    flex-grow: 1; /* Chia đều không gian */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.saveButton {
+    background-color: #2979ff;
+    color: white;
+}
+.saveButton:hover:not(:disabled) {
+    background-color: #2979ff;
+}
+.saveButton:disabled {
+    background-color: #535353;
+    cursor: not-allowed;
+}
+
+.cancelButton {
+    background-color: #535353;
+    color: #ffffff;
+}
+.cancelButton:hover:not(:disabled) {
+    background-color: #6a6a6a;
+}
+.cancelButton:disabled {
+     opacity: 0.6;
+     cursor: not-allowed;
+}
+
+
+.error,
+.fieldError {
+    color: #f44336;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+.error {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.success {
+    color: #2979ff;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.loading {
+     text-align: center;
+     padding: 30px;
+}

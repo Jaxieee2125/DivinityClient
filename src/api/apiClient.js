@@ -200,6 +200,30 @@ export const changePassword = (oldPassword, newPassword) => {
   });
 };
 
+// === API CHO PROFILE USER HIỆN TẠI ===
+/**
+ * Lấy thông tin profile của người dùng đang đăng nhập.
+ * Gọi GET /api/profile/
+ * @returns {Promise<object>}
+ */
+export const getCurrentUserProfile = () => {
+  console.log("[apiClient] GET /profile/ (current user)");
+  // Interceptor sẽ gửi token
+  return apiClient.get('/profile/');
+};
+
+/**
+* Cập nhật thông tin profile của người dùng đang đăng nhập.
+* Gọi PUT /api/profile/
+* @param {FormData | object} userData - Dữ liệu cập nhật.
+* @returns {Promise<object>}
+*/
+export const updateCurrentUserProfile = (userData) => {
+  console.log("[apiClient] PUT /profile/ (current user update)");
+  // Interceptor sẽ gửi token
+  return apiClient.put('/profile/', userData); // Dùng PUT hoặc PATCH tùy backend
+};
+
 export const getRecentlyAddedAlbums = (params) => apiClient.get('/home/new-releases/', { params });
 export const getPlaylistDetail = (playlistId) => apiClient.get(`/playlists/${playlistId}/`);
 
