@@ -79,6 +79,7 @@ function ProfilePage() {
                 month: '2-digit',
                 year: 'numeric',
             });
+        // eslint-disable-next-line no-unused-vars
         } catch (e) {
             return 'Ngày không hợp lệ';
         }

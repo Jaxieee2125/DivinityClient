@@ -78,9 +78,6 @@
   }
   
   /* Phần thông tin chi tiết */
-  .infoSection {
-    /* Không cần flex-grow ở đây nữa */
-  }
   
   .infoGrid { /* Sử dụng Grid cho thông tin */
       display: grid;
