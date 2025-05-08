@@ -150,12 +150,12 @@
 .trackRow:hover .tableLink { color: #fff; }
 
 /* Plays */
-.trackPlaysCell { text-align: right; font-size: 0.85rem; }
+.trackPlaysCell { text-align: left; font-size: 0.85rem; }
 
 /* Duration & Actions */
-.trackDurationCell { text-align: right; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
+.trackDurationCell { text-align: left; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
 .durationText { /* Span chứa số thời gian */ }
-.trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3; /* Màu icon mặc định */ }
+.trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3;  /* Màu icon mặc định */ }
 .trackRow:hover .trackActions { opacity: 1; color: #fff; } /* Hiện và đổi màu icon khi hover hàng */
 
 .actionButton { background: none; border: none; color: inherit; /* Kế thừa màu từ .trackActions */ cursor: pointer; padding: 4px; border-radius: 50%; transition: color 0.15s ease, background-color 0.15s ease; }

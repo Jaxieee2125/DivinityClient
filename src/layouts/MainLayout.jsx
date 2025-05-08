@@ -6,7 +6,7 @@ import PlayerBar from '../components/PlayerBar.jsx';
 import styles from './MainLayout.module.css';
 
 // Nhận prop openSearchModal từ App
-const MainLayout = ({ openSearchModal }) => {
+const MainLayout = ({ openSearchModal, toggleQueueSidebar }) => {
   // --- THÊM STATE VÀ LOGIC XỬ LÝ AUTH ---
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State để biết user đăng nhập chưa
   const navigate = useNavigate(); // Hook để điều hướng
@@ -56,7 +56,7 @@ const MainLayout = ({ openSearchModal }) => {
         <main className={styles.mainContent}>
           <Outlet />
         </main>
-        <PlayerBar />
+        <PlayerBar toggleQueueSidebar={toggleQueueSidebar} />
       </div>
     </div>
   );

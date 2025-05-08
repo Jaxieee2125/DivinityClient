@@ -7,7 +7,7 @@ import {
 import usePlayerStore from '../store/playerStore'; // Đảm bảo đường dẫn đúng
 import styles from './PlayerBar.module.css'; // Đảm bảo import CSS Module
 
-const PlayerBar = () => {
+const PlayerBar = ({ toggleQueueSidebar }) => {
   const audioRef = useRef(null);
   const [isMiniPlayer, setIsMiniPlayer] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -274,10 +274,14 @@ const PlayerBar = () => {
       setVolume(newVolume);
   };
 
-  const handleShowQueue = () => {
-      console.log("Show playback queue");
-      // TODO: Implement logic mở modal/panel hàng đợi
-  };
+  const handleShowQueue = useCallback(() => {
+    if(toggleQueueSidebar) { // Kiểm tra prop tồn tại
+      toggleQueueSidebar(); // Gọi hàm từ App.jsx
+    } else {
+        console.warn("toggleQueueSidebar function not passed to PlayerBar");
+    }
+  }, [toggleQueueSidebar]); // Thêm dependency
+
 
   // --- HELPER ---
    const formatTime = (time) => {

@@ -1,0 +1,139 @@
+/* src/components/QueueSidebar.module.css */
+
+.sidebar {
+    position: fixed; /* Hoặc absolute nếu cha là relative */
+    top: 0;
+    right: 0; /* Nằm bên phải */
+    bottom: 90px; /* <<< Cách player bar ở dưới một khoảng */
+    width: 300px; /* Chiều rộng sidebar queue */
+    max-width: 80vw; /* Chiều rộng tối đa trên màn hình nhỏ */
+    background-color: #121212; /* Nền tối */
+    border-left: 1px solid #282828; /* Đường kẻ ngăn cách */
+    padding: 16px;
+    padding-bottom: 0; /* Không cần padding dưới vì đã cách player bar */
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%); /* Ẩn ban đầu */
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000; /* Nằm trên nội dung chính */
+    color: #b3b3b3;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0); /* Hiện ra */
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-shrink: 0; /* Không co header */
+  }
+  
+  .title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  .closeButton { /* Nút đóng X */
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  .closeButton:hover {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+  }
+  .closeButton svg { width: 20px; height: 20px; display: block; }
+  
+  .queueList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Chiếm không gian còn lại */
+    overflow-y: auto; /* Cho phép cuộn */
+    /* Tùy chỉnh thanh cuộn */
+    scrollbar-width: thin;
+    scrollbar-color: #4d4d4d #121212;
+  }
+  .queueList::-webkit-scrollbar { width: 6px; }
+  .queueList::-webkit-scrollbar-track { background: #121212; }
+  .queueList::-webkit-scrollbar-thumb { background-color: #4d4d4d; border-radius: 3px; }
+  .queueList::-webkit-scrollbar-thumb:hover { background-color: #6b6b6b; }
+  
+  
+  .queueItem {
+    display: flex;
+    align-items: center;
+    padding: 8px 4px; /* Padding nhỏ hơn */
+    border-radius: 4px;
+    gap: 10px;
+    cursor: pointer; /* Cho phép double click để play */
+    transition: background-color 0.15s ease;
+    position: relative; /* Cho nút xóa */
+  }
+  .queueItem:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  .queueItem.playing { /* Style cho bài đang phát */
+      background-color: rgba(255, 255, 255, 0.1);
+  }
+  .queueItem.playing .trackName {
+      color: #2e77d0; /* Màu xanh dương */
+  }
+  
+  
+  .trackCover { /* Ảnh bìa nhỏ */
+      width: 32px; height: 32px; border-radius: 3px; flex-shrink: 0;
+      background-color: #333; object-fit: cover;
+  }
+  .trackCoverPlaceholder { width: 32px; height: 32px; display:flex; align-items:center; justify-content:center; color: #777; background-color: #282828; border-radius: 3px; flex-shrink: 0;}
+  .trackCoverPlaceholder svg {width: 16px; height: 16px;}
+  
+  
+  .trackInfo {
+      overflow: hidden; /* Ngăn tràn text */
+      flex-grow: 1; /* Chiếm không gian còn lại */
+  }
+  .trackName {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 2px;
+  }
+  .trackArtist {
+      font-size: 0.8rem;
+      color: #b3b3b3;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  
+  .removeButton { /* Nút xóa khỏi queue */
+      background: none; border: none; color: #888;
+      cursor: pointer; padding: 6px; border-radius: 50%;
+      margin-left: 8px; /* Khoảng cách với text */
+      opacity: 0; /* Ẩn ban đầu */
+      transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+      flex-shrink: 0; /* Không co lại */
+  }
+  .queueItem:hover .removeButton {
+      opacity: 1; /* Hiện khi hover vào item */
+  }
+  .removeButton:hover {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Trạng thái trống */
+  .emptyQueue {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.9rem;
+      color: #888;
+  }
