@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import {
   FiPlay, FiPause, FiSkipBack, FiSkipForward,
-  FiVolume2, FiVolumeX, FiHeart, FiList, FiShuffle, FiRepeat, FiMaximize, FiMinimize, FiChevronUp
+  FiVolume2, FiVolumeX, FiHeart, FiList, FiShuffle, FiRepeat, FiMaximize, FiMinimize, FiChevronUp, FiDownload
 } from 'react-icons/fi';
 import usePlayerStore from '../store/playerStore'; // Đảm bảo đường dẫn đúng
 import styles from './PlayerBar.module.css'; // Đảm bảo import CSS Module
@@ -151,6 +151,40 @@ const PlayerBar = () => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [togglePlayPause, playNext, playPrevious, volume, setVolume, toggleMute, handleLikeToggle, handleShuffleToggle, handleRepeatToggle]);
+
+  const handleDownload = useCallback(() => {
+    if (!currentSong || !currentSong.file_url) {
+        toast.error("No song selected or file URL is missing.");
+        return;
+    }
+
+    try {
+        const link = document.createElement('a');
+        link.href = currentSong.file_url;
+
+        // Tạo tên file gợi ý (ví dụ: Artist - Song Name.mp3)
+        // Cần xử lý ký tự đặc biệt trong tên file
+        const artistName = currentSong.artists?.[0]?.artist_name || 'Unknown Artist';
+        const songName = currentSong.song_name || 'Unknown Song';
+        // Lấy đuôi file từ URL
+        const fileExtension = currentSong.file_url.split('.').pop() || 'mp3';
+         // Làm sạch tên file, loại bỏ ký tự không hợp lệ
+        const safeFilename = `${artistName} - ${songName}`.replace(/[\\/:*?"<>|]/g, '_');
+        link.download = `${safeFilename}.${fileExtension}`;
+
+        // Thêm vào DOM, click, rồi xóa đi
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        console.log(`Attempting download for: ${link.download}`);
+        toast.success("Download started...");
+
+    } catch (error) {
+        console.error("Error initiating download:", error);
+        toast.error("Could not start download.");
+    }
+  }, [currentSong]); // Phụ thuộc vào currentSong
 
   // --- USE EFFECTS ---
   useEffect(() => {
@@ -333,6 +367,9 @@ const PlayerBar = () => {
             </div>
             <button onClick={handleLikeToggle} className={`${styles.likeButton} ${isLiked ? styles.liked : ''}`} title={isLiked ? "Unlike" : "Like"}>
               <FiHeart fill={isLiked ? 'currentColor' : 'none'} stroke={isLiked ? 'currentColor' : '#b3b3b3'}/>
+            </button>
+            <button onClick={handleDownload} className={styles.controlButton} title="Download track" disabled={!currentSong}>
+                         <FiDownload size={18} />
             </button>
           </>
         ) : (
