@@ -87,9 +87,32 @@
   .itemCoverWrapper { width: 100%; margin-bottom: 12px; position: relative; }
   .itemCover { width: 100%; aspect-ratio: 1 / 1; border-radius: 4px; object-fit: cover; background-color: #333; display: block; }
   .artistItemCover { width: 100%; aspect-ratio: 1 / 1; border-radius: 50%; object-fit: cover; background-color: #333; display: block; }
-  .playButtonOverlay { position: absolute; bottom: 8px; right: 8px; background-color: #2e77d0; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); opacity: 0; transform: translateY(8px); transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; border: none; cursor: pointer; }
-  .playButtonOverlay svg { width: 24px; height: 24px; fill: #fff; position: relative; left: 1px; }
-  .playButtonOverlay:hover { transform: scale(1.05); background-color: #5fa8ff; }
+  .playButtonOverlay {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: #1e88e5; /* Màu xanh Spotify */
+    border-radius: 50%;
+    width: 44px; /* Kích thước nút play */
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    opacity: 0; /* Ẩn ban đầu */
+    transform: translateY(8px); /* Hiệu ứng trượt lên */
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+.playButtonOverlay svg {
+    width: 24px; height: 24px; fill: #000; /* Màu đen cho icon play */
+    position: relative; left: 1px; /* Căn chỉnh icon play */
+}
+.playButtonOverlay:hover {
+    transform: scale(1.05); /* Phóng to nhẹ khi hover nút */
+    background-color: #1e88e5; /* Sáng hơn */
+}
   .itemName { color: #fff; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .itemMeta { font-size: 0.8rem; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   
