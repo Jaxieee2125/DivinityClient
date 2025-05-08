@@ -39,16 +39,7 @@ const ArtistsPage = () => {
     // const playArtist = usePlayerStore(state => state.playArtist); // TODO: Action nếu có
 
     // --- Data Fetching ---
-    const fetchAllArtists = useCallback(async () => {
-        setLoading(true); setError(null);
-        try {
-            const response = await getArtists();
-            const fetchedArtists = response.data.results || response.data || [];
-            setAllArtists(fetchedArtists);
-            setTotalCount(fetchedArtists.length);
-        } catch (err) { /* ... xử lý lỗi ... */ }
-        finally { setLoading(false); }
-         fetchAllArtists = useCallback(async () => { // Re-define
+    const fetchAllArtists = useCallback(async () => { // Re-define
             setLoading(true); setError(null);
             try {
                 const response = await getArtists();
@@ -60,7 +51,7 @@ const ArtistsPage = () => {
             } finally { setLoading(false); }
         }, []);
 
-    }, []);
+    
 
     useEffect(() => { fetchAllArtists(); }, [fetchAllArtists]);
 

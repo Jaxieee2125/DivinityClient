@@ -106,24 +106,7 @@ const PlaylistsPage = () => {
     const handleSortOrderToggle = () => { setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc'); };
     const handlePlaylistClick = (playlistId) => { navigate(`/playlist/${playlistId}`); };
 
-    const handlePlayPlaylist = async (e, playlistId, playlistName) => {
-        e.stopPropagation();
-        if (playingPlaylistId) return;
-        setPlayingPlaylistId(playlistId);
-        const toastId = toast.loading(`Loading tracks for "${playlistName}"...`);
-        try {
-            // const tracksResponse = await getPlaylistTracks(playlistId); // <<< Cần API này
-            // const playlistTracks = tracksResponse.data?.results || tracksResponse.data || [];
-            const playlistTracks = []; // <<<< Thay bằng dữ liệu thật
-            if (playlistTracks.length > 0) {
-                playSong(playlistTracks[0], playlistTracks, 0);
-                toast.update(toastId, { render: `Playing "${playlistName}"`, type: "success", isLoading: false, autoClose: 3000 });
-            } else {
-                 toast.update(toastId, { render: `Playlist "${playlistName}" is empty.`, type: "warning", isLoading: false, autoClose: 3000 });
-            }
-        } catch (err) { /* ... xử lý lỗi toast ... */ }
-        finally { setPlayingPlaylistId(null); }
-         handlePlayPlaylist = async (e, playlistId, playlistName) => { // Re-define
+    const handlePlayPlaylist = async (e, playlistId, playlistName) => { // Re-define
             e.stopPropagation(); if (playingPlaylistId) return;
             setPlayingPlaylistId(playlistId);
             const toastId = toast.loading(`Loading "${playlistName}"...`);
@@ -147,7 +130,6 @@ const PlaylistsPage = () => {
             } finally { setPlayingPlaylistId(null); }
         };
 
-    };
 
 
     // --- Render ---

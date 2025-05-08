@@ -15,6 +15,7 @@ import MusicGenreDetailPage from './pages/MusicGenreDetailPage.jsx';
 import HomePage from './pages/HomePage.jsx'; // Import từ pages
 import AlbumsPage from './pages/AlbumsPage.jsx'; // Import từ pages
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx'; // Import từ pages
 // --- Import các trang Đăng nhập/Đăng ký User --- // <<< THÊM IMPORT
 import LoginPage from './pages/LoginPage.jsx';       // <<< THÊM IMPORT
 import RegisterPage from './pages/RegisterPage.jsx'; // <<< THÊM IMPORT
@@ -57,8 +58,9 @@ function App() {
           <Route path="playlist/:playlistId" element={<PlaylistDetailPage />} />
           <Route path="album/:albumId" element={<AlbumDetailPage />} />
           <Route path="artist/:artistId" element={<ArtistDetailPage />} />
-          
         </Route>
+        {/* Route cho trang cá nhân (Profile) */}
+        <Route path="profile" element={<ProfilePage />} />
 
         {/* Route Đăng nhập Admin */}
         <Route path="/admin/login" element={<AdminLoginPage />} />

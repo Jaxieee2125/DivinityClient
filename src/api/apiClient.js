@@ -142,6 +142,18 @@ export const loginUser = (identifier, password) => {
   return apiClient.post('/users/login/', { identifier, password });
 };
 
+/**
+ * Lấy chi tiết thông tin của người dùng hiện tại (hoặc user bất kỳ nếu có ID).
+ * Backend cần kiểm tra quyền xem user này có phải là chính họ hoặc admin không.
+ * @param {string} userId - ID của người dùng.
+ * @returns {Promise<object>} Promise chứa thông tin chi tiết của user.
+ */
+export const getUserProfile = (userId) => {
+  console.log(`[apiClient] Fetching profile for user ID: ${userId}`);
+  // API endpoint này cần được bảo vệ, interceptor sẽ gửi token
+  return apiClient.get(`/users/${userId}/`);
+};
+
 /** Lấy danh sách album của một nghệ sĩ */
 export const getArtistAlbums = (artistId, params) => apiClient.get(`/artists/${artistId}/albums/`, { params }); // Thêm params nếu cần pagination/sort
 
