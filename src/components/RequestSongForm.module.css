@@ -1,0 +1,107 @@
+/* src/components/RequestSongForm.module.css */
+/* Copy các style từ AuthForm.module.css hoặc EditProfilePage.module.css */
+/* Ví dụ: */
+.formContainer {
+    padding: 20px; /* Thêm padding nếu modal không có */
+    color: #ffffff; /* Đảm bảo màu chữ */
+}
+
+.formContainer h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #b3b3b3;
+}
+
+.input,
+.textarea {
+    padding: 10px 12px;
+    background-color: #282828;
+    border: 1px solid #404040;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1em;
+    resize: vertical; /* Cho phép thay đổi chiều cao textarea */
+}
+.input:focus,
+.textarea:focus {
+    outline: none;
+    border-color: #2979ff;
+    box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.3);
+}
+.input:disabled,
+.textarea:disabled {
+     background-color: #3a3a3a;
+     cursor: not-allowed;
+}
+
+.submitButton,
+.cancelButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+}
+
+.submitButton {
+    background-color: #2979ff; /* Màu xanh lá */
+    color: white;
+}
+.submitButton:hover:not(:disabled) {
+    background-color: #2979ff;
+}
+.submitButton:disabled {
+    background-color: #535353;
+    cursor: not-allowed;
+}
+.cancelButton {
+    background-color: #535353;
+    color: #ffffff;
+}
+.cancelButton:hover:not(:disabled) {
+    background-color: #6a6a6a;
+}
+.cancelButton:disabled {
+     opacity: 0.6;
+     cursor: not-allowed;
+}
+
+
+.error,
+.fieldError {
+    color: #f44336;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+.error {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.success {
+    color: #2979ff;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
