@@ -13,6 +13,7 @@ const usePlayerStore = create(devtools((set, get) => ({
   duration: 0,         // Tổng thời lượng của bài hát (seconds)
   isMuted: false,      // Trạng thái tắt tiếng
   repeatMode: 'none',  // Chế độ lặp lại (none, all, one)
+  isCurrentSongLiked: false, // Trạng thái bài hát hiện tại có được thích hay không
 
   // --- Actions (Hàm để cập nhật state) ---
 
@@ -166,6 +167,8 @@ const usePlayerStore = create(devtools((set, get) => ({
      const newVolume = Math.max(0, Math.min(1, volume)); // Đảm bảo trong khoảng 0-1
      set({ volume: newVolume, isMuted: newVolume === 0 }); // Tự động mute nếu volume là 0
   },
+
+  setCurrentSongLikedStatus: (isLiked) => set({ isCurrentSongLiked: isLiked }, false, 'player/setCurrentSongLikedStatus'),
 
   /**
    * Chuyển đổi trạng thái tắt/bật tiếng.

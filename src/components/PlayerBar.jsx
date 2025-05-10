@@ -7,18 +7,19 @@ import {
 import usePlayerStore from '../store/playerStore'; // Đảm bảo đường dẫn đúng
 import styles from './PlayerBar.module.css'; // Đảm bảo import CSS Module
 import { toast } from 'react-toastify'; // Thêm import cho toast
+import { toggleUserFavouriteSongApi, checkUserFavouriteStatusApi } from '../api/apiClient';
 
 const PlayerBar = ({ toggleQueueSidebar }) => {
   const audioRef = useRef(null);
   const [isMiniPlayer, setIsMiniPlayer] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isLiked, setIsLiked] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false);
   const [repeatMode, setRepeatMode] = useState('none');
   const [isExpanded, setIsExpanded] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showRateSlider, setShowRateSlider] = useState(false);
+  const [isLikedLocal, setIsLikedLocal] = useState(false); // <<< State cục bộ để quản lý icon trước khi store cập nhật
 
   // --- State & Actions từ Zustand ---
   const currentSong = usePlayerStore(state => state.currentSong);
@@ -34,13 +35,58 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
   const toggleMute = usePlayerStore(state => state.toggleMute);
   const setCurrentTime = usePlayerStore(state => state.setCurrentTime);
   const setDuration = usePlayerStore(state => state.setDuration);
+  const isCurrentSongLiked = usePlayerStore(state => state.isCurrentSongLiked);
+  const setCurrentSongLikedStatus = usePlayerStore(state => state.setCurrentSongLikedStatus);
 
+  useEffect(() => {
+        setIsLikedLocal(isCurrentSongLiked);
+    }, [isCurrentSongLiked]);
 
-  const handleLikeToggle = useCallback(() => {
-    if (!currentSong) return;
-    console.log("Toggle Like for song:", currentSong._id);
-    setIsLiked(!isLiked);
-  } , [currentSong, isLiked]);
+  useEffect(() => {
+        const checkLikeStatus = async () => {
+            if (currentSong?._id) {
+                try {
+                    // API này trả về object: { "song_id_string": true/false }
+                    const response = await checkUserFavouriteStatusApi(currentSong._id);
+                    if (response.data && response.data[currentSong._id] !== undefined) {
+                        setCurrentSongLikedStatus(response.data[currentSong._id]);
+                    } else {
+                        setCurrentSongLikedStatus(false); // Mặc định là false nếu không có thông tin
+                    }
+                } catch (error) {
+                    console.error("Error checking favourite status:", error);
+                    setCurrentSongLikedStatus(false); // Lỗi thì coi như chưa like
+                }
+            } else {
+                setCurrentSongLikedStatus(false); // Không có bài hát thì không like
+            }
+        };
+        checkLikeStatus();
+    }, [currentSong, setCurrentSongLikedStatus]); // Chạy khi currentSong thay đổi
+
+  const handleLikeToggle = useCallback(async () => {
+        if (!currentSong?._id) {
+            toast.warn("No song is currently playing to like.");
+            return;
+        }
+        // Cập nhật UI ngay lập tức để có phản hồi nhanh
+        const newLikedStatus = !isLikedLocal;
+        setIsLikedLocal(newLikedStatus); // Cập nhật state cục bộ
+
+        try {
+            const response = await toggleUserFavouriteSongApi(currentSong._id);
+            // Cập nhật state trong store với giá trị từ API (để đảm bảo đồng bộ)
+            setCurrentSongLikedStatus(response.data.is_favourited);
+            setIsLikedLocal(response.data.is_favourited); // Đồng bộ lại state cục bộ
+            toast.success(response.data.message);
+        } catch (err) {
+            console.error("Toggle favourite error:", err);
+            toast.error("Failed to update favourite status.");
+            // Quay lại trạng thái cũ nếu API lỗi
+            setIsLikedLocal(!newLikedStatus);
+            setCurrentSongLikedStatus(!newLikedStatus);
+        }
+    }, [currentSong, isLikedLocal, setCurrentSongLikedStatus]);
 
 
   const handleShuffleToggle = useCallback(() => {
@@ -169,6 +215,7 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
          // Làm sạch tên file, loại bỏ ký tự không hợp lệ
         const safeFilename = `${artistName} - ${songName}`.replace(/[\\/:*?"<>|]/g, '_');
         link.download = `${safeFilename}.${fileExtension}`;
+
 
         // Thêm vào DOM, click, rồi xóa đi
         document.body.appendChild(link);
@@ -367,8 +414,13 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
                 {currentSong.artists?.[0]?.artist_name || 'Unknown Artist'}
               </div>
             </div>
-            <button onClick={handleLikeToggle} className={`${styles.likeButton} ${isLiked ? styles.liked : ''}`} title={isLiked ? "Unlike" : "Like"}>
-              <FiHeart fill={isLiked ? 'currentColor' : 'none'} stroke={isLiked ? 'currentColor' : '#b3b3b3'}/>
+            <button
+                onClick={handleLikeToggle}
+                className={`${styles.likeButton} ${isLikedLocal ? styles.liked : ''}`}
+                title={isLikedLocal ? "Remove from Liked Songs" : "Save to Liked Songs"}
+                disabled={!currentSong} // Disable nếu không có bài hát
+            >
+                <FiHeart fill={isLikedLocal ? 'currentColor' : 'none'} stroke={isLikedLocal ? 'currentColor' : '#b3b3b3'}/>
             </button>
             <button onClick={handleDownload} className={styles.controlButton} title="Download track" disabled={!currentSong}>
                          <FiDownload size={18} />

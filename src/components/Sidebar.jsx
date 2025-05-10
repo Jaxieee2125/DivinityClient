@@ -114,7 +114,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       {isLoggedIn && ( // <<< Điều kiện hiển thị
                           <li>
                               <button onClick={openRequestSongModal}> {/* <<< Gọi hàm mở modal */}
-                                  <FiPlusSquare /> Yêu cầu bài hát
+                                  <FiPlusSquare /> New Song Request
                               </button>
                           </li>
                       )}
@@ -126,13 +126,13 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       {/* === MỤC ĐĂNG NHẬP/ĐĂNG KÝ HOẶC TÀI KHOẢN/ĐĂNG XUẤT === */}
                       {!isLoggedIn ? (
                           <>
-                              <li><Link to="/register" onClick={closeMenu}><FiUserPlus /> Đăng ký</Link></li>
-                              <li><Link to="/login" onClick={closeMenu}><FiLogIn /> Đăng nhập</Link></li>
+                              <li><Link to="/register" onClick={closeMenu}><FiUserPlus /> Register</Link></li>
+                              <li><Link to="/login" onClick={closeMenu}><FiLogIn /> Login</Link></li>
                           </>
                       ) : (
                           <>
-                              <li><Link to="/profile" onClick={closeMenu}><FiUser /> Tài khoản</Link></li>
-                              <li><button onClick={() => { handleLogout(); closeMenu(); }}><FiLogOut /> Đăng xuất</button></li>
+                              <li><Link to="/profile" onClick={closeMenu}><FiUser /> Profile</Link></li>
+                              <li><button onClick={() => { handleLogout(); closeMenu(); }}><FiLogOut /> Logout</button></li>
                           </>
                       )}
                       {/* ======================================================= */}
