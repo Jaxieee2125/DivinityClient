@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUserProfile, updateCurrentUserProfile } from '../api/apiClient';
 import styles from './EditProfilePage.module.css'; // Tạo CSS riêng hoặc dùng chung
+import { FiCamera, FiSave, FiXCircle } from 'react-icons/fi'; // Thêm icon cho nút
 
 function EditProfilePage() {
     const [formData, setFormData] = useState({
@@ -131,91 +132,85 @@ function EditProfilePage() {
     if (error.general && !userData) return <div className={styles.error}>{error.general}</div>; // Lỗi không tải được data ban đầu
 
     return (
-        <div className={styles.container}>
-            <h2>Chỉnh Sửa Thông Tin Cá Nhân</h2>
-             <form onSubmit={handleSubmit} className={styles.form}>
-                 {successMessage && <p className={styles.success}>{successMessage}</p>}
-                 {error.general && <p className={styles.error}>{error.general}</p>}
+        <div className={styles.pageWrapper}>
+            <div className={styles.editCard}>
+                <h1 className={styles.cardTitle}>Edit Your Profile</h1>
 
-                 {/* Avatar Preview and Upload */}
-                 <div className={styles.inputGroup}>
-                     <label className={styles.label}>Ảnh đại diện</label>
-                     <div className={styles.avatarPreviewContainer}>
-                         <img
-                            src={currentAvatarUrl || 'https://via.placeholder.com/100?text=Avatar'}
-                            alt="Avatar Preview"
-                            className={styles.avatarPreview}
-                         />
-                         <input
-                            type="file"
-                            id="profile_picture"
-                            name="profile_picture"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className={styles.fileInput}
-                            disabled={saving}
-                         />
-                         <label htmlFor="profile_picture" className={styles.fileInputLabel}>Chọn ảnh mới</label>
-                     </div>
-                     {error.profile_picture && <p className={styles.fieldError}>{error.profile_picture}</p>}
-                 </div>
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    {/* Hiển thị lỗi chung hoặc thành công */}
+                    {successMessage && <p className={`${styles.generalMessage} ${styles.success}`}>{successMessage}</p>}
+                    {error.general && <p className={`${styles.generalMessage} ${styles.error}`}>{error.general}</p>}
 
-                 {/* Username */}
-                 <div className={styles.inputGroup}>
-                     <label htmlFor="username" className={styles.label}>Tên đăng nhập</label>
-                     <input
-                         type="text"
-                         id="username"
-                         name="username"
-                         value={formData.username}
-                         onChange={handleChange}
-                         className={styles.input}
-                         disabled={saving}
-                         required
-                     />
-                     {error.username && <p className={styles.fieldError}>{error.username}</p>}
-                 </div>
+                    {/* Phần Ảnh đại diện */}
+                    <div className={styles.formSection}>
+                        <h3 className={styles.sectionTitle}>Profile Picture</h3>
+                        <div className={styles.avatarUploadGroup}>
+                            <img
+                                src={currentAvatarUrl || '/default-avatar.png'}
+                                alt="Avatar Preview"
+                                className={styles.avatarPreview}
+                                onError={(e) => { e.target.src = '/default-avatar.png'; }}
+                            />
+                            <div className={styles.fileInputContainer}>
+                                <input
+                                    type="file"
+                                    id="profile_picture"
+                                    name="profile_picture"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className={styles.fileInput} // Input gốc được ẩn
+                                    disabled={saving}
+                                />
+                                <label htmlFor="profile_picture" className={styles.fileInputLabel}>
+                                    <FiCamera style={{ marginRight: '8px' }} /> Change Avatar
+                                </label>
+                                {formData.profile_picture && <span className={styles.fileName}>{formData.profile_picture.name}</span>}
+                            </div>
+                        </div>
+                        {error.profile_picture && <p className={styles.fieldError}>{error.profile_picture}</p>}
+                    </div>
 
-                 {/* Email */}
-                 <div className={styles.inputGroup}>
-                     <label htmlFor="email" className={styles.label}>Email</label>
-                     <input
-                         type="email"
-                         id="email"
-                         name="email"
-                         value={formData.email}
-                         onChange={handleChange}
-                         className={styles.input}
-                         disabled={saving}
-                         required
-                     />
-                     {error.email && <p className={styles.fieldError}>{error.email}</p>}
-                 </div>
+                    {/* Phần Thông tin Tài khoản */}
+                    <div className={styles.formSection}>
+                        <h3 className={styles.sectionTitle}>Account Information</h3>
+                        <div className={styles.formGrid}>
+                            <div className={styles.inputGroup}>
+                                <label htmlFor="username" className={styles.label}>Username</label>
+                                <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className={styles.input} disabled={saving} required />
+                                {error.username && <p className={styles.fieldError}>{error.username}</p>}
+                            </div>
+                            <div className={styles.inputGroup}>
+                                <label htmlFor="email" className={styles.label}>Email</label>
+                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={styles.input} disabled={saving} required />
+                                {error.email && <p className={styles.fieldError}>{error.email}</p>}
+                            </div>
+                        </div>
+                    </div>
 
-                 {/* Date of Birth */}
-                 <div className={styles.inputGroup}>
-                     <label htmlFor="date_of_birth" className={styles.label}>Ngày sinh</label>
-                     <input
-                         type="date"
-                         id="date_of_birth"
-                         name="date_of_birth"
-                         value={formData.date_of_birth}
-                         onChange={handleChange}
-                         className={styles.input}
-                         disabled={saving}
-                     />
-                     {error.date_of_birth && <p className={styles.fieldError}>{error.date_of_birth}</p>}
-                 </div>
+                     {/* Phần Thông tin Cá nhân */}
+                     <div className={styles.formSection}>
+                        <h3 className={styles.sectionTitle}>Personal Details</h3>
+                        <div className={styles.formGrid}>
+                            <div className={styles.inputGroup}>
+                                <label htmlFor="date_of_birth" className={styles.label}>Date of Birth</label>
+                                <input type="date" id="date_of_birth" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} className={styles.input} disabled={saving} />
+                                {error.date_of_birth && <p className={styles.fieldError}>{error.date_of_birth}</p>}
+                            </div>
+                            {/* Thêm các trường personal khác nếu có */}
+                        </div>
+                    </div>
 
-                 <div className={styles.buttonGroup}>
-                    <button type="submit" className={styles.saveButton} disabled={saving}>
-                        {saving ? 'Đang lưu...' : 'Lưu thay đổi'}
-                    </button>
-                    <button type="button" className={styles.cancelButton} onClick={() => navigate('/profile')} disabled={saving}>
-                        Hủy
-                    </button>
-                 </div>
-             </form>
+
+                    <div className={styles.buttonGroup}>
+                       <button type="button" className={styles.cancelButton} onClick={() => navigate('/profile')} disabled={saving}>
+                            <FiXCircle style={{marginRight: '8px'}}/> Cancel
+                        </button>
+                       <button type="submit" className={styles.saveButton} disabled={saving}>
+                            {saving ? 'Saving...' : <><FiSave style={{marginRight: '8px'}}/> Save Changes</>}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

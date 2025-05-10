@@ -102,7 +102,6 @@ function RequestSongForm({ onClose }) { // Thêm prop onClose nếu form nằm t
 
     return (
         <div className={styles.formContainer}>
-            <h3>Yêu cầu bài hát mới</h3>
             <form onSubmit={handleSubmit} className={styles.form}>
                 {successMessage && <p className={styles.success}>{successMessage}</p>}
                 {error.general && <p className={styles.error}>{error.general}</p>}

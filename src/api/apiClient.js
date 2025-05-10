@@ -244,4 +244,19 @@ export const getPlaylistDetail = (playlistId) => apiClient.get(`/playlists/${pla
 
 export const createPlaylistApi = (playlistData) => apiClient.post('/playlists/', playlistData);
 
+/** Toggle trạng thái yêu thích của một bài hát cho user hiện tại */
+export const toggleUserFavouriteSongApi = (songId) => apiClient.post(`/user/favourites/toggle/${songId}/`);
+
+/** Kiểm tra trạng thái yêu thích của một hoặc nhiều bài hát cho user hiện tại */
+export const checkUserFavouriteStatusApi = (songIdsString) => apiClient.get(`/user/favourites/status/?song_ids=${songIdsString}`);
+
+/** Thêm một hoặc nhiều bài hát vào playlist */
+export const addSongsToPlaylistApi = (playlistId, songIdsArray) => {
+    // songIdsArray là mảng các string ID
+    return apiClient.put(`/playlists/${playlistId}/`, {
+        action: 'add_songs', // Chỉ định action
+        song_ids: songIdsArray // Mảng các ID
+    });
+};
+
 export default apiClient;

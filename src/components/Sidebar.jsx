@@ -76,7 +76,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
   // Playlist Modal Handlers
   const handleOpenCreatePlaylistModal = () => { setIsCreatePlaylistModalOpen(true); };
   const handleCloseCreatePlaylistModal = () => { setIsCreatePlaylistModalOpen(false); };
-  const handlePlaylistCreated = (newPlaylist) => { fetchPlaylists(true); };
+  const handlePlaylistCreated = () => { fetchPlaylists(true); };
 
   // --- Request Song Modal Handlers --- // <<< THÊM HANDLERS MỚI
   const openRequestSongModal = () => {
@@ -114,7 +114,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       {isLoggedIn && ( // <<< Điều kiện hiển thị
                           <li>
                               <button onClick={openRequestSongModal}> {/* <<< Gọi hàm mở modal */}
-                                  <FiPlusSquare /> Yêu cầu bài hát
+                                  <FiPlusSquare /> New Song Request
                               </button>
                           </li>
                       )}
@@ -126,13 +126,13 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       {/* === MỤC ĐĂNG NHẬP/ĐĂNG KÝ HOẶC TÀI KHOẢN/ĐĂNG XUẤT === */}
                       {!isLoggedIn ? (
                           <>
-                              <li><Link to="/register" onClick={closeMenu}><FiUserPlus /> Đăng ký</Link></li>
-                              <li><Link to="/login" onClick={closeMenu}><FiLogIn /> Đăng nhập</Link></li>
+                              <li><Link to="/register" onClick={closeMenu}><FiUserPlus /> Register</Link></li>
+                              <li><Link to="/login" onClick={closeMenu}><FiLogIn /> Login</Link></li>
                           </>
                       ) : (
                           <>
-                              <li><Link to="/profile" onClick={closeMenu}><FiUser /> Tài khoản</Link></li>
-                              <li><button onClick={() => { handleLogout(); closeMenu(); }}><FiLogOut /> Đăng xuất</button></li>
+                              <li><Link to="/profile" onClick={closeMenu}><FiUser /> Profile</Link></li>
+                              <li><button onClick={() => { handleLogout(); closeMenu(); }}><FiLogOut /> Logout</button></li>
                           </>
                       )}
                       {/* ======================================================= */}
@@ -203,7 +203,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
             }}
             contentLabel="Yêu cầu bài hát mới"
         >
-           <h2>Yêu cầu bài hát</h2> {/* Thêm tiêu đề cho modal */}
+           <h2 align="center">Yêu cầu bài hát</h2> {/* Thêm tiêu đề cho modal */}
            <RequestSongForm onClose={closeRequestSongModal} /> {/* Truyền hàm đóng */}
            {/* Có thể thêm nút đóng riêng nếu muốn */}
            {/* <button onClick={closeRequestSongModal} style={{ marginTop: '15px', ... }}>Đóng</button> */}

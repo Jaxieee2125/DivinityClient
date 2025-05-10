@@ -56,6 +56,7 @@
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -144,7 +145,7 @@
 .trackRow:hover .trackName { color: #fff; }
 
 /* Artist */
-.trackArtistCell {}
+
 .tableLink { color: inherit; text-decoration: none; transition: color 0.1s ease; }
 .tableLink:hover { text-decoration: underline; color: #fff; }
 .trackRow:hover .tableLink { color: #fff; }
@@ -154,7 +155,6 @@
 
 /* Duration & Actions */
 .trackDurationCell { text-align: left; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
-.durationText { /* Span chứa số thời gian */ }
 .trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3;  /* Màu icon mặc định */ }
 .trackRow:hover .trackActions { opacity: 1; color: #fff; } /* Hiện và đổi màu icon khi hover hàng */
 
