@@ -57,7 +57,7 @@ function ManageSongRequests() {
         setUpdatingId(requestId);
         let adminNotes = null;
         if (newStatus === 'rejected') {
-            adminNotes = prompt(`Reason for rejecting request ID ${requestId}? (Optional)`);
+            adminNotes = prompt(`Reason for rejecting this request ID ${requestId}? (Optional)`);
              // Nếu người dùng nhấn Cancel trên prompt, adminNotes sẽ là null
              // Nếu muốn bắt buộc nhập lý do khi reject, cần kiểm tra kỹ hơn
         }
@@ -65,8 +65,7 @@ function ManageSongRequests() {
             const updateData = { status: newStatus };
             // Chỉ gửi admin_notes nếu nó có giá trị (không phải null)
             if (adminNotes !== null) {
-                // eslint-disable-next-line no-undef
-                updateData.admin_notes = admin_notes;
+                updateData.admin_notes = adminNotes;
             }
             await updateAdminSongRequest(requestId, updateData); // <<< Gọi API đã sửa
             toast?.success(`Request ${requestId} status updated to ${newStatus}.`);
