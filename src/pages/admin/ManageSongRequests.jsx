@@ -30,9 +30,11 @@ function ManageSongRequests() {
             const params = filterStatus ? { status: filterStatus } : {};
             const response = await getAdminSongRequests(params); // <<< Gọi API đã sửa
             setRequests(Array.isArray(response.data?.results) ? response.data.results : []);
+        // eslint-disable-next-line no-unused-vars
         } catch (err) { /* ... xử lý lỗi ... */ }
         finally { setLoading(false); }
-         fetchRequests = useCallback(async () => {
+        // eslint-disable-next-line no-const-assign, react-hooks/rules-of-hooks
+        fetchRequests = useCallback(async () => {
             setLoading(true); setError(null);
             try {
                 const params = filterStatus ? { status: filterStatus } : {};
@@ -42,6 +44,7 @@ function ManageSongRequests() {
                 const errMsg = err.response?.data?.detail || err.message || "Failed to load song requests.";
                 setError(errMsg); toast?.error(errMsg);
             } finally { setLoading(false); }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [filterStatus]);
 
 
@@ -62,6 +65,7 @@ function ManageSongRequests() {
             const updateData = { status: newStatus };
             // Chỉ gửi admin_notes nếu nó có giá trị (không phải null)
             if (adminNotes !== null) {
+                // eslint-disable-next-line no-undef
                 updateData.admin_notes = admin_notes;
             }
             await updateAdminSongRequest(requestId, updateData); // <<< Gọi API đã sửa

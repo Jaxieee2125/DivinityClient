@@ -76,7 +76,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
   // Playlist Modal Handlers
   const handleOpenCreatePlaylistModal = () => { setIsCreatePlaylistModalOpen(true); };
   const handleCloseCreatePlaylistModal = () => { setIsCreatePlaylistModalOpen(false); };
-  const handlePlaylistCreated = (newPlaylist) => { fetchPlaylists(true); };
+  const handlePlaylistCreated = () => { fetchPlaylists(true); };
 
   // --- Request Song Modal Handlers --- // <<< THÊM HANDLERS MỚI
   const openRequestSongModal = () => {
