@@ -203,7 +203,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
             }}
             contentLabel="Yêu cầu bài hát mới"
         >
-           <h2>Yêu cầu bài hát</h2> {/* Thêm tiêu đề cho modal */}
+           <h2 align="center">Yêu cầu bài hát</h2> {/* Thêm tiêu đề cho modal */}
            <RequestSongForm onClose={closeRequestSongModal} /> {/* Truyền hàm đóng */}
            {/* Có thể thêm nút đóng riêng nếu muốn */}
            {/* <button onClick={closeRequestSongModal} style={{ marginTop: '15px', ... }}>Đóng</button> */}

@@ -1,6 +1,6 @@
 // src/pages/AlbumDetailPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getAlbumDetail, getAlbumSongs } from '../api/apiClient';
 import usePlayerStore from '../store/playerStore';
 import styles from './AlbumDetailPage.module.css'; // <<< Import CSS Module
@@ -36,7 +36,7 @@ const AlbumCoverDisplay = ({ src, alt, className = '' }) => {
 
 const AlbumDetailPage = () => {
     const { albumId } = useParams();
-    const navigate = useNavigate();
+    
 
     // State cho chi tiết album và danh sách bài hát
     const [albumDetails, setAlbumDetails] = useState(null);
