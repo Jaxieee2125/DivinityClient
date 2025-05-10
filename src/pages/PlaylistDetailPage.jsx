@@ -4,9 +4,11 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getPlaylistDetail } from '../api/apiClient'; // API function
 import usePlayerStore from '../store/playerStore'; // Zustand store for player
 import styles from './PlaylistDetailPage.module.css'; // CSS Module cho trang này
+import AddSongsToPlaylistModal from '../components/AddSongsToPlaylistModal'; // <<< IMPORT MODAL
+import { addSongsToPlaylistApi } from '../api/apiClient'; // API function để thêm bài hát vào playlist
 import {
     FiPlay, FiHeart, FiMoreHorizontal, FiList, FiClock,
-    FiPlayCircle, FiPlusSquare, FiEdit3, FiShare2, FiTrash2, FiUsers // Thêm FiUsers
+    FiPlayCircle, FiPlusSquare, FiEdit3, FiShare2, FiTrash2, FiUsers, FiPlus // Thêm FiUsers
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
@@ -69,6 +71,7 @@ const PlaylistDetailPage = () => {
 
     const playSong = usePlayerStore(state => state.playSong);
     const addToQueue = usePlayerStore(state => state.addToQueue);
+    const [isAddSongsModalOpen, setIsAddSongsModalOpen] = useState(false); // <<< STATE MỚI
 
     const fetchData = useCallback(async () => { // Re-define
             setLoading(true); setError(null);
@@ -106,6 +109,27 @@ const PlaylistDetailPage = () => {
     const handleLikePlaylist = (e) => { e.stopPropagation(); console.log("TODO: Like/Unlike Playlist", playlistId); toast.info("Like playlist feature not implemented yet."); /* setIsPlaylistLiked(!isPlaylistLiked); */ };
     const handleMoreOptionsPlaylist = (e) => { e.stopPropagation(); console.log("TODO: Show more options for playlist", playlistId); toast.info("More options feature not implemented yet."); };
     const handleLikeTrackToggle = (e, trackId) => { e.stopPropagation(); console.log("TODO: Like/Unlike Track", trackId); toast.info("Like track feature not implemented yet."); };
+
+    const openAddSongsModal = (e) => {
+        e.stopPropagation();
+        setIsAddSongsModalOpen(true);
+    };
+    const closeAddSongsModal = () => {
+        setIsAddSongsModalOpen(false);
+    };
+
+    const handleAddSongsToPlaylist = async (pId, songIdsToAdd) => {
+        // Hàm này được gọi từ AddSongsToPlaylistModal
+        try {
+            await addSongsToPlaylistApi(pId, songIdsToAdd); // Gọi API
+            toast.success("Songs added to playlist!");
+            fetchData(); // Tải lại dữ liệu trang chi tiết playlist
+        } catch (err) {
+            console.error("Error in handleAddSongsToPlaylist:", err);
+            toast.error("Failed to add songs to playlist.");
+            throw err; // Ném lỗi lại để modal xử lý isSubmitting
+        }
+    };
 
     // --- Tính toán thông tin meta ---
     const tracks = playlistDetails?.songs || []; // Mảng các object {song: {...}, date_added: ...} hoặc chỉ object song
@@ -150,6 +174,9 @@ const PlaylistDetailPage = () => {
                     <FiPlay />
                 </button>
                 {/* <button className={`${styles.iconButton} ${isPlaylistLiked ? styles.liked : ''}`} onClick={handleLikePlaylist} title="Save to Your Library"><FiHeart size={24} fill={isPlaylistLiked ? 'currentColor' : 'none'} stroke={isPlaylistLiked ? 'none' : 'currentColor'} /></button> */}
+                <button className={styles.iconButton} onClick={openAddSongsModal} title="Add songs to this playlist">
+                    <FiPlus size={24} /> {/* Hoặc FiMusic, FiPlusSquare */}
+                </button>
                 <button className={styles.iconButton} onClick={handleMoreOptionsPlaylist} title="More options"><FiMoreHorizontal size={24} /></button>
                 {/* Toolbar Actions theo hình ảnh */}
                 <div className={styles.toolbarActions}>
@@ -224,6 +251,14 @@ const PlaylistDetailPage = () => {
                         </tbody>
                     </table>
                 )}
+                <AddSongsToPlaylistModal
+                        isOpen={isAddSongsModalOpen}
+                        onClose={closeAddSongsModal}
+                        onAddSongs={handleAddSongsToPlaylist} // Truyền hàm callback
+                        playlistId={playlistId} // Truyền ID playlist hiện tại
+                        // Truyền mảng ID các bài hát đã có trong playlist để modal loại trừ
+                        existingSongIds={tracks.map(item => (item.song || item)._id)}
+                    />
             </div>
              {/* TODO: Pagination nếu API trả về phân trang cho tracks trong playlist */}
         </div>

@@ -125,3 +125,96 @@
 /* Animation spinner */
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .animate-spin svg { animation: spin 1s linear infinite; }
+
+/* --- Action Bar --- */
+.actionBar {
+  padding: 20px 32px 28px 32px; /* Tăng padding dưới một chút */
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Tăng nhẹ khoảng cách giữa các nút chính */
+  /* Thêm gradient nếu muốn có hiệu ứng chuyển tiếp mượt hơn với header */
+  /* background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0) 80px); */
+}
+
+/* Nút Play lớn */
+.playButtonLarge {
+  background-color: #2e77d0; /* Xanh dương */
+  color: #fff; /* Icon màu trắng */
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.1s ease;
+  padding: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Thêm bóng đổ nhẹ */
+}
+.playButtonLarge:hover:not(:disabled) {
+  transform: scale(1.05);
+  background-color: #5fa8ff; /* Sáng hơn khi hover */
+}
+.playButtonLarge:disabled {
+    background-color: #535353;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.playButtonLarge svg {
+    width: 28px; height: 28px; fill: #fff;
+    position: relative; left: 2px; /* Căn chỉnh play icon */
+}
+
+/* Các nút icon tròn nhỏ hơn (Like, More, Add Songs) */
+.iconButton {
+    background: none;
+    border: none;
+    color: #b3b3b3; /* Màu icon mặc định */
+    cursor: pointer;
+    padding: 8px; /* Vùng bấm */
+    border-radius: 50%; /* Bo tròn */
+    display: flex; /* Căn giữa icon */
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+}
+.iconButton:hover:not(:disabled) {
+    color: #ffffff; /* Màu trắng khi hover */
+    background-color: rgba(255, 255, 255, 0.1); /* Nền nhẹ khi hover */
+    transform: scale(1.1);
+}
+.iconButton:disabled {
+    color: #535353; /* Màu xám hơn khi disable */
+    cursor: not-allowed;
+    background-color: transparent; /* Bỏ nền hover khi disable */
+    transform: scale(1);
+}
+/* Style riêng cho nút Like khi active */
+.iconButton.liked {
+    color: #2e77d0; /* Màu xanh dương khi like */
+}
+.iconButton.liked:hover:not(:disabled) {
+    color: #5fa8ff; /* Xanh dương sáng hơn */
+}
+.iconButton svg {
+    display: block; /* Tránh lỗi căn chỉnh */
+    width: 22px; /* Kích thước icon chuẩn */
+    height: 22px;
+}
+
+/* Thanh actions phụ bên phải (nếu có) */
+.toolbarActions {
+    margin-left: auto; /* Đẩy nhóm này sang phảiสุด */
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.actionText { /* Dùng cho text "Id" hoặc tương tự */
+    font-size: 0.8rem;
+    color: #b3b3b3;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: default;
+}

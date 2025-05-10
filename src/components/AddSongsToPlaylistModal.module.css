@@ -1,0 +1,65 @@
+/* src/components/modals/AddSongsToPlaylistModal.module.css */
+/* Lớp phủ và modal cơ bản */
+.overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.75); display: flex; justify-content: center; align-items: center; z-index: 1055; /* Cao hơn modal khác */ opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0s linear 0.2s; }
+.overlay.open { opacity: 1; visibility: visible; }
+.modal {
+  background-color: #282828; /* Nền tối hơn */
+  color: #fff;
+  border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  width: 90%; max-width: 700px; /* Rộng hơn chút */
+  height: 85vh; /* Cao hơn */
+  display: flex; flex-direction: column; position: relative;
+  transform: scale(0.95); transition: transform 0.2s ease; opacity: 0;
+}
+.overlay.open .modal { transform: scale(1); opacity: 1; }
+.modalHeader { padding: 18px 24px; border-bottom: 1px solid #404040; font-size: 1.2rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.closeButton { background: none; border: none; font-size: 1.5rem; color: #a0a0a0; cursor: pointer; padding: 4px; line-height: 1; }
+.closeButton:hover { color: #fff; }
+
+/* Body modal chứa search và list */
+.modalBody { padding: 16px 24px; overflow: hidden; display: flex; flex-direction: column; flex-grow: 1; }
+
+/* Search Input */
+.searchInputContainer { /* Tái sử dụng hoặc copy từ SongFormModal */ display: flex; align-items: center; background-color: #3e3e3e; border-radius: 4px; padding: 0 10px; margin-bottom: 16px; }
+.searchIcon { color: #aaa; margin-right: 8px; }
+.searchInput { flex-grow: 1; background: none; border: none; outline: none; padding: 10px 0; font-size: 0.9rem; color: #fff; font-family: inherit; }
+.searchInput::placeholder { color: #888; }
+
+/* Danh sách bài hát (Bảng) */
+.songListContainer {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Tùy chỉnh thanh cuộn */
+    scrollbar-width: thin;
+    scrollbar-color: #535353 #282828;
+}
+.songListContainer::-webkit-scrollbar { width: 8px; }
+.songListContainer::-webkit-scrollbar-track { background: #282828; }
+.songListContainer::-webkit-scrollbar-thumb { background-color: #535353; border-radius: 4px; }
+
+.songTable { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.songTable th, .songTable td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #3a3a3a; }
+.songTable th { color: #b3b3b3; font-weight: 500; text-transform: uppercase; font-size: 0.75rem; }
+.songTable tr { transition: background-color 0.1s ease; }
+.songTable tr:hover:not(.selectedRow) { background-color: rgba(255,255,255,0.05); } /* Hover khi chưa chọn */
+.songTable tr.selectedRow { background-color: rgba(46, 119, 208, 0.2); /* Nền xanh dương nhạt khi chọn */ }
+.songTable tr.selectedRow:hover { background-color: rgba(46, 119, 208, 0.3); }
+
+.checkboxCell { width: 40px; text-align: center; }
+.titleCell { display: flex; align-items: center; gap: 10px; }
+.coverArt { width: 32px; height: 32px; border-radius: 3px; object-fit: cover; background-color: #535353; }
+.songName { color: #fff; font-weight: 500; }
+.artistName { color: #a0a0a0; font-size: 0.8rem; }
+
+/* Footer modal */
+.modalFooter { padding: 16px 24px; border-top: 1px solid #404040; display: flex; justify-content: space-between; align-items: center; }
+.selectedCount { font-size: 0.85rem; color: #b3b3b3; }
+.actionButtons { display: flex; gap: 12px; }
+.addButton, .cancelButton { /* Tái sử dụng hoặc copy từ SongFormModal */ padding: 9px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none; }
+.addButton { background-color: #2e77d0; color: white; }
+.addButton:hover:not(:disabled) { background-color: #5fa8ff; }
+.addButton:disabled { background-color: #535353 !important; color: #888 !important; cursor: not-allowed; }
+.cancelButton { background-color: #535353; color: #fff; }
+.cancelButton:hover:not(:disabled) { background-color: #6b6b6b; }
+
+.message {text-align: center; padding: 20px; color: #888;}
