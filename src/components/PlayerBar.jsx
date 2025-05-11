@@ -2,12 +2,13 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import {
   FiPlay, FiPause, FiSkipBack, FiSkipForward,
-  FiVolume2, FiVolumeX, FiHeart, FiList, FiShuffle, FiRepeat, FiMaximize, FiMinimize, FiChevronUp, FiDownload
+  FiVolume2, FiVolumeX, FiHeart, FiList, FiShuffle, FiRepeat, FiMaximize, FiMinimize, FiChevronUp, FiDownload, FiShare2
 } from 'react-icons/fi';
 import usePlayerStore from '../store/playerStore'; // Đảm bảo đường dẫn đúng
 import styles from './PlayerBar.module.css'; // Đảm bảo import CSS Module
 import { toast } from 'react-toastify'; // Thêm import cho toast
 import { toggleUserFavouriteSongApi, checkUserFavouriteStatusApi } from '../api/apiClient';
+import ShareModal from './ShareModal';
 
 const PlayerBar = ({ toggleQueueSidebar }) => {
   const audioRef = useRef(null);
@@ -37,10 +38,30 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
   const setDuration = usePlayerStore(state => state.setDuration);
   const isCurrentSongLiked = usePlayerStore(state => state.isCurrentSongLiked);
   const setCurrentSongLikedStatus = usePlayerStore(state => state.setCurrentSongLikedStatus);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [shareableLink, setShareableLink] = useState('');
+  const [shareTitle, setShareTitle] = useState('');
 
   useEffect(() => {
         setIsLikedLocal(isCurrentSongLiked);
     }, [isCurrentSongLiked]);
+
+  const openShareModal = () => {
+        if (!currentSong || !currentSong.album?._id) {
+            toast.warn("No album information available for the current song.");
+            return;
+        }
+        // Tạo link dựa trên cấu trúc route của bạn
+        // Ví dụ: trang chi tiết album có path là /album/:albumId
+        const albumLink = `${window.location.origin}/album/${currentSong.album._id}`;
+        setShareableLink(albumLink);
+        setShareTitle(currentSong.album.album_name || currentSong.song_name || "this music");
+        setIsShareModalOpen(true);
+    };
+
+  const closeShareModal = () => {
+      setIsShareModalOpen(false);
+  };
 
   useEffect(() => {
         const checkLikeStatus = async () => {
@@ -425,6 +446,7 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
             <button onClick={handleDownload} className={styles.controlButton} title="Download track" disabled={!currentSong}>
                          <FiDownload size={18} />
             </button>
+            
           </>
         ) : (
               <div className={styles.albumArt} style={{ background: 'transparent', width: '56px', height: '56px' }}></div>
@@ -509,6 +531,9 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
                 </div>
               </div>
             </div>
+          <button onClick={openShareModal} className={styles.controlButton} title="Share Album" disabled={!currentSong || !currentSong.album?._id}>
+                         <FiShare2 size={18} />
+            </button>
          <button onClick={handleShowQueue} className={styles.controlButton} title="Queue">
             <FiList size={18} />
          </button>
@@ -536,10 +561,19 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
               <span className={styles.tooltipText}>Mini Player (Ctrl+M)</span>
             </button>
       </div>
+      
     </footer>
       )}
+      <ShareModal
+                isOpen={isShareModalOpen}
+                onClose={closeShareModal}
+                shareUrl={shareableLink}
+                titleToShare={shareTitle}
+             />
     </>
+    
   );
+  
 };
 
 export default PlayerBar;
