@@ -259,4 +259,12 @@ export const addSongsToPlaylistApi = (playlistId, songIdsArray) => {
     });
 };
 
+/** Xóa một bài hát khỏi playlist cụ thể */
+export const removeSongFromPlaylistApi = (playlistId, songIdToRemove) => {
+    return apiClient.put(`/playlists/${playlistId}/`, { // Vẫn dùng PUT đến detail
+        action: 'remove_song',
+        song_id: songIdToRemove
+    });
+};
+
 export default apiClient;

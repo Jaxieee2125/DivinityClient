@@ -5,10 +5,10 @@ import { getPlaylistDetail } from '../api/apiClient'; // API function
 import usePlayerStore from '../store/playerStore'; // Zustand store for player
 import styles from './PlaylistDetailPage.module.css'; // CSS Module cho trang này
 import AddSongsToPlaylistModal from '../components/AddSongsToPlaylistModal'; // <<< IMPORT MODAL
-import { addSongsToPlaylistApi } from '../api/apiClient'; // API function để thêm bài hát vào playlist
+import { addSongsToPlaylistApi, removeSongFromPlaylistApi } from '../api/apiClient'; // API function để thêm bài hát vào playlist
 import {
     FiPlay, FiHeart, FiMoreHorizontal, FiList, FiClock,
-    FiPlayCircle, FiPlusSquare, FiEdit3, FiShare2, FiTrash2, FiUsers, FiPlus // Thêm FiUsers
+    FiPlayCircle, FiPlusSquare, FiLoader, FiTrash2, FiUsers, FiPlus // Thêm FiUsers
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
@@ -72,6 +72,7 @@ const PlaylistDetailPage = () => {
     const playSong = usePlayerStore(state => state.playSong);
     const addToQueue = usePlayerStore(state => state.addToQueue);
     const [isAddSongsModalOpen, setIsAddSongsModalOpen] = useState(false); // <<< STATE MỚI
+    const [deletingTrackId, setDeletingTrackId] = useState(null);
 
     const fetchData = useCallback(async () => { // Re-define
             setLoading(true); setError(null);
@@ -96,6 +97,29 @@ const PlaylistDetailPage = () => {
             playSong(tracksInPlaylist[0], tracksInPlaylist, 0);
         } else {
             toast.warn("This playlist is empty.");
+        }
+    };
+
+    const handleRemoveTrack = async (e, trackIdToRemove, trackName) => {
+        e.stopPropagation();
+        if (deletingTrackId) return; // Ngăn click nhiều lần
+
+        // Optional: Thêm modal xác nhận ở đây nếu muốn
+        // const confirm = window.confirm(`Remove "${trackName}" from this playlist?`);
+        // if (!confirm) return;
+
+        setDeletingTrackId(trackIdToRemove); // Bắt đầu loading cho track này
+        const toastId = toast.loading(`Removing "${trackName}"...`);
+        try {
+            await removeSongFromPlaylistApi(playlistId, trackIdToRemove);
+            toast.update(toastId, { render: `"${trackName}" removed from playlist.`, type: "success", isLoading: false, autoClose: 3000 });
+            fetchData(); // Tải lại toàn bộ chi tiết playlist để cập nhật danh sách tracks
+        } catch (err) {
+            console.error("Error removing track from playlist:", err);
+            const apiError = err.response?.data?.detail || err.message || "Failed to remove track.";
+            toast.update(toastId, { render: `Error: ${apiError}`, type: "error", isLoading: false, autoClose: 5000 });
+        } finally {
+            setDeletingTrackId(null); // Kết thúc loading
         }
     };
 
@@ -240,9 +264,15 @@ const PlaylistDetailPage = () => {
                                         </td>
                                         <td className={styles.trackDurationCell}>
                                             <span className={styles.durationText}>{formatDuration(song.duration_song)}</span>
+                                        </td>
+                                        <td className={styles.trackActionsCell}>
                                             <div className={styles.trackActions}>
                                                  <button onClick={(e) => handleLikeTrackToggle(e, song._id)} className={styles.actionButton} title="Like"> <FiHeart size={16} /> </button>
                                                  <button onClick={(e) => handleAddToQueue(e, song)} className={styles.actionButton} title="Add to queue"> <FiPlusSquare size={16}/> </button>
+                                                 {/* Nút Xóa Track khỏi Playlist */}
+                                                 <button onClick={(e) => handleRemoveTrack(e, song._id, song.song_name)} className={styles.actionButton} title="Remove from this playlist" disabled={deletingTrackId === song._id} >
+                                                     {deletingTrackId === song._id ? <FiLoader className={styles['animate-spin']} size={16}/> : <FiTrash2 size={16}/>}
+                                                 </button>
                                              </div>
                                         </td>
                                     </tr>
