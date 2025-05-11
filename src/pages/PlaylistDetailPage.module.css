@@ -1,41 +1,41 @@
 /* src/pages/PlaylistDetailPage.module.css */
-/* Kế thừa hoặc định nghĩa lại các styles chung */
-/* @import url('./AdminPages.module.css'); */
 
-.pageContainer { padding: 0; background-color: #121212; color: #e0e0e0; min-height: calc(100vh - 90px); }
+.pageContainer {
+  padding: 0;
+  background-color: #121212;
+  color: #e0e0e0;
+  min-height: calc(100vh - 90px); /* Chiều cao tối thiểu trừ player bar */
+}
 
 /* --- Playlist Header --- */
 .playlistHeader {
   display: flex;
-  align-items: center; /* Căn giữa theo chiều dọc */
+  align-items: center; /* Căn giữa dọc */
   gap: 24px;
-  padding: 32px 32px 24px 32px; /* Giảm padding top một chút */
-  min-height: 200px; /* Giảm chiều cao header */
-  /* background: linear-gradient(...); */
+  padding: 32px 32px 24px 32px;
+  min-height: 200px;
 }
 
 .headerCover {
-  width: 190px; /* Giảm kích thước ảnh bìa */
+  width: 190px;
   height: 190px;
   flex-shrink: 0;
   box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
-  border-radius: 6px; /* Hoặc 0px */
+  border-radius: 6px;
 }
 .coverWrapper { width: 100%; height: 100%; background-color: #282828; border-radius: inherit; overflow: hidden; display: flex; align-items: center; justify-content: center;}
 .coverImage { width: 100%; height: 100%; object-fit: cover; }
 .coverPlaceholder svg { width: 50px; height: 50px; color: #555; }
-/* Style cho lưới 4 ảnh bìa track */
 .headerCoverGrid { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background-color: #181818; border-radius: inherit; overflow:hidden; }
 .headerCoverGrid img { width: 100%; height: 100%; object-fit: cover; }
-.headerCoverGrid .gridCellPlaceholder { background-color: #282828; } /* Ô trống nếu không đủ 4 ảnh */
+.headerCoverGrid .gridCellPlaceholder { background-color: #282828; }
 .headerCoverGrid .gridPlaceholderIcon { grid-column: 1 / -1; grid-row: 1 / -1; display: flex; align-items: center; justify-content: center; color: #777; background-color: #333; }
 .headerCoverGrid .gridPlaceholderIcon svg { width: 40%; height: 40%; }
 
-
-.headerInfo { display: flex; flex-direction: column; justify-content: center; /* Căn giữa dọc */ flex-grow: 1; gap: 6px; }
+.headerInfo { display: flex; flex-direction: column; justify-content: center; flex-grow: 1; gap: 6px; }
 .itemType { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #fff; margin-bottom: 2px; }
 .playlistTitle {
-  font-size: clamp(1.8rem, 5vw, 3rem); /* Giảm size title một chút */
+  font-size: clamp(1.8rem, 5vw, 3rem);
   font-weight: 900; color: #fff; line-height: 1.1; margin: 0;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
@@ -51,20 +51,23 @@
 
 /* --- Action Bar --- */
 .actionBar {
-  padding: 16px 32px 24px 32px; /* Giảm padding top */
-  display: flex; align-items: center; gap: 16px; /* Giảm gap */
+  padding: 16px 32px 24px 32px;
+  display: flex; align-items: center; gap: 16px;
 }
-.playButtonLarge { /* Giữ nguyên */ }
-.iconButton { /* Giữ nguyên */ }
-.iconButton.liked { /* Giữ nguyên */ }
-/* Thanh actions bên phải theo hình ảnh */
-.toolbarActions {
-    margin-left: auto; /* Đẩy sang phải */
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-.actionText { font-size: 0.8rem; color: #b3b3b3; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;}
+.playButtonLarge { background-color: #2e77d0; color: #fff; border: none; border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s ease, background-color 0.1s ease; padding: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.playButtonLarge:hover:not(:disabled) { transform: scale(1.05); background-color: #5fa8ff; }
+.playButtonLarge:disabled { background-color: #535353; opacity: 0.6; cursor: not-allowed; }
+.playButtonLarge svg { width: 28px; height: 28px; fill: #fff; position: relative; left: 2px; }
+
+.iconButton { background: none; border: none; color: #b3b3b3; cursor: pointer; padding: 8px; transition: color 0.15s ease, transform 0.1s ease, background-color 0.15s ease; border-radius: 50%; }
+.iconButton:hover:not(:disabled) { color: #fff; transform: scale(1.1); background-color: rgba(255, 255, 255, 0.1); }
+.iconButton:disabled { color: #535353; cursor: not-allowed; background-color: transparent; transform: scale(1); }
+.iconButton.liked { color: #2e77d0; }
+.iconButton.liked:hover { color: #5fa8ff; }
+.iconButton svg { display: block; width: 22px; height: 22px; }
+
+.toolbarActions { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+.actionText { font-size: 0.8rem; color: #b3b3b3; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; cursor: default; }
 
 
 /* --- Track List Container và Bảng --- */
@@ -72,15 +75,22 @@
 .trackTable { width: 100%; border-collapse: collapse; }
 .tableHeader { border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #b3b3b3; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
 .tableHeader th { padding: 10px 8px; text-align: left; font-weight: 400; }
-/* Điều chỉnh chiều rộng cột cho Playlist Detail */
-.indexCol { width: 4%; }
-.titleCol { width: 35%; }
-.albumCol { width: 25%; }
-.artistCol { width: 20%; } /* <<< Thêm lại cột Artist */
-.dateAddedCol { width: 10%; } /* <<< CỘT MỚI */
-.durationCol { width: 6%; }
 
-/* Các class cho hàng và ô (trackRow, trackIndex, ...) giữ nguyên hoặc copy */
+/* --- Điều chỉnh chiều rộng cột --- */
+.indexCol { width: 4%; }
+.titleCol { width: 30%; } /* Giảm lại nếu cần */
+.albumCol { width: 25%; }
+.artistCol { width: 20%; }
+.dateAddedCol { width: 10%; }
+.durationCol { width: 5%; text-align: left !important; /* Chỉ chứa duration text */ }
+.actionsCol { /* Cột mới cho actions */
+    width: 6%; /* Hoặc % phù hợp với số lượng nút */
+    text-align: right; /* Căn phải các nút */
+    padding-right: 8px !important; /* Padding bên phải của ô */
+}
+/* ----------------------------- */
+
+
 .trackRow { transition: background-color 0.15s ease; border-radius: 4px; height: 56px; }
 .trackRow td { padding: 0 8px; vertical-align: middle; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #b3b3b3; font-size: 0.875rem; }
 .trackRow:hover { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
@@ -89,11 +99,13 @@
 .trackRow:hover .playButtonContainer { opacity: 1; }
 .trackRow:hover .indexNumber { display: none; }
 .trackRow:hover .trackActions { opacity: 1; color: #fff; }
+
 .trackIndex { text-align: right; padding-right: 16px !important; position: relative; min-width: 40px; width: 4%; color: #b3b3b3; }
 .playButtonContainer { opacity: 0; transition: opacity 0.1s ease; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); display: flex; justify-content: flex-end; padding-right: 16px; cursor: pointer; }
 .playButton { background: none; border: none; color: #fff; padding: 0; cursor: pointer; display: flex; }
 .playButton svg { width: 20px; height: 20px; }
 .indexNumber { transition: opacity 0.1s ease; display: inline-block; }
+
 .trackTitleCell { display: flex; align-items: center; gap: 12px; height: inherit; }
 .trackCoverContainer { width: 40px; height: 40px; flex-shrink: 0; background-color: #333; border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .trackCover { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -103,118 +115,66 @@
 .trackRow:hover .trackName { color: #fff; }
 .trackSubArtists { font-size: 0.8rem; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 .trackRow:hover .trackSubArtists { color: #b3b3b3; }
+
 .trackAlbumCell {}
 .tableLink { color: inherit; text-decoration: none; transition: color 0.1s ease; }
 .tableLink:hover { text-decoration: underline; color: #fff; }
-.trackArtistCell {} /* Giữ lại nếu cần hiển thị artist của track */
-.trackDateAddedCell { font-size: 0.85rem; color: #b3b3b3; }
-.trackDurationCell { text-align: right; font-size: 0.85rem; position: relative; padding-right: 12px !important; }
-.durationText {}
-.trackActions { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; opacity: 0; transition: opacity 0.15s ease; color: #b3b3b3; }
-.trackRow:hover .trackActions { opacity: 1; color: #fff; }
-.actionButton { background: none; border: none; color: inherit; cursor: pointer; padding: 4px; border-radius: 50%; transition: color 0.15s ease, background-color 0.15s ease; }
-.actionButton:hover { color: #fff; background-color: rgba(255, 255, 255, 0.1); }
+
+.trackArtistCell {}
+.trackDateAddedCell { font-size: 0.85rem; color: #b3b3b3; width: 20%; }
+
+/* --- Cột Duration (chỉ text) --- */
+.trackDurationCell {
+    text-align: right;
+    
+    font-size: 0.85rem;
+    color: #b3b3b3; /* Màu duration mặc định */
+    white-space: nowrap;
+    padding-right: 16px !important; /* Thêm padding phải để không bị sát nút actions */
+}
+.trackRow:hover .trackDurationCell { color: #fff; }
+.durationText { }
+/* ----------------------------- */
+
+
+/* --- Ô Actions --- */
+.trackActionsCell {
+    text-align: right; /* Căn các nút trong ô này sang phải */
+    padding-right: 8px; /* Padding nhỏ bên phải của ô */
+    /* width: auto; */ /* Để tự co giãn theo nội dung nút */
+}
+.trackActions {
+  /* Không còn position absolute */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Căn các nút về cuối (phải) */
+  gap: 8px; /* Giảm gap giữa các nút actions */
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  color: #b3b3b3; /* Màu icon actions mặc định */
+}
+.trackRow:hover .trackActions {
+    opacity: 1;
+    color: #fff;
+}
+/* ---------------- */
+
+.actionButton {
+    background: none; border: none; color: inherit; cursor: pointer;
+    padding: 4px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+.actionButton:hover:not(:disabled) { color: #fff; background-color: rgba(255, 255, 255, 0.15); }
+.actionButton:disabled { color: #535353 !important; cursor: not-allowed; background-color: transparent !important; }
 .actionButton svg { width: 16px; height: 16px; display: block; }
 .actionButton.liked { color: #2e77d0; }
 .actionButton.liked:hover { color: #5fa8ff; }
 
-/* Loading/Error */
+
+/* Loading/Error/Pagination */
 .message { text-align: center; padding: 40px; color: #a0a0a0; }
 .error { color: #f87171; }
 
-/* Animation spinner */
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .animate-spin svg { animation: spin 1s linear infinite; }
-
-/* --- Action Bar --- */
-.actionBar {
-  padding: 20px 32px 28px 32px; /* Tăng padding dưới một chút */
-  display: flex;
-  align-items: center;
-  gap: 20px; /* Tăng nhẹ khoảng cách giữa các nút chính */
-  /* Thêm gradient nếu muốn có hiệu ứng chuyển tiếp mượt hơn với header */
-  /* background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0) 80px); */
-}
-
-/* Nút Play lớn */
-.playButtonLarge {
-  background-color: #2e77d0; /* Xanh dương */
-  color: #fff; /* Icon màu trắng */
-  border: none;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.1s ease, background-color 0.1s ease;
-  padding: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Thêm bóng đổ nhẹ */
-}
-.playButtonLarge:hover:not(:disabled) {
-  transform: scale(1.05);
-  background-color: #5fa8ff; /* Sáng hơn khi hover */
-}
-.playButtonLarge:disabled {
-    background-color: #535353;
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-.playButtonLarge svg {
-    width: 28px; height: 28px; fill: #fff;
-    position: relative; left: 2px; /* Căn chỉnh play icon */
-}
-
-/* Các nút icon tròn nhỏ hơn (Like, More, Add Songs) */
-.iconButton {
-    background: none;
-    border: none;
-    color: #b3b3b3; /* Màu icon mặc định */
-    cursor: pointer;
-    padding: 8px; /* Vùng bấm */
-    border-radius: 50%; /* Bo tròn */
-    display: flex; /* Căn giữa icon */
-    align-items: center;
-    justify-content: center;
-    transition: color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
-}
-.iconButton:hover:not(:disabled) {
-    color: #ffffff; /* Màu trắng khi hover */
-    background-color: rgba(255, 255, 255, 0.1); /* Nền nhẹ khi hover */
-    transform: scale(1.1);
-}
-.iconButton:disabled {
-    color: #535353; /* Màu xám hơn khi disable */
-    cursor: not-allowed;
-    background-color: transparent; /* Bỏ nền hover khi disable */
-    transform: scale(1);
-}
-/* Style riêng cho nút Like khi active */
-.iconButton.liked {
-    color: #2e77d0; /* Màu xanh dương khi like */
-}
-.iconButton.liked:hover:not(:disabled) {
-    color: #5fa8ff; /* Xanh dương sáng hơn */
-}
-.iconButton svg {
-    display: block; /* Tránh lỗi căn chỉnh */
-    width: 22px; /* Kích thước icon chuẩn */
-    height: 22px;
-}
-
-/* Thanh actions phụ bên phải (nếu có) */
-.toolbarActions {
-    margin-left: auto; /* Đẩy nhóm này sang phảiสุด */
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-.actionText { /* Dùng cho text "Id" hoặc tương tự */
-    font-size: 0.8rem;
-    color: #b3b3b3;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: default;
-}

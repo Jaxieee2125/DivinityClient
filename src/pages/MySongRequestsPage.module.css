@@ -1,0 +1,38 @@
+/* src/pages/MySongRequestsPage.module.css */
+/* Kế thừa hoặc copy style từ AdminPages.module.css hoặc SongsPage.module.css */
+
+.pageContainer { padding: 24px 32px; }
+.pageHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.pageTitle { font-size: 1.8rem; font-weight: 700; color: #fff; margin: 0; }
+/* Nút tạo request mới (nếu muốn) */
+.actionButton { /* Style chung cho nút */ }
+.addButton { /* Style cho nút Add */ }
+
+
+/* --- Style cho bảng --- */
+.requestTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.tableHeader { border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #b3b3b3; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.tableHeader th { padding: 12px 8px; text-align: left; font-weight: 400; }
+
+.requestRow td { padding: 10px 8px; vertical-align: middle; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #b3b3b3; font-size: 0.875rem; }
+.requestRow:hover { background-color: rgba(255, 255, 255, 0.05); } /* Hover nhẹ */
+
+/* Status Badge (tái sử dụng từ AdminPages hoặc định nghĩa lại) */
+.statusBadge {
+    padding: 3px 8px;
+    border-radius: 12px; /* Bo tròn hơn */
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-block; /* Để padding có tác dụng */
+    border: 1px solid transparent;
+}
+.status-pending { background-color: #4a4a4a; color: #e0e0e0; border-color: #666; }
+.status-approved { background-color: rgba(46, 119, 208, 0.2); color: #5fa8ff; border-color: #5fa8ff; }
+.status-rejected { background-color: rgba(248, 113, 113, 0.15); color: #fca5a5; border-color: #f87171; }
+.status-added { background-color: rgba(22, 163, 74, 0.2); color: #4ade80; border-color: #22c55e; }
+
+
+/* Loading/Error/Empty states */
+.message { text-align: center; padding: 40px; color: #a0a0a0; }
+.error { color: #f87171; }

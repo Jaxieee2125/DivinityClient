@@ -12,7 +12,7 @@ import {
     FiSettings, FiChevronsLeft, FiGithub, FiExternalLink,
     // Auth Icons (Ví dụ)
     FiLogIn, FiLogOut, FiUserPlus, FiUser,
-    FiPlusSquare // <<< Icon cho Request Song
+    FiPlusSquare, FiGitPullRequest // <<< Icon cho Request Song
 } from 'react-icons/fi';
 import usePlaylistStore from '../store/playlistStore';
 import styles from './Sidebar.module.css';
@@ -51,6 +51,11 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
   const menuButtonRef = useRef(null);
 
   useEffect(() => { fetchPlaylists(); }, [fetchPlaylists]);
+
+  const handleMyRequestsClick = () => {
+        navigate('/my-requests'); // Điều hướng đến trang My Song Requests
+        setIsMenuOpen(false);
+    };
 
   // Effect đóng menu khi click ra ngoài
   useEffect(() => {
@@ -109,7 +114,11 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       <li><button onClick={handleCollapseSidebar}><FiChevronsLeft /> Collapse sidebar</button></li>
 
                       <hr className={styles.menuDivider} />
-
+                      <li>
+                            <button onClick={handleMyRequestsClick}>
+                                <FiGitPullRequest /> My Song Requests
+                            </button>
+                      </li>
                       {/* === NÚT YÊU CẦU BÀI HÁT (Chỉ hiển thị khi đã đăng nhập) === */}
                       {isLoggedIn && ( // <<< Điều kiện hiển thị
                           <li>

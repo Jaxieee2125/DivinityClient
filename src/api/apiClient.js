@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api', // !!! CHỈNH SỬA NẾU CẦN !!!
+  baseURL: '/api', // !!! CHỈNH SỬA NẾU CẦN !!!
 });
 
 // --- Interceptor để thêm Token (Ví dụ - Cần điều chỉnh theo cách lưu token của bạn) ---
@@ -258,5 +258,17 @@ export const addSongsToPlaylistApi = (playlistId, songIdsArray) => {
         song_ids: songIdsArray // Mảng các ID
     });
 };
+
+/** Xóa một bài hát khỏi playlist cụ thể */
+export const removeSongFromPlaylistApi = (playlistId, songIdToRemove) => {
+    return apiClient.put(`/playlists/${playlistId}/`, { // Vẫn dùng PUT đến detail
+        action: 'remove_song',
+        song_id: songIdToRemove
+    });
+};
+
+export const deletePlaylistApi = (playlistId) => apiClient.delete(`/playlists/${playlistId}/`);
+
+export const getUserSongRequests = (params) => apiClient.get('/user/song-requests/', { params });
 
 export default apiClient;

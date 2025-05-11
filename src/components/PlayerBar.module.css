@@ -395,7 +395,6 @@ button[title^="Repeat: One"] {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 50px;
 }
 
 .rateText {
