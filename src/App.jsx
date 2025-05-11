@@ -38,6 +38,7 @@ import ManageUsers from './pages/admin/ManageUsers.jsx'; // Ví dụ
 import ManageGenres from './pages/admin/ManageMusicGenres.jsx'; // Ví dụ
 import ManageSongRequests from './pages/admin/ManageSongRequests.jsx'; // Ví dụ
 import MySongRequestsPage from './pages/MySongRequestsPage.jsx'; // <<< THÊM IMPORT
+import LikedSongsPage from './pages/LikedSongsPage.jsx'; // <<< THÊM IMPORT
 
 function App() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -75,6 +76,7 @@ function App() {
           <Route path="playlist/:playlistId" element={<PlaylistDetailPage />} />
           <Route path="album/:albumId" element={<AlbumDetailPage />} />
           <Route path="artist/:artistId" element={<ArtistDetailPage />} />
+          <Route path="liked-songs" element={<LikedSongsPage />} />
           {/* Route cho trang cá nhân (Profile) */}
           <Route path="profile" element={<ProfilePage />} />
           <Route path="profile/edit" element={<EditProfilePage />} />

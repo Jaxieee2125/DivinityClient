@@ -18,8 +18,8 @@
     background-color: #333; /* Có thể đổi màu nền khác */
     color: #fff;
     border-radius: 50%;
-    width: 56px; /* Giữ kích thước lớn */
-    height: 56px;
+    width: 48px; /* Giữ kích thước lớn */
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
