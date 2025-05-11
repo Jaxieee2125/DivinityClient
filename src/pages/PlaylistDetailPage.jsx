@@ -5,12 +5,14 @@ import { getPlaylistDetail } from '../api/apiClient'; // API function
 import usePlayerStore from '../store/playerStore'; // Zustand store for player
 import styles from './PlaylistDetailPage.module.css'; // CSS Module cho trang này
 import AddSongsToPlaylistModal from '../components/AddSongsToPlaylistModal'; // <<< IMPORT MODAL
-import { addSongsToPlaylistApi, removeSongFromPlaylistApi } from '../api/apiClient'; // API function để thêm bài hát vào playlist
+import { addSongsToPlaylistApi, removeSongFromPlaylistApi, deletePlaylistApi,  } from '../api/apiClient'; // API function để thêm bài hát vào playlist
 import {
     FiPlay, FiHeart, FiMoreHorizontal, FiList, FiClock,
     FiPlayCircle, FiPlusSquare, FiLoader, FiTrash2, FiUsers, FiPlus // Thêm FiUsers
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import ConfirmationModal from '../components/admin/ConfirmationModal'; // Modal xác nhận xóa playlist
+import usePlaylistStore from '../store/playlistStore';
 
 // Helper function để định dạng thời lượng (giây -> MM:SS)
 const formatDuration = (seconds) => {
@@ -73,6 +75,9 @@ const PlaylistDetailPage = () => {
     const addToQueue = usePlayerStore(state => state.addToQueue);
     const [isAddSongsModalOpen, setIsAddSongsModalOpen] = useState(false); // <<< STATE MỚI
     const [deletingTrackId, setDeletingTrackId] = useState(null);
+    const [isConfirmDeletePlaylistOpen, setIsConfirmDeletePlaylistOpen] = useState(false);
+    const [isDeletingPlaylist, setIsDeletingPlaylist] = useState(false);
+    const fetchPlaylists = usePlaylistStore(state => state.fetchPlaylists);
 
     const fetchData = useCallback(async () => { // Re-define
             setLoading(true); setError(null);
@@ -123,6 +128,33 @@ const PlaylistDetailPage = () => {
         }
     };
 
+    const openDeletePlaylistModal = (e) => {
+        e.stopPropagation();
+        setIsConfirmDeletePlaylistOpen(true);
+    };
+    const closeDeletePlaylistModal = () => {
+        setIsConfirmDeletePlaylistOpen(false);
+    };
+    const confirmDeletePlaylist = async () => {
+        if (!playlistDetails?._id) return;
+        setIsDeletingPlaylist(true);
+        const toastId = toast.loading(`Deleting playlist "${playlistDetails.playlist_name}"...`);
+        try {
+            await deletePlaylistApi(playlistDetails._id);
+            toast.update(toastId, { render: `Playlist "${playlistDetails.playlist_name}" deleted.`, type: "success", isLoading: false, autoClose: 3000 });
+            // Gọi fetchPlaylists từ store Sidebar để cập nhật danh sách ở đó
+            if(typeof fetchPlaylists === 'function') fetchPlaylists(true); // true để force refresh
+            navigate('/playlists'); // Chuyển hướng về trang danh sách playlist
+        } catch (err) {
+            console.error("Delete playlist error:", err);
+            const apiError = err.response?.data?.detail || err.message || "Failed to delete playlist.";
+            toast.update(toastId, { render: `Error: ${apiError}`, type: "error", isLoading: false, autoClose: 5000 });
+        } finally {
+            setIsDeletingPlaylist(false);
+            setIsConfirmDeletePlaylistOpen(false); // Đóng modal sau khi xử lý
+        }
+    };
+
     const handlePlayTrack = (trackObject, index) => {
         const trackToPlay = trackObject.song || trackObject;
         const queueTracks = playlistDetails?.songs?.map(item => item.song || item) || [];
@@ -130,8 +162,6 @@ const PlaylistDetailPage = () => {
     };
 
     const handleAddToQueue = (e, trackObject) => { e.stopPropagation(); const song = trackObject.song || trackObject; addToQueue(song); toast.info(`"${song.song_name}" added to queue.`); };
-    const handleLikePlaylist = (e) => { e.stopPropagation(); console.log("TODO: Like/Unlike Playlist", playlistId); toast.info("Like playlist feature not implemented yet."); /* setIsPlaylistLiked(!isPlaylistLiked); */ };
-    const handleMoreOptionsPlaylist = (e) => { e.stopPropagation(); console.log("TODO: Show more options for playlist", playlistId); toast.info("More options feature not implemented yet."); };
     const handleLikeTrackToggle = (e, trackId) => { e.stopPropagation(); console.log("TODO: Like/Unlike Track", trackId); toast.info("Like track feature not implemented yet."); };
 
     const openAddSongsModal = (e) => {
@@ -201,7 +231,14 @@ const PlaylistDetailPage = () => {
                 <button className={styles.iconButton} onClick={openAddSongsModal} title="Add songs to this playlist">
                     <FiPlus size={24} /> {/* Hoặc FiMusic, FiPlusSquare */}
                 </button>
-                <button className={styles.iconButton} onClick={handleMoreOptionsPlaylist} title="More options"><FiMoreHorizontal size={24} /></button>
+                <button
+                    className={`${styles.iconButton} ${styles.deletePlaylistButton}`} // Thêm class riêng nếu muốn style khác
+                    onClick={openDeletePlaylistModal}
+                    title="Delete this playlist"
+                    disabled={isDeletingPlaylist} // Disable khi đang xóa
+                >
+                    <FiTrash2 size={22} />
+                </button>
                 {/* Toolbar Actions theo hình ảnh */}
                 <div className={styles.toolbarActions}>
                     {/* <span className={styles.actionText}>Id</span> */}
@@ -289,6 +326,16 @@ const PlaylistDetailPage = () => {
                         // Truyền mảng ID các bài hát đã có trong playlist để modal loại trừ
                         existingSongIds={tracks.map(item => (item.song || item)._id)}
                     />
+                {isConfirmDeletePlaylistOpen && (
+                <ConfirmationModal
+                    isOpen={isConfirmDeletePlaylistOpen}
+                    onClose={closeDeletePlaylistModal}
+                    onConfirm={confirmDeletePlaylist}
+                    title="Delete Playlist"
+                    message={`Are you sure you want to delete the playlist <strong>"${playlistDetails.playlist_name}"</strong>? This action cannot be undone.`}
+                    isLoading={isDeletingPlaylist}
+                />
+            )}
             </div>
              {/* TODO: Pagination nếu API trả về phân trang cho tracks trong playlist */}
         </div>
