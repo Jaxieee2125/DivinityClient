@@ -23,18 +23,32 @@ const ManageMusicGenres = () => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     // --- Data Fetching ---
-    const fetchMusicGenres = useCallback(async () => { // <<< Đổi tên hàm fetch
-        if (musicGenres.length === 0) setLoading(true); setError(null);
-        try {
-            const response = await getMusicGenres(); // <<< Gọi hàm API đã đổi tên
-            console.log("Fetched music genres:", response.data); // Debug log
-            setMusicGenres(response.data || []); // <<< Cập nhật state đã đổi tên
-        } catch (err) {
-            const apiError = err.response?.data?.detail || err.message || "Failed to load music genres.";
-            setError(apiError); toast.error(apiError);
-            console.error("Fetch music genres error:", err);
-        } finally { setLoading(false); }
-    }, [musicGenres.length]); // <<< Dependency đã đổi tên
+    const fetchMusicGenres = useCallback(async () => {
+    if (musicGenres.length === 0) setLoading(true); setError(null);
+    try {
+        const response = await getMusicGenres();
+        console.log("API Response for Music Genres:", response); // <<< LOG TOÀN BỘ RESPONSE
+        console.log("API Data for Music Genres:", response.data); // <<< LOG response.data
+        // setMusicGenres(response.data || []); // Tạm thời comment dòng này để xem log
+
+        // Kiểm tra cấu trúc response.data
+        if (response.data && Array.isArray(response.data.results)) {
+            // Nếu API trả về dạng { count: ..., results: [...] } (có pagination)
+            setMusicGenres(response.data.results);
+            // TODO: Cập nhật totalCount, totalPages nếu có pagination
+        } else if (Array.isArray(response.data)) {
+            // Nếu API trả về trực tiếp một mảng
+            setMusicGenres(response.data);
+        } else {
+            // Nếu response.data không phải mảng hoặc không có results
+            console.error("Unexpected API response format for music genres:", response.data);
+            setMusicGenres([]); // Đặt về mảng rỗng
+            setError("Received invalid data format for music genres.");
+        }
+
+    } catch (err) { /* ... xử lý lỗi ... */ }
+    finally { setLoading(false); }
+    }, [musicGenres.length]);
 
     useEffect(() => { fetchMusicGenres(); }, [fetchMusicGenres]); // <<< Gọi hàm fetch đã đổi tên
 
