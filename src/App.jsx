@@ -37,6 +37,7 @@ import ManageAlbums from './pages/admin/ManageAlbums.jsx'; // Ví dụ
 import ManageUsers from './pages/admin/ManageUsers.jsx'; // Ví dụ
 import ManageGenres from './pages/admin/ManageMusicGenres.jsx'; // Ví dụ
 import ManageSongRequests from './pages/admin/ManageSongRequests.jsx'; // Ví dụ
+import MySongRequestsPage from './pages/MySongRequestsPage.jsx'; // <<< THÊM IMPORT
 
 function App() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -77,6 +78,7 @@ function App() {
           {/* Route cho trang cá nhân (Profile) */}
           <Route path="profile" element={<ProfilePage />} />
           <Route path="profile/edit" element={<EditProfilePage />} />
+          <Route path="my-requests" element={<MySongRequestsPage />} /> {/* <<< THÊM ROUTE NÀY */}
         </Route>
         {/* Route cho trang cá nhân (Profile) */}
         
