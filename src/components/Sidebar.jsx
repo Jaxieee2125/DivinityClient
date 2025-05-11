@@ -111,7 +111,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       {/* Các mục điều hướng cơ bản */}
                       <li><button onClick={handleGoBack}><FiChevronLeft /> Go back</button></li>
                       <li><button onClick={handleGoForward}><FiChevronRight /> Go forward</button></li>
-                      <li><button onClick={handleCollapseSidebar}><FiChevronsLeft /> Collapse sidebar</button></li>
+                      {/* <li><button onClick={handleCollapseSidebar}><FiChevronsLeft /> Collapse sidebar</button></li> */}
 
                       <hr className={styles.menuDivider} />
                       <li>
