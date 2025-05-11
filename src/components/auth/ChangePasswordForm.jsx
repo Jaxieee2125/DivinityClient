@@ -15,16 +15,16 @@ function ChangePasswordForm() {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!oldPassword) newErrors.oldPassword = "Vui lòng nhập mật khẩu cũ.";
+        if (!oldPassword) newErrors.oldPassword = "Please enter your old password.";
         if (!newPassword) {
-            newErrors.newPassword = "Vui lòng nhập mật khẩu mới.";
+            newErrors.newPassword = "Please enter a new password.";
         } else if (newPassword.length < 8) { // Đồng bộ với backend validator
-            newErrors.newPassword = "Mật khẩu mới phải có ít nhất 8 ký tự.";
+            newErrors.newPassword = "Your new password must be at least 8 characters long.";
         }
         if (!confirmPassword) {
-             newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu mới.";
+             newErrors.confirmPassword = "Please confirm your new password.";
         } else if (newPassword !== confirmPassword) {
-            newErrors.confirmPassword = "Mật khẩu xác nhận không khớp.";
+            newErrors.confirmPassword = "Your new password and confirmation do not match.";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -42,7 +42,7 @@ function ChangePasswordForm() {
 
         try {
             const response = await changePassword(oldPassword, newPassword);
-            setSuccessMessage(response.data.message || 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.');
+            setSuccessMessage(response.data.message || 'Change password successful!Please log in again.');
             // Xóa form
             setOldPassword('');
             setNewPassword('');
@@ -73,10 +73,10 @@ function ChangePasswordForm() {
                       if(err.response.data.error) backendErrors.general = err.response.data.error;
                      setErrors(backendErrors);
                  } else {
-                     setErrors({ general: 'Đổi mật khẩu thất bại. Vui lòng thử lại.' });
+                     setErrors({ general: 'Fail to change password. Please try again!' });
                  }
             } else {
-                setErrors({ general: 'Đã xảy ra lỗi mạng hoặc lỗi không xác định.' });
+                setErrors({ general: 'There is maybe network error or unknown error' });
             }
         } finally {
             setLoading(false);
@@ -85,13 +85,13 @@ function ChangePasswordForm() {
 
     return (
         <div className={styles.formContainer}>
-            <h2>Đổi Mật Khẩu</h2>
+            <h2>Change Password</h2>
             <form onSubmit={handleSubmit} className={styles.form}>
                 {successMessage && <p className={styles.success}>{successMessage}</p>}
                 {errors.general && <p className={styles.error}>{errors.general}</p>}
 
                 <div className={styles.inputGroup}>
-                    <label htmlFor="oldPassword" className={styles.label}>Mật khẩu cũ</label>
+                    <label htmlFor="oldPassword" className={styles.label}>Old Password</label>
                     <input
                         type="password"
                         id="oldPassword"
@@ -106,7 +106,7 @@ function ChangePasswordForm() {
                 </div>
 
                 <div className={styles.inputGroup}>
-                    <label htmlFor="newPassword" className={styles.label}>Mật khẩu mới</label>
+                    <label htmlFor="newPassword" className={styles.label}>New Password</label>
                     <input
                         type="password"
                         id="newPassword"
@@ -122,7 +122,7 @@ function ChangePasswordForm() {
                 </div>
 
                 <div className={styles.inputGroup}>
-                    <label htmlFor="confirmPassword" className={styles.label}>Xác nhận mật khẩu mới</label>
+                    <label htmlFor="confirmPassword" className={styles.label}>Confirm New Password</label>
                     <input
                         type="password"
                         id="confirmPassword"
@@ -137,10 +137,10 @@ function ChangePasswordForm() {
                 </div>
 
                 <button type="submit" className={styles.submitButton} disabled={loading}>
-                    {loading ? 'Đang lưu...' : 'Đổi Mật Khẩu'}
+                    {loading ? 'Saving...' : 'Change Password'}
                 </button>
                  <div className={styles.links}>
-                    <Link to="/profile" className={styles.link}>Quay lại Profile</Link> {/* Sử dụng Link */}
+                    <Link to="/profile" className={styles.link}>Back to Profile</Link> {/* Sử dụng Link */}
                 </div>
             </form>
         </div>

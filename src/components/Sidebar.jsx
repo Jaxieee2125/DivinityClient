@@ -114,11 +114,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       {/* <li><button onClick={handleCollapseSidebar}><FiChevronsLeft /> Collapse sidebar</button></li> */}
 
                       <hr className={styles.menuDivider} />
-                      <li>
-                            <button onClick={handleMyRequestsClick}>
-                                <FiGitPullRequest /> My Song Requests
-                            </button>
-                      </li>
+                      
                       {/* === NÚT YÊU CẦU BÀI HÁT (Chỉ hiển thị khi đã đăng nhập) === */}
                       {isLoggedIn && ( // <<< Điều kiện hiển thị
                           <li>
@@ -126,6 +122,13 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                                   <FiPlusSquare /> New Song Request
                               </button>
                           </li>
+                      )}
+                      {isLoggedIn && (
+                        <li>
+                            <button onClick={handleMyRequestsClick}>
+                                <FiGitPullRequest /> My Song Requests
+                            </button>
+                      </li>
                       )}
                       {/* ============================================================ */}
 
