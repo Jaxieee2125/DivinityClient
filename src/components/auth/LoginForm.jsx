@@ -12,7 +12,7 @@ function LoginForm() {
         event.preventDefault();
         setError(''); // Xóa lỗi cũ
         if (!identifier || !password) {
-            setError('Vui lòng nhập tài khoản và mật khẩu.');
+            setError('Please fill in all fields.');
             return;
         }
         setLoading(true);
@@ -34,9 +34,9 @@ function LoginForm() {
             console.error('Login error:', err.response || err.message);
             if (err.response && err.response.data) {
                 // Hiển thị lỗi từ backend
-                setError(err.response.data.detail || err.response.data.error || 'Đăng nhập thất bại. Vui lòng thử lại.');
+                setError(err.response.data.detail || err.response.data.error || 'Login failed. Please try again.');
             } else {
-                setError('Đã xảy ra lỗi mạng hoặc lỗi không xác định.');
+                setError('There was an error connecting to the server. Please try again later.');
             }
         } finally {
             setLoading(false);
@@ -45,11 +45,11 @@ function LoginForm() {
 
     return (
         <div className={styles.formContainer}>
-            <h2>Đăng nhập</h2>
+            <h2>Login</h2>
             <form onSubmit={handleSubmit} className={styles.form}>
                 {error && <p className={styles.error}>{error}</p>}
                 <div className={styles.inputGroup}>
-                    <label htmlFor="identifier" className={styles.label}>Tài khoản</label>
+                    <label htmlFor="identifier" className={styles.label}>Username</label>
                     <input
                         type="text"
                         id="identifier"
@@ -57,13 +57,13 @@ function LoginForm() {
                         className={styles.input}
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
-                        placeholder="Nhập username hoặc email" // Thêm placeholder
+                        placeholder="Enter your username or email" // Thêm placeholder
                         required
                         disabled={loading}
                     />
                 </div>
                 <div className={styles.inputGroup}>
-                    <label htmlFor="password" className={styles.label}>Mật khẩu</label>
+                    <label htmlFor="password" className={styles.label}>Password</label>
                     <input
                         type="password"
                         id="password"
@@ -71,18 +71,18 @@ function LoginForm() {
                         className={styles.input}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Nhập mật khẩu" // Thêm placeholder
+                        placeholder="Enter your password" // Thêm placeholder
                         required
                         disabled={loading}
                     />
                 </div>
                 <button type="submit" className={styles.submitButton} disabled={loading}>
-                    {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+                    {loading ? 'Processing...' : 'Login'}
                 </button>
                 <div className={styles.links}>
                     {/* Sử dụng Link của React Router nếu có */}
-                    <a href="/register" className={styles.link}>Chưa có tài khoản? Đăng ký</a>
-                    <a href="/forgot-password" className={styles.link}>Quên mật khẩu</a>
+                    <a href="/register" className={styles.link}>Register</a>
+                    <a href="/forgot-password" className={styles.link}>Forgot your password?</a>
                 </div>
             </form>
         </div>

@@ -271,4 +271,6 @@ export const deletePlaylistApi = (playlistId) => apiClient.delete(`/playlists/${
 
 export const getUserSongRequests = (params) => apiClient.get('/user/song-requests/', { params });
 
+export const getUserFavouriteSongs = (params) => apiClient.get('/user/liked-songs/', { params });
+
 export default apiClient;

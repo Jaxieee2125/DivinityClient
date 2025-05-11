@@ -232,6 +232,8 @@ const AlbumDetailPage = () => {
                                         {formatDuration(track.duration_song)}
                                     </span>
                                     {/* Actions */}
+                                </td>
+                                <td className={styles.trackActionsCell}>
                                     <div className={styles.trackActions}>
                                          <button onClick={(e) => handleLikeTrackToggle(e, track._id)} className={styles.actionButton} title="Save to your Liked Songs">
                                             <FiHeart size={16} /> {/* TODO: Thêm state like cho từng track */}
@@ -239,7 +241,7 @@ const AlbumDetailPage = () => {
                                          <button onClick={(e) => handleAddToQueue(e, track)} className={styles.actionButton} title="Add to queue">
                                             <FiPlusSquare size={16}/>
                                          </button>
-                                     </div>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

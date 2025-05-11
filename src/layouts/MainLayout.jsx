@@ -39,7 +39,7 @@ const MainLayout = ({ openSearchModal, toggleQueueSidebar }) => {
     localStorage.removeItem('userInfo');     // <<< Key thông tin user (nếu có)
 
     setIsLoggedIn(false); // Cập nhật state
-    navigate('/login'); // Chuyển hướng về trang đăng nhập
+    navigate('/'); // Chuyển hướng về trang đăng nhập
   };
   // --- KẾT THÚC PHẦN THÊM STATE VÀ LOGIC ---
 

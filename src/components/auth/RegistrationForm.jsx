@@ -13,19 +13,20 @@ function RegistrationForm() {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!username.trim()) newErrors.username = "Vui lòng nhập tên đăng nhập.";
+        if (!username.trim()) newErrors.username = "Please enter a username.";
+        else if (username.length < 3) newErrors.username = "Username must be at least 3 characters.";
         if (!email.trim()) {
-             newErrors.email = "Vui lòng nhập email.";
+             newErrors.email = "Please enter an email address.";
         } else if (!/\S+@\S+\.\S+/.test(email)) {
-             newErrors.email = "Địa chỉ email không hợp lệ.";
+             newErrors.email = "Your email address is invalid.";
         }
         if (!password) {
-             newErrors.password = "Vui lòng nhập mật khẩu.";
+             newErrors.password = "Please enter a password.";
         } else if (password.length < 8) { // Nên đồng bộ với validation backend
-             newErrors.password = "Mật khẩu phải có ít nhất 8 ký tự.";
+             newErrors.password = "Your password must be at least 8 characters.";
         }
         if (password !== confirmPassword) {
-             newErrors.confirmPassword = "Mật khẩu xác nhận không khớp.";
+             newErrors.confirmPassword = "Your passwords do not match.";
         }
         setError(newErrors);
         return Object.keys(newErrors).length === 0; // True nếu không có lỗi
@@ -43,7 +44,7 @@ function RegistrationForm() {
 
         try {
             await registerUser(username, email, password);
-            setSuccessMessage('Đăng ký thành công! Bạn có thể đăng nhập.');
+            setSuccessMessage('Registration successful! You can now log in.');
             // Xóa form sau khi thành công
             setUsername('');
             setEmail('');
@@ -75,11 +76,11 @@ function RegistrationForm() {
 
                      setError(backendErrors);
                  } else {
-                     setError({ general: 'Đăng ký thất bại. Vui lòng thử lại.' });
+                     setError({ general: 'Register fail. Please try again!' });
                  }
 
             } else {
-                setError({ general: 'Đã xảy ra lỗi mạng hoặc lỗi không xác định.' });
+                setError({ general: 'There is connection error.' });
             }
         } finally {
             setLoading(false);
@@ -88,7 +89,7 @@ function RegistrationForm() {
 
     return (
         <div className={styles.formContainer}>
-            <h2>Đăng ký</h2>
+            <h2>Register</h2>
             <form onSubmit={handleSubmit} className={styles.form}>
                 {successMessage && <p className={styles.success}>{successMessage}</p>}
                 {error.general && <p className={styles.error}>{error.general}</p>}
@@ -122,7 +123,7 @@ function RegistrationForm() {
                     {error.email && <p className={styles.fieldError}>{error.email}</p>}
                 </div>
                 <div className={styles.inputGroup}>
-                    <label htmlFor="reg-password" className={styles.label}>Mật khẩu</label>
+                    <label htmlFor="reg-password" className={styles.label}>Password</label>
                     <input
                         type="password"
                         id="reg-password"
@@ -137,7 +138,7 @@ function RegistrationForm() {
                      {error.password && <p className={styles.fieldError}>{error.password}</p>}
                 </div>
                 <div className={styles.inputGroup}>
-                    <label htmlFor="confirmPassword" className={styles.label}>Xác nhận mật khẩu</label>
+                    <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
                     <input
                         type="password"
                         id="confirmPassword"
@@ -151,10 +152,10 @@ function RegistrationForm() {
                     {error.confirmPassword && <p className={styles.fieldError}>{error.confirmPassword}</p>}
                 </div>
                 <button type="submit" className={styles.submitButton} disabled={loading}>
-                    {loading ? 'Đang xử lý...' : 'Đăng ký'}
+                    {loading ? 'Processing...' : 'Register'}
                 </button>
                  <div className={styles.links}>
-                    <a href="/login" className={styles.link}>Đã có tài khoản? Đăng nhập</a>
+                    <a href="/login" className={styles.link}>Having a account? Login</a>
                 </div>
             </form>
         </div>

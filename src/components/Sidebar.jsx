@@ -111,14 +111,10 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                       {/* Các mục điều hướng cơ bản */}
                       <li><button onClick={handleGoBack}><FiChevronLeft /> Go back</button></li>
                       <li><button onClick={handleGoForward}><FiChevronRight /> Go forward</button></li>
-                      <li><button onClick={handleCollapseSidebar}><FiChevronsLeft /> Collapse sidebar</button></li>
+                      {/* <li><button onClick={handleCollapseSidebar}><FiChevronsLeft /> Collapse sidebar</button></li> */}
 
                       <hr className={styles.menuDivider} />
-                      <li>
-                            <button onClick={handleMyRequestsClick}>
-                                <FiGitPullRequest /> My Song Requests
-                            </button>
-                      </li>
+                      
                       {/* === NÚT YÊU CẦU BÀI HÁT (Chỉ hiển thị khi đã đăng nhập) === */}
                       {isLoggedIn && ( // <<< Điều kiện hiển thị
                           <li>
@@ -126,6 +122,13 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
                                   <FiPlusSquare /> New Song Request
                               </button>
                           </li>
+                      )}
+                      {isLoggedIn && (
+                        <li>
+                            <button onClick={handleMyRequestsClick}>
+                                <FiGitPullRequest /> My Song Requests
+                            </button>
+                      </li>
                       )}
                       {/* ============================================================ */}
 
@@ -173,6 +176,7 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
              <NavLink to="/songs" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}> <FiMusic /> Tracks </NavLink>
              <NavLink to="/artists" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}> <FiUsers /> Artists </NavLink>
              <NavLink to="/musicgenres" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}> <FiTag /> Genres </NavLink>
+             <NavLink to="/liked-songs" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}><FiHeart /> Loves</NavLink>
         </nav>
 
         <hr className={styles.divider} />

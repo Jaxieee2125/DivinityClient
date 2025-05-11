@@ -234,7 +234,7 @@ const MusicGenreDetailPage = () => {
                                 <th className={styles.titleCol}>Title</th>
                                 <th className={styles.albumCol}>Album</th>
                                 <th className={styles.artistCol}>Artist</th>
-                                <th className={styles.playsCol}>Plays</th>
+                                
                                 <th className={styles.durationCol}><FiClock size={16} /></th>
                             </tr>
                         </thead>
@@ -268,11 +268,12 @@ const MusicGenreDetailPage = () => {
                                             </React.Fragment>
                                         )) || '-'}
                                     </td>
-                                    <td className={styles.trackPlaysCell}>
-                                        {track.number_of_plays != null ? track.number_of_plays : '-'}
-                                    </td>
+                                    
                                     <td className={styles.trackDurationCell}>
                                         <span className={styles.durationText}>{formatDuration(track.duration_song)}</span>
+                                        
+                                    </td>
+                                    <td className={styles.trackActionsCell}>
                                         <div className={styles.trackActions}>
                                              <button onClick={(e) => handleLike(e, track._id)} className={styles.actionButton} title="Save to your Liked Songs"> <FiHeart size={16} /> </button>
                                              <button onClick={(e) => handleAddToQueue(e, track)} className={styles.actionButton} title="Add to queue"> <FiPlusSquare size={16}/> </button>
