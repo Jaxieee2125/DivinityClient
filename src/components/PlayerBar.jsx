@@ -42,6 +42,8 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareableLink, setShareableLink] = useState('');
   const [shareTitle, setShareTitle] = useState('');
+  const isShuffleActive = usePlayerStore(state => state.isShuffleActive);
+  const toggleShuffle = usePlayerStore(state => state.toggleShuffle);
 
   useEffect(() => {
         setIsLikedLocal(isCurrentSongLiked);
@@ -112,14 +114,15 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
 
 
   const handleShuffleToggle = useCallback(() => {
-    setIsShuffle(!isShuffle);
-    console.log("Toggle Shuffle:", !isShuffle);
-  }, [isShuffle]);
+    toggleShuffle(); // <<< GỌI ACTION TỪ STORE
+  }, [toggleShuffle]); // Dependency là action từ store
 
   const handleRepeatToggle = useCallback(() => {
     toggleRepeatMode(); // <<< GỌI ACTION TỪ STORE ZUSTAND
     // setRepeatMode không còn nữa
   }, [toggleRepeatMode]); // Dependency là action từ store (tham chiếu ổn định)
+
+  
 
   const toggleMiniPlayer = () => {
     setIsMiniPlayer(!isMiniPlayer);
@@ -455,7 +458,7 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
         <div className={styles.controlButtons}>
           <button
             onClick={handleShuffleToggle}
-            className={`${styles.controlButton} ${isShuffle ? styles.active : ''}`}
+            className={`${styles.controlButton} ${isShuffleActive ? styles.active : ''}`}
             title="Shuffle"
                 disabled={!currentSong}
           >
