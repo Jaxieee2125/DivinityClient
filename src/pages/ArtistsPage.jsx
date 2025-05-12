@@ -1,11 +1,13 @@
 // src/pages/ArtistsPage.jsx
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getArtists } from '../api/apiClient';
 import usePlayerStore from '../store/playerStore'; // Nếu cần nút play artist
 import styles from './ArtistsPage.module.css'; // <<< Sử dụng CSS Module này
-import { FiUsers, FiFilter, FiRefreshCcw, FiMoreHorizontal, FiArrowUp, FiArrowDown, FiPlay, FiStar } from 'react-icons/fi'; // Thêm FiStar
+import { FiUsers, FiFilter, FiRefreshCcw, FiMoreHorizontal, FiArrowUp, FiArrowDown, FiPlay, FiStar, FiLoader } from 'react-icons/fi'; // Thêm FiStar
 import { toast } from 'react-toastify';
+import { getArtistTopTracks } from '../api/apiClient';
+
 
 // Component Avatar (Có thể tách ra)
 const ArtistAvatarDisplay = ({ src, alt }) => {
@@ -23,6 +25,8 @@ const ArtistAvatarDisplay = ({ src, alt }) => {
 };
 
 
+
+
 const ArtistsPage = () => {
     // --- State ---
     const [allArtists, setAllArtists] = useState([]);
@@ -34,6 +38,8 @@ const ArtistsPage = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [searchTerm, setSearchTerm] = useState('');
     const [playingArtistId, setPlayingArtistId] = useState(null); // <<< State loading play
+
+    const playSong = usePlayerStore(state => state.playSong);
 
     const navigate = useNavigate();
     // const playArtist = usePlayerStore(state => state.playArtist); // TODO: Action nếu có
@@ -93,11 +99,11 @@ const ArtistsPage = () => {
         const toastId = toast.loading(`Loading top tracks for "${artistName}"...`);
         try {
             console.log(`TODO: Fetch top tracks for artist ${artistName} (${artistId})`);
-            // const tracksResponse = await getArtistTopTracks(artistId); // <<< Cần API này
-            // const artistTracks = tracksResponse.data || [];
-            const artistTracks = []; // <<<< Thay bằng dữ liệu thật
+            const tracksResponse = await getArtistTopTracks(artistId); // <<< Cần API này
+            const artistTracks = tracksResponse.data || [];
+            // const artistTracks = []; // <<<< Thay bằng dữ liệu thật
             if (artistTracks.length > 0) {
-                // playSong(artistTracks[0], artistTracks, 0); // Play bài đầu tiên
+                playSong(artistTracks[0], artistTracks, 0); // Play bài đầu tiên
                 toast.update(toastId, { render: `Playing top tracks by "${artistName}"`, type: "success", isLoading: false, autoClose: 3000 });
             } else {
                  toast.update(toastId, { render: `No tracks found for "${artistName}".`, type: "warning", isLoading: false, autoClose: 3000 });
