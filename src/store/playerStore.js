@@ -103,8 +103,10 @@ const usePlayerStore = create(devtools((set, get) => ({
     if (queue.length === 0) return;
 
     let nextIndex;
+    console.log(repeatMode);
     if (currentQueueIndex === queue.length - 1) {
       // Nếu là bài cuối cùng
+      console.log(repeatMode)
       if (repeatMode === 'all') {
         nextIndex = 0; // Quay lại bài đầu
       } else {
@@ -185,6 +187,15 @@ const usePlayerStore = create(devtools((set, get) => ({
        // Không cần set volume về 0 ở đây, vì useEffect trong PlayerBar sẽ làm điều đó dựa trên isMuted
     }
   },
+
+  toggleRepeatMode: () => set((state) => {
+        let newMode;
+        if (state.repeatMode === 'none') newMode = 'all';
+        else if (state.repeatMode === 'all') newMode = 'one';
+        else newMode = 'none'; // 'one' -> 'none'
+        console.log("[Store] Toggling repeat mode to:", newMode); // DEBUG
+        return { repeatMode: newMode };
+    }, false, 'player/toggleRepeatMode'),
 
   /**
    * Thêm một bài hát vào cuối hàng đợi.

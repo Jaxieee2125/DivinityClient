@@ -16,7 +16,6 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isShuffle, setIsShuffle] = useState(false);
-  const [repeatMode, setRepeatMode] = useState('none');
   const [isExpanded, setIsExpanded] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showRateSlider, setShowRateSlider] = useState(false);
@@ -38,6 +37,8 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
   const setDuration = usePlayerStore(state => state.setDuration);
   const isCurrentSongLiked = usePlayerStore(state => state.isCurrentSongLiked);
   const setCurrentSongLikedStatus = usePlayerStore(state => state.setCurrentSongLikedStatus);
+  const repeatMode = usePlayerStore(state => state.repeatMode);
+  const toggleRepeatMode = usePlayerStore(state => state.toggleRepeatMode);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareableLink, setShareableLink] = useState('');
   const [shareTitle, setShareTitle] = useState('');
@@ -116,16 +117,15 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
   }, [isShuffle]);
 
   const handleRepeatToggle = useCallback(() => {
-    setRepeatMode(prevMode => {
-      if (prevMode === 'none') return 'all';
-      if (prevMode === 'all') return 'one';
-      return 'none';
-    });
-  }, [setRepeatMode]);
+    toggleRepeatMode(); // <<< GỌI ACTION TỪ STORE ZUSTAND
+    // setRepeatMode không còn nữa
+  }, [toggleRepeatMode]); // Dependency là action từ store (tham chiếu ổn định)
 
   const toggleMiniPlayer = () => {
     setIsMiniPlayer(!isMiniPlayer);
   };
+
+  
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -299,7 +299,7 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
     if (audioRef.current) {
       audioRef.current.loop = (repeatMode === 'one');
     }
-  }, [repeatMode]);
+  }, [repeatMode]); // Phụ thuộc vào repeatMode từ store
 
   // --- CALLBACKS CHO AUDIO EVENTS ---
   const handleLoadedMetadata = useCallback(() => {
@@ -316,13 +316,10 @@ const PlayerBar = ({ toggleQueueSidebar }) => {
 
   // Xử lý khi bài hát kết thúc dựa trên repeatMode
   const handleSongEnd = useCallback(() => {
-    if (repeatMode === 'one') {
-      if(audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play();
-      }
+    if (repeatMode !== 'one') {
+      playNext();
     } else {
-       playNext();
+        if (audioRef.current) audioRef.current.currentTime = 0;
     }
   }, [repeatMode, playNext]);
 
