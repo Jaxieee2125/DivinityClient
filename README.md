@@ -71,8 +71,8 @@ Divinity là một ứng dụng client nghe nhạc được xây dựng với m�
 
 1.  **Clone Repository:**
     ```bash
-    git clone https://github.com/Jaxieee2125/MusicClient.git # <<< THAY THẾ BẰNG URL REPO CỦA BẠN
-    cd MusicClient
+    git clone https://github.com/Jaxieee2125/DivinityClient.git
+    cd DivinityClient
     ```
 
 2.  **Cài đặt Dependencies:**
