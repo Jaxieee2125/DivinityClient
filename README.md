@@ -2,9 +2,9 @@
 
 Divinity là một ứng dụng client nghe nhạc được xây dựng với mục tiêu mang đến trải nghiệm nghe nhạc mượt mà và tùy biến. Dự án này được phát triển bằng React, Vite, và Zustand, kết nối với một API backend riêng biệt để quản lý dữ liệu âm nhạc.
 
-![image](https://github.com/Jaxieee2125/MusicClient/public/ss1)
-![image](https://github.com/Jaxieee2125/MusicClient/public/ss2)
-![image](https://github.com/Jaxieee2125/MusicClient/public/ss3)
+![image](https://github.com/Jaxieee2125/MusicClient/blob/3094dff2946717074eca1381687b1f785578a8ec/public/ss1.png)
+![image](https://github.com/Jaxieee2125/MusicClient/blob/3094dff2946717074eca1381687b1f785578a8ec/public/ss2.png)
+![image](https://github.com/Jaxieee2125/MusicClient/blob/3094dff2946717074eca1381687b1f785578a8ec/public/ss3.png)
 
 
 ## Tính năng Hiện tại
