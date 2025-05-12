@@ -20,7 +20,7 @@ const AdminSidebar = () => {
 
     return (
         <aside className={styles.sidebar}>
-            <div className={styles.logo}>Admin Panel</div>
+            <div className={styles.logo}>Divinity Interface</div>
             <nav className={styles.nav}>
                 <NavLink to="/admin" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
                    <FiGrid /> Dashboard

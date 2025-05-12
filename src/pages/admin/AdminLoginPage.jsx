@@ -53,7 +53,7 @@ const AdminLoginPage = () => {
     return (
         <div className={styles.loginContainer}>
             <div className={styles.loginBox}>
-                <h2>Admin Login</h2>
+                <h2>Divinity Interface</h2>
                 <form onSubmit={handleSubmit}>
                     <div className={styles.inputGroup}>
                         <label htmlFor="username">Username</label>

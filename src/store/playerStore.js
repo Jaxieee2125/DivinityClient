@@ -1,259 +1,357 @@
 // src/store/playerStore.js
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware'; // Import devtools
+import { devtools } from 'zustand/middleware';
 
-const usePlayerStore = create(devtools((set, get) => ({
-  // --- State Variables ---
-  currentSong: null,   // Thông tin bài hát đang phát (object)
-  queue: [],           // Hàng đợi các bài hát (array of song objects)
-  currentQueueIndex: -1, // Vị trí của bài hát đang phát trong hàng đợi (-1 nếu không phát từ queue)
-  isPlaying: false,    // Trạng thái phát/dừng
-  volume: 1,         // Âm lượng (0 đến 1)
-  currentTime: 0,      // Thời gian hiện tại của bài hát (seconds)
-  duration: 0,         // Tổng thời lượng của bài hát (seconds)
-  isMuted: false,      // Trạng thái tắt tiếng
-  repeatMode: 'none',  // Chế độ lặp lại (none, all, one)
-  isCurrentSongLiked: false, // Trạng thái bài hát hiện tại có được thích hay không
+// Hàm helper để xáo trộn mảng (Fisher-Yates shuffle)
+const shuffleArray = (arrayToShuffle) => {
+  const array = [...arrayToShuffle]; // Tạo bản sao để không thay đổi mảng gốc
+  let currentIndex = array.length,  randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
+};
 
-  // --- Actions (Hàm để cập nhật state) ---
+const usePlayerStore = create(devtools(
+  (set, get) => ({
+    // --- State Variables ---
+    currentSong: null,
+    queue: [],
+    currentQueueIndex: -1,
+    isPlaying: false,
+    volume: 1, // Giữ nguyên giá trị bạn đã đặt
+    currentTime: 0,
+    duration: 0,
+    isMuted: false,
+    repeatMode: 'none',  // 'none', 'all', 'one'
+    isCurrentSongLiked: false, // Trạng thái like của bài hát hiện tại
+    isShuffleActive: false, // Trạng thái shuffle
+    originalQueue: [], // Lưu trữ hàng đợi gốc khi chưa shuffle
+    playedInShuffle: new Set(), // Theo dõi các bài đã phát trong lượt shuffle hiện tại
 
-  /**
-   * Cập nhật thời gian hiện tại của bài hát đang phát.
-   * (Thường được gọi từ sự kiện onTimeUpdate của thẻ audio).
-   * @param {number} time
-   */
-  setCurrentTime: (time) => {
-    
-    set({ currentTime: time });
-  },
-  
-  /**
-   * Bắt đầu phát một bài hát.
-   * @param {object} song - Object bài hát để phát.
-   * @param {array} [list=[]] - Danh sách bài hát hiện tại (ví dụ: từ trang đang xem) để đặt làm hàng đợi mới.
-   * @param {number} [indexInList=-1] - Vị trí của 'song' trong 'list'.
-   */
-  playSong: (song, list = [], indexInList = -1) => {
-    set({
-      currentSong: song,
-      queue: [...list], // Tạo một bản sao của danh sách làm hàng đợi mới
-      currentQueueIndex: indexInList, // Đặt index hiện tại trong hàng đợi mới
-      isPlaying: true,
-      currentTime: 0, // Reset thời gian khi bắt đầu bài mới
-      duration: 0,    // Reset thời lượng, sẽ được cập nhật từ thẻ audio
-    });
-    // Lưu ý: Logic tương tác trực tiếp với thẻ <audio> (như gọi .play())
-    // nên nằm trong component PlayerBar sử dụng các state này qua useEffect.
-  },
+    // --- Actions ---
+    setCurrentTime: (time) => set({ currentTime: time }, false, 'player/setCurrentTime'),
+    setDuration: (duration) => set({ duration: duration }, false, 'player/setDuration'),
 
-  /**
-   * Phát bài hát tại một vị trí index cụ thể trong hàng đợi hiện tại.
-   * @param {number} index - Vị trí trong hàng đợi (queue).
-   */
-  playFromQueue: (index) => {
-    const { queue } = get(); // Lấy hàng đợi hiện tại từ state
-    if (index >= 0 && index < queue.length) {
-      // Nếu index hợp lệ, cập nhật state để phát bài hát đó
-      set({
-        currentSong: queue[index],
-        currentQueueIndex: index,
-        isPlaying: true,
-        currentTime: 0,
-        duration: 0,
-      });
-    } else {
-      // Nếu index không hợp lệ (ví dụ: vượt quá cuối hàng đợi)
-      // Có thể dừng phát hoặc xử lý theo logic khác (ví dụ: lặp lại)
-      // Hiện tại: Dừng phát và xóa hàng đợi
-      set({ currentSong: null, queue: [], currentQueueIndex: -1, isPlaying: false });
-    }
-  },
+    playSong: (song, list = [], indexInList = -1) => {
+        const isShuffleCurrentlyActive = get().isShuffleActive;
+        const newOriginalQueue = [...list]; // Luôn lưu queue gốc
+        let newQueue = [...newOriginalQueue];
+        let newIndex = indexInList;
+        let newPlayedInShuffle = new Set();
 
-  /**
-   * Chuyển đổi trạng thái phát/dừng.
-   */
-  togglePlayPause: () => set((state) => {
-    // Chỉ cho phép toggle nếu có bài hát đang được chọn (trong currentSong)
-    if (!state.currentSong) return { isPlaying: false };
-    return { isPlaying: !state.isPlaying };
-  }),
+        if (song) { // Chỉ xử lý nếu có bài hát được cung cấp
+            if (isShuffleCurrentlyActive && newQueue.length > 0) {
+                console.log("[Store] playSong: Shuffle is active, shuffling new list.");
+                // Đảm bảo bài hát được chọn là bài đầu tiên trong queue đã xáo trộn
+                newQueue = newQueue.filter(item => item._id !== song._id);
+                shuffleArray(newQueue); // Xáo trộn phần còn lại
+                newQueue.unshift(song); // Đưa bài đang chọn lên đầu
+                newIndex = 0;
+                newPlayedInShuffle.add(song._id);
+            } else if (newQueue.length > 0 && newIndex === -1) {
+                // Nếu không shuffle và không có index cụ thể, mặc định là index 0
+                // (Trường hợp này có thể không cần thiết nếu indexInList luôn được cung cấp đúng)
+                newIndex = 0;
+            }
+        } else if (newQueue.length > 0) { // Nếu không có song cụ thể nhưng list có
+            // Phát bài đầu tiên trong list
+            song = newQueue[0];
+            newIndex = 0;
+            if(isShuffleCurrentlyActive) newPlayedInShuffle.add(song._id);
+        }
 
-  /**
-   * Dừng phát nhạc.
-   */
-  pause: () => set({ isPlaying: false }),
 
-  /**
-   * Tiếp tục phát nhạc (nếu có bài hát).
-   */
-  play: () => {
-      const { currentSong } = get();
-      // Chỉ đặt isPlaying thành true nếu thực sự có bài hát để phát
-      if (currentSong) {
-          set({ isPlaying: true });
-      }
-  },
+        set({
+            currentSong: song,
+            queue: newQueue,
+            originalQueue: newOriginalQueue,
+            currentQueueIndex: newIndex,
+            isPlaying: !!song, // isPlaying là true nếu có bài hát
+            currentTime: 0,
+            duration: 0,
+            playedInShuffle: newPlayedInShuffle,
+        }, false, 'player/playSong');
+    },
 
-  /**
-   * Phát bài hát tiếp theo trong hàng đợi.
-   */
-  playNext: () => {
-    const { queue, currentQueueIndex, repeatMode } = get();
-    
-    if (queue.length === 0) return;
+    playFromQueue: (index) => {
+        const { queue, isShuffleActive, playedInShuffle } = get();
+        if (index >= 0 && index < queue.length) {
+            const songToPlay = queue[index];
+            let newPlayedInShuffle = new Set(playedInShuffle);
+            if (isShuffleActive) {
+                newPlayedInShuffle.add(songToPlay._id);
+            }
+            set({
+                currentSong: songToPlay,
+                currentQueueIndex: index,
+                isPlaying: true,
+                currentTime: 0,
+                duration: 0,
+                playedInShuffle: newPlayedInShuffle,
+            }, false, 'player/playFromQueue');
+        } else {
+            // Nếu index không hợp lệ (ví dụ: hết queue và không lặp)
+            set({ isPlaying: false }, false, 'player/playQueueEnd_stop');
+            // Không reset queue ở đây, playNext/playPrevious sẽ quyết định
+        }
+    },
 
-    let nextIndex;
-    if (currentQueueIndex === queue.length - 1) {
-      // Nếu là bài cuối cùng
-      if (repeatMode === 'all') {
-        nextIndex = 0; // Quay lại bài đầu
-      } else {
-        return; // Không làm gì nếu không phải chế độ lặp
-      }
-    } else {
-      nextIndex = currentQueueIndex + 1;
-    }
+    togglePlayPause: () => set((state) => {
+        if (!state.currentSong) return { isPlaying: false };
+        return { isPlaying: !state.isPlaying };
+    }, false, 'player/togglePlayPause'),
 
-    set({
-      currentSong: queue[nextIndex],
-      currentQueueIndex: nextIndex,
-      isPlaying: true,
-      currentTime: 0,
-      duration: 0
-    });
-  },
+    pause: () => set({ isPlaying: false }, false, 'player/pause'),
 
-  /**
-   * Phát bài hát trước đó trong hàng đợi.
-   */
-  playPrevious: () => {
-    const { queue, currentQueueIndex, repeatMode } = get();
-    
-    if (queue.length === 0) return;
+    play: () => {
+        const { currentSong } = get();
+        if (currentSong) set({ isPlaying: true }, false, 'player/play');
+    },
 
-    let prevIndex;
-    if (currentQueueIndex === 0) {
-      // Nếu là bài đầu tiên
-      if (repeatMode === 'all') {
-        prevIndex = queue.length - 1; // Chuyển đến bài cuối
-      } else {
-        return; // Không làm gì nếu không phải chế độ lặp
-      }
-    } else {
-      prevIndex = currentQueueIndex - 1;
-    }
+    playNext: () => {
+        const { queue, currentQueueIndex, repeatMode, isShuffleActive, playedInShuffle, originalQueue, currentSong } = get();
+        console.log("[Store] playNext. Shuffle:", isShuffleActive, "Repeat:", repeatMode, "Played:", playedInShuffle.size, "Q:", queue.length, "idx:", currentQueueIndex);
 
-    set({
-      currentSong: queue[prevIndex],
-      currentQueueIndex: prevIndex,
-      isPlaying: true,
-      currentTime: 0,
-      duration: 0
-    });
-  },
+        if (queue.length === 0) {
+            set({isPlaying: false, currentSong: null, currentQueueIndex: -1, playedInShuffle: new Set()}, false, 'player/playNext_emptyQueue');
+            return;
+        }
 
-  /**
-   * Cập nhật tổng thời lượng của bài hát đang phát.
-   * (Thường được gọi từ sự kiện onLoadedMetadata của thẻ audio).
-   * @param {number} duration - Tổng thời lượng (tính bằng giây).
-   */
-  setDuration: (duration) => set({ duration: duration }),
+        if (isShuffleActive) {
+            let availableToPlay = queue.filter(song => !playedInShuffle.has(song._id));
+            console.log("[Store] playNext Shuffle: Available to play:", availableToPlay.map(s=>s.song_name));
 
-  /**
-   * Đặt mức âm lượng.
-   * @param {number} volume - Giá trị âm lượng từ 0 đến 1.
-   */
-  setVolume: (volume) => {
-     const newVolume = Math.max(0, Math.min(1, volume)); // Đảm bảo trong khoảng 0-1
-     set({ volume: newVolume, isMuted: newVolume === 0 }); // Tự động mute nếu volume là 0
-  },
+            if (availableToPlay.length === 0) {
+                if (repeatMode === 'all') {
+                    console.log("[Store] playNext Shuffle: All played, repeating all.");
+                    set({ playedInShuffle: new Set() }, false, 'player/playNext_resetShuffle');
+                     // Sau khi reset, gọi lại playNext để nó chọn ngẫu nhiên từ đầu
+                     // Cần cẩn thận tránh vòng lặp vô hạn nếu queue rỗng hoặc chỉ có 1 bài
+                    if (queue.length > 0) {
+                        const firstShuffledSongIndex = Math.floor(Math.random() * queue.length);
+                        get().playFromQueue(firstShuffledSongIndex);
+                    } else {
+                         set({ isPlaying: false }, false, 'player/playNext_shuffleEndEmpty');
+                    }
+                    return;
+                } else {
+                    console.log("[Store] playNext Shuffle: All played, not repeating all. Stopping.");
+                    set({ isPlaying: false }, false, 'player/playNext_shuffleEndNoRepeat');
+                    return;
+                }
+            }
+            const randomIndex = Math.floor(Math.random() * availableToPlay.length);
+            const nextSong = availableToPlay[randomIndex];
+            const nextIndexInQueue = queue.findIndex(song => song._id === nextSong._id);
+            get().playFromQueue(nextIndexInQueue);
+        } else { // Không shuffle
+            let nextIndex = currentQueueIndex + 1;
+            if (nextIndex >= queue.length) { // Nếu là bài cuối hoặc vượt quá
+                if (repeatMode === 'all') {
+                    nextIndex = 0;
+                } else {
+                    set({ isPlaying: false }, false, 'player/playNext_endNoRepeatAll');
+                    return;
+                }
+            }
+            get().playFromQueue(nextIndex);
+        }
+    },
 
-  setCurrentSongLikedStatus: (isLiked) => set({ isCurrentSongLiked: isLiked }, false, 'player/setCurrentSongLikedStatus'),
+    playPrevious: () => {
+        const { queue, currentQueueIndex, repeatMode, isShuffleActive } = get();
+        if (queue.length === 0) return;
 
-  /**
-   * Chuyển đổi trạng thái tắt/bật tiếng.
-   */
-  toggleMute: () => {
-    const { volume, isMuted } = get();
-    if (isMuted) {
-       // Khi bật lại tiếng, quay về mức volume trước đó
-       // Nếu volume trước đó là 0, đặt một giá trị mặc định (ví dụ: 0.5)
-       set({ isMuted: false, volume: volume > 0 ? volume : 0.5 });
-    } else {
-       // Khi tắt tiếng, đặt volume về 0 nhưng vẫn lưu giá trị cũ trong isMuted
-       set({ isMuted: true }); // PlayerBar sẽ tự đặt audioRef.current.muted = true
-       // Không cần set volume về 0 ở đây, vì useEffect trong PlayerBar sẽ làm điều đó dựa trên isMuted
-    }
-  },
+        if (isShuffleActive) {
+            // Khi shuffle, "previous" thường không có ý nghĩa tuần tự.
+            // Có thể chọn một bài ngẫu nhiên khác chưa phát, hoặc không làm gì.
+            // Để đơn giản, có thể không cho phép previous khi shuffle hoặc phát ngẫu nhiên.
+            console.warn("Previous button in shuffle mode might behave unexpectedly or do nothing.");
+            // Tạm thời phát một bài ngẫu nhiên khác (không phải bài hiện tại)
+            if (queue.length > 1) {
+                let randomIndex;
+                let randomSong;
+                do {
+                    randomIndex = Math.floor(Math.random() * queue.length);
+                    randomSong = queue[randomIndex];
+                } while (randomSong._id === get().currentSong?._id); // Đảm bảo không phải bài hiện tại
+                get().playFromQueue(randomIndex);
+            }
+            return;
+        }
 
-  /**
-   * Thêm một bài hát vào cuối hàng đợi.
-   * @param {object} song - Object bài hát cần thêm.
-   */
-  addToQueue: (song) => {
-    set(state => {
-       // Kiểm tra để tránh thêm trùng lặp vào hàng đợi (tùy chọn)
-       const alreadyInQueue = state.queue.some(item => item._id === song._id);
-       if (!alreadyInQueue) {
-           return { queue: [...state.queue, song] };
-       }
-       // Nếu đã có trong queue, không thay đổi state
-       return {};
-    });
-  },
+        let prevIndex = currentQueueIndex - 1;
+        if (prevIndex < 0) {
+            if (repeatMode === 'all') {
+                prevIndex = queue.length - 1;
+            } else {
+                // Giữ nguyên bài hiện tại, có thể tua về đầu nếu muốn
+                if (get().currentSong) set({ currentTime: 0 }, false, 'player/playPrevious_seekTo0');
+                return;
+            }
+        }
+        get().playFromQueue(prevIndex);
+    },
 
-  /**
-   * Xóa một bài hát khỏi hàng đợi dựa vào vị trí index.
-   * @param {number} index - Vị trí của bài hát cần xóa.
-   */
-  removeFromQueue: (index) => {
-     set(state => {
-        const newQueue = [...state.queue];
-        if (index >= 0 && index < newQueue.length) {
-           newQueue.splice(index, 1); // Xóa bài hát khỏi mảng
+    setVolume: (volume) => { const newVolume = Math.max(0, Math.min(1, volume)); set({ volume: newVolume, isMuted: newVolume === 0 }, false, 'player/setVolume'); },
+    setCurrentSongLikedStatus: (isLiked) => set({ isCurrentSongLiked: isLiked }, false, 'player/setCurrentSongLikedStatus'),
+    toggleMute: () => { const { isMuted } = get(); if (isMuted) { set(state => ({ isMuted: false, volume: state.volume > 0 ? state.volume : 0.5 }), false, 'player/unmute'); } else { set({ isMuted: true }, false, 'player/mute'); } }, // Không set volume = 0 ở đây
 
-           // Điều chỉnh currentQueueIndex nếu cần
-           let newCurrentIndex = state.currentQueueIndex;
-           if (index === state.currentQueueIndex) {
-             // Bài hát đang phát bị xóa -> dừng phát và reset index
-             // Hoặc có thể tự động phát bài tiếp theo (logic phức tạp hơn)
-             newCurrentIndex = -1; // Reset index, PlayerBar sẽ dừng dựa trên currentSong = null
-             // Nếu muốn phát bài tiếp theo:
-             // newCurrentIndex = index < newQueue.length ? index : (newQueue.length > 0 ? newQueue.length - 1 : -1);
-             // Cần cập nhật cả currentSong trong trường hợp này
-           } else if (index < state.currentQueueIndex) {
-             // Xóa bài hát phía trước bài đang phát -> giảm index đi 1
-             newCurrentIndex -= 1;
-           }
+    addToQueue: (song) => {
+        set(state => {
+            if (!state.queue.find(item => (item.song || item)._id === song._id)) { // Kiểm tra ID của song object
+                const newQueue = [...state.queue, song];
+                const newOriginalQueue = state.isShuffleActive ? [...state.originalQueue, song] : newQueue;
+                return { queue: newQueue, originalQueue: newOriginalQueue };
+            }
+            return {};
+        }, false, 'player/addToQueue');
+    },
 
-           // Nếu bài đang phát bị xóa, cần cập nhật cả currentSong
-           const newCurrentSong = newCurrentIndex === -1 ? null : (newQueue[newCurrentIndex] || null);
+    removeFromQueue: (indexToRemove) => {
+        set(state => {
+            if (indexToRemove < 0 || indexToRemove >= state.queue.length) return {};
 
-           return {
-               queue: newQueue,
-               currentQueueIndex: newCurrentIndex,
-               currentSong: index === state.currentQueueIndex ? newCurrentSong : state.currentSong, // Cập nhật currentSong nếu cần
-               isPlaying: index === state.currentQueueIndex ? false : state.isPlaying // Dừng phát nếu bài hiện tại bị xóa
+            const songObjectToRemove = state.queue[indexToRemove];
+            const songIdToRemove = (songObjectToRemove.song || songObjectToRemove)._id;
+
+            const newQueue = state.queue.filter((_, index) => index !== indexToRemove);
+            let newOriginalQueue = state.isShuffleActive ? state.originalQueue.filter(s => (s.song || s)._id !== songIdToRemove) : newQueue;
+            let newPlayedInShuffle = new Set(state.playedInShuffle);
+            newPlayedInShuffle.delete(songIdToRemove);
+
+            let newCurrentIndex = state.currentQueueIndex;
+            let newCurrentSong = state.currentSong;
+            let newIsPlaying = state.isPlaying;
+
+            if (songIdToRemove === state.currentSong?._id) { // Nếu bài đang phát bị xóa
+                if (newQueue.length > 0) {
+                    // Cố gắng phát bài tiếp theo trong queue mới (nếu có)
+                    // Hoặc bài đầu tiên nếu index bị xóa là cuối
+                    newCurrentIndex = (indexToRemove < newQueue.length) ? indexToRemove : 0;
+                    newCurrentSong = newQueue[newCurrentIndex];
+                    newIsPlaying = true; // Tiếp tục phát
+                } else { // Hết queue
+                    newCurrentIndex = -1; newCurrentSong = null; newIsPlaying = false;
+                }
+            } else if (indexToRemove < state.currentQueueIndex) {
+                newCurrentIndex--; // Giảm index nếu xóa bài phía trước
+            }
+
+            return {
+                queue: newQueue,
+                originalQueue: newOriginalQueue,
+                currentQueueIndex: newCurrentIndex,
+                currentSong: newCurrentSong,
+                isPlaying: newIsPlaying,
+                playedInShuffle: newPlayedInShuffle
+            };
+        }, false, 'player/removeFromQueue');
+    },
+
+    clearQueue: () => set({ queue: [], originalQueue: [], currentQueueIndex: -1, playedInShuffle: new Set() }, false, 'player/clearQueue'),
+
+    setQueue: (newQueue, newIndex = -1, shouldPlay = true) => {
+        const isShuffleCurrentlyActive = get().isShuffleActive;
+        let finalQueue = [...newQueue];
+        let finalOriginalQueue = [...newQueue];
+        let finalIndex = newIndex;
+        let newPlayedInShuffle = new Set();
+        let songToPlay = null;
+
+        if (finalQueue.length > 0) {
+            if (finalIndex === -1) finalIndex = 0; // Mặc định phát từ đầu nếu không có index
+            songToPlay = finalQueue[finalIndex];
+
+            if (isShuffleCurrentlyActive) {
+                console.log("[Store] setQueue: Shuffle is active, shuffling new queue.");
+                finalQueue = finalQueue.filter((item, idx) => idx !== finalIndex); // Loại bài sẽ phát
+                shuffleArray(finalQueue);
+                if (songToPlay) finalQueue.unshift(songToPlay); // Đặt bài sẽ phát lên đầu
+                finalIndex = 0;
+                if (songToPlay) newPlayedInShuffle.add(songToPlay._id);
+            }
+        } else {
+            finalIndex = -1; // Không có bài nào trong queue
+        }
+
+
+        set({
+            currentSong: songToPlay,
+            queue: finalQueue,
+            originalQueue: finalOriginalQueue,
+            currentQueueIndex: finalIndex,
+            isPlaying: shouldPlay && !!songToPlay, // Chỉ play nếu shouldPlay và có bài
+            currentTime: 0,
+            duration: 0,
+            playedInShuffle: newPlayedInShuffle,
+        }, false, 'player/setQueue');
+    },
+
+    toggleShuffle: () => set((state) => {
+        const newShuffleState = !state.isShuffleActive;
+        let newQueue = [...state.queue]; // Mặc định lấy queue hiện tại
+        let newCurrentIndex = state.currentQueueIndex;
+        let newPlayedInShuffle = new Set();
+
+        if (newShuffleState) { // Bật Shuffle
+            console.log("[Store] Shuffle ON. Original queue was:", state.originalQueue, "Current Queue:", state.queue);
+            // Lưu queue hiện tại (có thể đã được shuffle trước đó hoặc là queue gốc) làm original
+            const originalForThisShuffle = [...state.queue];
+            if (state.currentSong) {
+                newQueue = originalForThisShuffle.filter(song => (song.song || song)._id !== state.currentSong._id);
+                shuffleArray(newQueue);
+                newQueue.unshift(state.currentSong); // Giữ bài đang phát ở đầu
+                newCurrentIndex = 0;
+                newPlayedInShuffle.add(state.currentSong._id);
+            } else if (originalForThisShuffle.length > 0) {
+                shuffleArray(originalForThisShuffle);
+                newQueue = originalForThisShuffle;
+                newCurrentIndex = 0; // Sẽ phát từ đầu queue mới xáo trộn
+            }
+            return {
+                isShuffleActive: true,
+                queue: newQueue,
+                originalQueue: originalForThisShuffle, // Lưu lại thứ tự trước khi shuffle LẦN NÀY
+                currentQueueIndex: newCurrentIndex,
+                playedInShuffle: newPlayedInShuffle,
+            };
+        } else { // Tắt Shuffle
+            console.log("[Store] Shuffle OFF. Restoring from originalQueue:", state.originalQueue);
+            newQueue = [...state.originalQueue]; // Khôi phục từ originalQueue đã lưu
+            if (state.currentSong) {
+                newCurrentIndex = newQueue.findIndex(song => (song.song || song)._id === state.currentSong._id);
+                if (newCurrentIndex === -1) newCurrentIndex = 0; // Fallback
+            } else {
+                newCurrentIndex = -1; // Hoặc 0 nếu muốn phát từ đầu queue gốc
+            }
+            return {
+                isShuffleActive: false,
+                queue: newQueue,
+                // originalQueue: [], // Có thể xóa originalQueue khi tắt shuffle
+                currentQueueIndex: newCurrentIndex,
+                playedInShuffle: new Set(),
             };
         }
-        // Nếu index không hợp lệ, không thay đổi state
-        return {};
-     });
-  },
+    }, false, 'player/toggleShuffle'),
 
-   /**
-    * Xóa tất cả bài hát khỏi hàng đợi.
-    */
-  clearQueue: () => set({ queue: [], currentQueueIndex: -1 }),
+    toggleRepeatMode: () => set((state) => {
+        let newMode;
+        if (state.repeatMode === 'none') newMode = 'all';
+        else if (state.repeatMode === 'all') newMode = 'one';
+        else newMode = 'none';
+        return { repeatMode: newMode };
+    }, false, 'player/toggleRepeatMode'),
 
-  /**
-   * Đặt lại toàn bộ hàng đợi và vị trí hiện tại.
-   * Hữu ích cho việc sắp xếp lại hàng đợi hoặc tải một playlist mới.
-   * @param {array} newQueue - Mảng hàng đợi mới.
-   * @param {number} [newIndex=-1] - Vị trí hiện tại trong hàng đợi mới.
-   */
-  setQueue: (newQueue, newIndex = -1) => set({ queue: newQueue, currentQueueIndex: newIndex }),
-
-}), {name:"PlayerStore"})); // Tên cho devtools));
+  }),
+  {
+    name: "PlayerStore", // Tên cho Redux DevTools
+    // serialize: { options: true } // Bật serialize để xem object/set trong devtools (nếu cần)
+  }
+));
 
 export default usePlayerStore;

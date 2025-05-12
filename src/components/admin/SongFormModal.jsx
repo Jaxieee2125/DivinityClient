@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './SongFormModal.module.css'; // Đảm bảo import CSS Module
 import { FiX, FiSearch } from 'react-icons/fi';
-import { getArtistOptions, getAlbumOptions } from '../../api/apiClient'; // Import API functions
+import { getArtistOptions, getAlbumOptions, getMusicGenreOptions } from '../../api/apiClient'; // Import API functions
 
 const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoading = false, apiError = null }) => {
     // --- State cho các trường của form ---
@@ -14,6 +14,7 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
     const [releaseTime, setReleaseTime] = useState(''); // Format YYYY-MM-DD
     const [durationSong, setDurationSong] = useState(''); // String để người dùng nhập
     const [status, setStatus] = useState('draft');
+    const [musicGenreIds, setMusicGenreIds] = useState([]); // Mảng các ID string
     // const [fileUp, setFileUp] = useState(''); // Không cần state cho path nữa
     const [audioFile, setAudioFile] = useState(null); // State mới để lưu File object
     const [existingFileUrl, setExistingFileUrl] = useState(null); // Lưu URL file hiện tại (chế độ edit)
@@ -22,22 +23,26 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
     // --- State cho select options và tìm kiếm ---
     const [availableArtists, setAvailableArtists] = useState([]);
     const [availableAlbums, setAvailableAlbums] = useState([]);
+    const [availableMusicGenres, setAvailableMusicGenres] = useState([]);
     const [optionsLoading, setOptionsLoading] = useState(false);
     const [optionsError, setOptionsError] = useState(null);
     const [artistSearchTerm, setArtistSearchTerm] = useState('');
     const [albumSearchTerm, setAlbumSearchTerm] = useState('');
+    const [genreSearchTerm, setGenreSearchTerm] = useState('');
 
     // --- Fetch dữ liệu cho Select Options ---
     const fetchOptions = useCallback(async () => {
         setOptionsLoading(true);
         setOptionsError(null);
         try {
-            const [artistRes, albumRes] = await Promise.all([
+            const [artistRes, albumRes, genreRes] = await Promise.all([
                 getArtistOptions(),
-                getAlbumOptions()
+                getAlbumOptions(),
+                getMusicGenreOptions()
             ]);
             setAvailableArtists(artistRes.data || []);
             setAvailableAlbums(albumRes.data || []);
+            setAvailableMusicGenres(genreRes.data || []);
         } catch (err) {
             console.error("Error fetching select options:", err);
             setOptionsError("Failed to load artists or albums options.");
@@ -63,9 +68,13 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
     useEffect(() => {
         if (isOpen) {
             if (initialData) { // Edit Mode
+                console.log(initialData);
                 setSongName(initialData.song_name || '');
                 setArtistIds(initialData.artists?.map(a => String(a._id)) || initialData.artist_ids?.map(id => String(id)) || []);
+                console.log("Initial Artist IDs:", initialData.artists?.map(a => String(a._id)), initialData.artist_ids?.map(id => String(id)));
                 setAlbumId(String(initialData.album?._id || initialData.album_id || ''));
+                setMusicGenreIds(initialData.musicgenres?.map(a => String(a._id)) || initialData.musicgenre_ids?.map(id => String(id)) || []);
+                console.log("Initial Music Genre IDs:", initialData.musicgenres?.map(a => String(a._id)), initialData.musicgenre_ids?.map(id => String(id)));
                 setDescription(initialData.description || '');
                 setLyrics(initialData.lyrics || '');
                 const releaseDate = initialData.release_time ? new Date(initialData.release_time).toISOString().split('T')[0] : '';
@@ -75,7 +84,7 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
                 setAudioFile(null); // Reset file input khi mở edit
                 setExistingFileUrl(initialData.file_url || null); // Lưu URL hiện tại để hiển thị
             } else { // Add Mode - Reset form
-                setSongName(''); setArtistIds([]); setAlbumId(''); setDescription(''); setLyrics('');
+                setSongName(''); setArtistIds([]); setAlbumId(''); setDescription(''); setLyrics('');  setMusicGenreIds([]);
                 setReleaseTime(''); setDurationSong(''); setStatus('draft');
                 setAudioFile(null); setExistingFileUrl(null);
             }
@@ -100,6 +109,14 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
         );
     }, [availableAlbums, albumSearchTerm]);
 
+    const filteredMusicGenres = useMemo(() => {
+        if (!genreSearchTerm) return availableMusicGenres;
+        const lowerCaseQuery = genreSearchTerm.toLowerCase();
+        return availableMusicGenres.filter(genre =>
+            genre.musicgenre_name.toLowerCase().includes(lowerCaseQuery) // Giả sử trường tên là musicgenre_name
+        );
+    }, [availableMusicGenres, genreSearchTerm]);
+
     // --- Client-side Validation ---
     const validateForm = () => {
         const newErrors = {};
@@ -122,6 +139,11 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
         setArtistIds(selectedOptions); // Cập nhật state
     };
 
+    const handleGenreSelectChange = (event) => { // <<< HANDLER MỚI
+        const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
+        setMusicGenreIds(selectedOptions);
+    };
+
     // --- Submit Handler (SỬ DỤNG FormData) ---
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -136,6 +158,9 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
         if (lyrics.trim()) formData.append('lyrics', lyrics.trim());
         if (releaseTime) formData.append('release_time', releaseTime);
         if (durationSong) formData.append('duration_song', parseInt(durationSong, 10));
+        if (musicGenreIds.length > 0) { // Chỉ gửi nếu có chọn
+            musicGenreIds.forEach(id => formData.append('musicgenre_ids', id));
+        }
         formData.append('status', status.trim());
     
         // --- SỬA LẠI PHẦN APPEND artist_ids ---
@@ -256,6 +281,42 @@ const SongFormModal = ({ isOpen, onClose, onSubmit, initialData = null, isLoadin
                                         {filteredAlbums.length === 0 && !albumSearchTerm && availableAlbums.length > 0 && ( <option disabled>Scroll or search...</option> )}
                                         {availableAlbums.length === 0 && !optionsLoading && ( <option disabled>No albums available</option> )}
                                     </select>
+                                </div>
+
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="musicGenreIds">Genres</label> {/* Thêm (Optional) nếu không bắt buộc */}
+                                    <div className={styles.selectSearchContainer}>
+                                        <FiSearch className={styles.selectSearchIcon} />
+                                        <input
+                                            type="text"
+                                            placeholder="Search genres..."
+                                            value={genreSearchTerm}
+                                            onChange={(e) => setGenreSearchTerm(e.target.value)}
+                                            className={styles.selectSearchInput}
+                                            disabled={isLoading || optionsLoading}
+                                        />
+                                    </div>
+                                    <select
+                                        id="musicGenreIds"
+                                        multiple
+                                        value={musicGenreIds}
+                                        onChange={handleGenreSelectChange} // <<< Dùng handler mới
+                                        disabled={isLoading || optionsLoading}
+                                        size="5"
+                                        className={styles.selectMultiple}
+                                        // required={true} // Bỏ nếu không bắt buộc
+                                    >
+                                        {filteredMusicGenres.map(genre => (
+                                            <option key={genre._id} value={genre._id}>
+                                                {genre.musicgenre_name}
+                                            </option>
+                                        ))}
+                                        {filteredMusicGenres.length === 0 && genreSearchTerm && ( <option disabled>No genres found matching "{genreSearchTerm}"</option> )}
+                                        {filteredMusicGenres.length === 0 && !genreSearchTerm && availableMusicGenres.length > 0 && ( <option disabled>Scroll or search...</option> )}
+                                        {availableMusicGenres.length === 0 && !optionsLoading && ( <option disabled>No genres available</option> )}
+                                    </select>
+                                    <span style={{fontSize: '0.75rem', color: '#888'}}>Hold Ctrl/Cmd to select multiple.</span>
+                                    {errors.musicGenreIds && <span className={styles.errorMessage}>{errors.musicGenreIds}</span>}
                                 </div>
 
                                 {/* Release Time */}
