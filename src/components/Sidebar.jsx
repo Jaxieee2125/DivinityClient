@@ -176,7 +176,9 @@ const Sidebar = ({ openSearchModal, isLoggedIn, handleLogout }) => {
              <NavLink to="/songs" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}> <FiMusic /> Tracks </NavLink>
              <NavLink to="/artists" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}> <FiUsers /> Artists </NavLink>
              <NavLink to="/musicgenres" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}> <FiTag /> Genres </NavLink>
+             {isLoggedIn && (
              <NavLink to="/liked-songs" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}><FiHeart /> Loves</NavLink>
+             )}
         </nav>
 
         <hr className={styles.divider} />
